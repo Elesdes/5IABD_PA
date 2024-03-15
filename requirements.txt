@@ -1,0 +1,12 @@
+fastapi
+uvicorn[standard]
+requests
+pandas
+tensorflow[and-cuda]
+numpy
+matplotlib
+ipykernel
+pybullet
+qibullet
+gputil
+numpngw
