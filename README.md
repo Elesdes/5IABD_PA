@@ -1,6 +1,6 @@
 # ICARUS - 5AIBD Annual Project 2023-2024
 
-ICARUS is a student project aimed at developing a system for controlling 3D-printed hand prostheses through EMG signals using deep reinforcement learning algorithms, thereby exploring the interactions between technology and the human body by leveraging concepts related to human-machine interactions.
+ICARUS is an open-source student project aimed at developing a system for controlling 3D-printed hand prostheses through EMG signals using deep reinforcement learning algorithms, thereby exploring the interactions between technology and the human body by leveraging concepts related to human-machine interactions.
 
 ## Architecture & Code Structures
 
@@ -29,7 +29,7 @@ rm -rf ~/miniconda3/miniconda.sh
 ~/miniconda3/bin/conda init bash
 ```
 
-After running these commands, reboot WSL.
+After running the above commands, reboot WSL.
 
 ### Prepare Conda Environment
 
@@ -54,7 +54,7 @@ export MESA_GLSL_VERSION_OVERRIDE=330
 sudo ln -sf /opt/bin/nvidia-smi /usr/bin/nvidia-smi
 ```
 
-You can then check if PyBullet works by running the notebook `notebooks/pybullet_hellow_world.ipynb`.
+You can then check if PyBullet works by running the notebook `notebooks/pybullet/pybullet_hello_world.ipynb`.
 
 ## How To Run
 
@@ -68,20 +68,16 @@ TODO
 
 ### Run FastAPI Local Server
 
-```bash
-uvicorn src.main:app --reload
-```
+Execute the code in `api/src/main.py`.
 
 ## Work Based On
 
 This project has been influenced by the following works:
+
 - [TactHand](https://github.com/pslade2/TactHand) (Open source model of a 3D-printed hand prosthesis)
 - [PyBullet](https://github.com/bulletphysics/bullet3) (Open source physics engine)
 
 We would like to express our gratitude to these authors for their groundbreaking work and contributions to the open-source community.
-
-## Citation
-
 
 ## Authors
 
