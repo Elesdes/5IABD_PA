@@ -10,3 +10,7 @@ pybullet
 qibullet
 gputil
 numpngw
+psycopg2-binary
+python-multipart
+passlib
+jinja2
