@@ -10,3 +10,9 @@ pybullet
 qibullet
 gputil
 numpngw
+tqdm
+gym
+gymnasium[classic-control]
+scipy
+PyVirtualDisplay
+imageio[ffmpeg]

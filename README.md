@@ -1,6 +1,6 @@
 # ICARUS - 5AIBD Annual Project 2023-2024
 
-ICARUS is an open-source student project aimed at developing a system for controlling 3D-printed hand prostheses through EMG signals using deep reinforcement learning algorithms, thereby exploring the interactions between technology and the human body by leveraging concepts related to human-machine interactions.
+ICARUS is an open-source student project aimed at developing a system for controlling a non-invasive 3D-printed hand prosthesis through EMG signals using deep reinforcement learning algorithms, thereby exploring the interactions between technology and the human body by leveraging concepts related to human-machine interactions.
 
 ## Architecture & Code Structures
 
@@ -56,7 +56,7 @@ sudo ln -sf /opt/bin/nvidia-smi /usr/bin/nvidia-smi
 
 You can then check if PyBullet works by running the notebook `notebooks/pybullet/pybullet_hello_world.ipynb`.
 
-## How To Run
+## How To Run Locally
 
 ### Run EMG Recording
 
