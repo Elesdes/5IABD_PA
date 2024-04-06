@@ -5,13 +5,15 @@ import uvicorn
 from starlette.templating import Jinja2Templates
 
 from config.app_config import CONFIG
-from api.src.services import download_upload
-from api.src.routes import pages
+from services import download_upload
+# Ne pas utiliser de chemins type cloud.api.src.routes, utiliser des chemins relatifs
+from routes import user
 
 app = FastAPI()
 app.mount("/static", StaticFiles(directory="../static"), name="static")
 app.include_router(download_upload.router)
-app.include_router(pages.router)
+app.include_router(user.router)
+
 templates = Jinja2Templates(directory="../templates")
 print(CONFIG)
 
