@@ -14,6 +14,7 @@ from fastapi import (
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
 from passlib.context import CryptContext
+from passlib.hash import md5_crypt
 from config.db_config import ConfigDB
 from datetime import timezone, timedelta
 import os
@@ -43,10 +44,11 @@ class User:
         self.cookie = cookie
 
     def verify_password(self, plain_password):
-        print(plain_password)
-        print(self.password)
-        print(pwd_context.verify(plain_password, self.password))
-        return pwd_context.verify(plain_password, self.password)
+        parts = self.password.split("$")
+        scheme, salt, stored_hash = parts[1], parts[2], parts[3]
+        stored_hash = stored_hash.strip()
+        new_hash = md5_crypt.using(salt=salt).hash(plain_password)
+        return new_hash == f"${scheme}${salt}${stored_hash}"
 
 
 # Mettre les fonctions ci-dessous en tant que méthode de la classe User et ne pas oublier de typer
