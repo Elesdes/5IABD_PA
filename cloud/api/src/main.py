@@ -1,9 +1,8 @@
 from fastapi import FastAPI, Request
 from fastapi.staticfiles import StaticFiles
-from starlette.responses import RedirectResponse, HTMLResponse
+from starlette.responses import HTMLResponse
 import uvicorn
 from starlette.templating import Jinja2Templates
-
 from config.app_config import CONFIG
 from services import download_upload, call_users
 # Ne pas utiliser de chemins type cloud.api.src.routes, utiliser des chemins relatifs
@@ -23,7 +22,11 @@ print(CONFIG)
 @app.get("/", response_class=HTMLResponse, include_in_schema=False)
 def root(request: Request):
     return templates.TemplateResponse(name="index.html", context={"request": request})
-    #return RedirectResponse(url="/docs")
+
+
+@app.get("/about", response_class=HTMLResponse)
+async def about(request: Request):
+    return templates.TemplateResponse(name="about.html", context={"request": request})
 
 
 def run():

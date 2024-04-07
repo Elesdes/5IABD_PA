@@ -1,6 +1,4 @@
-from typing import Dict, Any, List
-
-from fastapi import APIRouter, Request
+from fastapi import APIRouter
 from config.db_config import ConfigDB
 
 
@@ -34,7 +32,6 @@ def del_users(email_id: str):
     # Todo : On doit impérativement vérifier le rôle de l'utilisateur avec le cookie. Seuls les admins ont le droit.
     DB = ConfigDB()
     cursor = DB.get_db_cursor()
-    users = []
     SQL_query = (
         f"DELETE FROM USERS WHERE email='{email_id}'"
     )
