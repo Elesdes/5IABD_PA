@@ -23,7 +23,7 @@ env:
   AZURE_WEBAPP_NAME: icarus-pa  # set this to the name of your Azure Web App
   PYTHON_VERSION: '3.11'              # set this to the Python version to use
   WORKING_DIRECTORY: '.'
-  STARTUP_COMMAND: 'source venv/bin/activate ; pip install -r requirements.txt ; gunicorn main:app --host 0.0.0.0 --port 80'
+  STARTUP_COMMAND: 'gunicorn main:app --host 0.0.0.0 --port 80'
   
 on:
   push:
