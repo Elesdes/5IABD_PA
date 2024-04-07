@@ -22,7 +22,7 @@ name: Build and deploy Python app to Azure Web App
 env:
   AZURE_WEBAPP_NAME: icarus-pa  # set this to the name of your Azure Web App
   PYTHON_VERSION: '3.11'              # set this to the Python version to use
-  STARTUP_COMMAND: 'gunicorn main:app --host 0.0.0.0 --port 80'
+  STARTUP_COMMAND: 'source venv/bin/activate ; pip install -r requirements.txt ; gunicorn main:app --host 0.0.0.0 --port 80'
   
 on:
   push:
@@ -69,7 +69,9 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: python-app
-          path: api/
+          path: |
+            api/
+            requirements.txt
 
   deploy:
     permissions:
@@ -85,7 +87,9 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: python-app
-          path: api/
+          path: |
+            api/
+            requirements.txt
 
       - name: 'Deploy to Azure Web App'
         id: deploy-to-webapp
