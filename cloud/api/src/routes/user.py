@@ -22,9 +22,7 @@ import psycopg2
 import string
 import random
 
-# TODO Add salt mandatory
 pwd_context = CryptContext(schemes=["md5_crypt"], deprecated="auto")
-
 router = APIRouter(
     prefix="/pages",
     tags=["pages"],

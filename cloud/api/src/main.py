@@ -7,12 +7,13 @@ from starlette.templating import Jinja2Templates
 from config.app_config import CONFIG
 from services import download_upload
 # Ne pas utiliser de chemins type cloud.api.src.routes, utiliser des chemins relatifs
-from routes import user
+from routes import user, dashboard
 
 app = FastAPI()
 app.mount("/static", StaticFiles(directory="../static"), name="static")
 app.include_router(download_upload.router)
 app.include_router(user.router)
+app.include_router(dashboard.router)
 
 templates = Jinja2Templates(directory="../templates")
 print(CONFIG)
