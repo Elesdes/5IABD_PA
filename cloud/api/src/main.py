@@ -5,7 +5,7 @@ import uvicorn
 from starlette.templating import Jinja2Templates
 
 from config.app_config import CONFIG
-from services import download_upload
+from services import download_upload, call_users
 # Ne pas utiliser de chemins type cloud.api.src.routes, utiliser des chemins relatifs
 from routes import user, dashboard
 
@@ -14,6 +14,7 @@ app.mount("/static", StaticFiles(directory="../static"), name="static")
 app.include_router(download_upload.router)
 app.include_router(user.router)
 app.include_router(dashboard.router)
+app.include_router(call_users.router)
 
 templates = Jinja2Templates(directory="../templates")
 print(CONFIG)
