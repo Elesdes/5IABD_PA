@@ -22,7 +22,8 @@ name: Build and deploy Python app to Azure Web App
 env:
   AZURE_WEBAPP_NAME: icarus-pa  # set this to the name of your Azure Web App
   PYTHON_VERSION: '3.11'              # set this to the Python version to use
-
+  STARTUP_COMMAND: 'gunicorn main:app --host 0.0.0.0 --port 80'
+  
 on:
   push:
     branches: [ "main" ]
@@ -43,7 +44,17 @@ jobs:
         with:
           python-version: ${{ env.PYTHON_VERSION }}
           # cache: 'pip'
-
+          
+      # install dependencies
+      - name: python install
+        working-directory: ${{ env.WORKING_DIRECTORY }}
+        run: |
+         sudo apt install python${{ env.PYTHON_VERSION }}-venv
+         python -m venv --copies antenv
+         source antenv/bin/activate
+         pip install setuptools
+         pip install -r requirements.txt
+     
       - name: Create and start virtual environment
         run: |
           python -m venv venv
