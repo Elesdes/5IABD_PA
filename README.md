@@ -4,7 +4,7 @@ ICARUS is an open-source student project aimed at developing a system for contro
 
 ## Architecture
 
-![Architecture](/docs/architecture.pdf)
+![Architecture](/docs/architecture.jpg)
 
 ## Project Setup
 
