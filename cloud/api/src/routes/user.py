@@ -60,7 +60,6 @@ def get_user(cursor, email=None, cookie=None):
         SQL_query += f" AND cookie = '{cookie}'"
     cursor.execute(SQL_query)
     user_data = cursor.fetchone()
-    print(SQL_query)
     if user_data:
         return User(
             user_data["email"],
