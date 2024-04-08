@@ -24,7 +24,7 @@ You don't need Stack builder to install anything else.
 ### Create the database
 
 Open pgAdmin4. Click on "Servers" in the left list. Write your password previously set.
-Right click Login/Group Roles -> Create -> Login/Group Roles. Create your user.
+Right click Login/Group Roles -> Create -> Login/Group Roles. Create your user. Please be careful, you'll need to accept "Can login?" Privileges.
 Click on "Object" -> Create -> Database... Name your database and set your user as the owner.
 Click on your newly created database. On the top left of the app, click Query Tool.
 Copy and paste to query tool and execute the file : `cloud/sql/create_database_postgresql.sql`
