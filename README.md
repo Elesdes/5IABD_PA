@@ -2,9 +2,9 @@
 
 ICARUS is an open-source student project aimed at developing a system for controlling a non-invasive 3D-printed hand prosthesis through EMG signals using deep reinforcement learning algorithms, thereby exploring the interactions between technology and the human body by leveraging concepts related to human-machine interactions.
 
-## Architecture & Code Structures
+## Architecture
 
-TODO
+![Architecture](/docs/architecture.jpg)
 
 ## Project Setup
 
