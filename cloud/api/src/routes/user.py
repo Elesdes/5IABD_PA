@@ -1,4 +1,3 @@
-import datetime
 from typing import Annotated
 
 from fastapi import (
@@ -10,8 +9,6 @@ from fastapi import (
 )
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
-from config.db_config import ConfigDB
-from models.user_model import User
 from services.user_services import request_dashboard, request_login, request_register
 from services.cookie_services import set_response_cookie
 

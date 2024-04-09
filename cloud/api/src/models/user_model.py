@@ -1,8 +1,4 @@
-from fastapi import (
-    HTTPException,
-    status,
-    Depends,
-)
+from fastapi import Depends
 from passlib.hash import md5_crypt
 from config.db_config import ConfigDB
 from typing import Self
