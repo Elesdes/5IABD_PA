@@ -2,12 +2,10 @@ from fastapi import FastAPI, Request
 from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
 from starlette.responses import HTMLResponse
-import uvicorn
 from starlette.templating import Jinja2Templates
-from config.app_config import CONFIG
 from services import download_upload, call_users, call_models
-# Ne pas utiliser de chemins type cloud.api.src.routes, utiliser des chemins relatifs
 from routes import user, dashboard
+import uvicorn
 
 app = FastAPI()
 app.mount("/static", StaticFiles(directory="../static"), name="static")

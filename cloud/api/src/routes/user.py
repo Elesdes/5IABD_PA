@@ -53,13 +53,7 @@ async def register_page(request: Request):
 
 
 @router.post("/register", response_class=HTMLResponse)
-async def register(
-    request: Request,
-    email: Annotated[str, Form()],
-    password: Annotated[str, Form()],
-    name: Annotated[str, Form()],
-    forename: Annotated[str, Form()]
-) -> HTMLResponse:
+async def register(request: Request, email: Annotated[str, Form()], password: Annotated[str, Form()], name: Annotated[str, Form()], forename: Annotated[str, Form()]) -> HTMLResponse:
     response = request_register(request, email, password, name, forename)
     if not response:
         raise HTTPException(

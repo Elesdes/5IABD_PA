@@ -32,7 +32,6 @@ class User:
             SQL_query += f" AND email = '{email}' "
         if cookie is not None:
             SQL_query += f" AND cookie = '{cookie}'"
-        print(SQL_query)
         cursor.execute(SQL_query)
         user_data = cursor.fetchone()
         if user_data:
