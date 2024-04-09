@@ -110,7 +110,6 @@ async def about(request: Request):
 @router.get("/dashboard", response_class=HTMLResponse)
 async def dashboard(request: Request):
     cookie_value = request.cookies.get("ICARUS-Login")
-    print(cookie_value)
     if cookie_value is not None:
         DB = ConfigDB()
         cursor = DB.get_db_cursor()
@@ -149,9 +148,8 @@ async def register(
     password: Annotated[str, Form()],
     name: Annotated[str, Form()],
     forename: Annotated[str, Form()],
-    response: Response,
     request: Request,
-):
+) -> HTMLResponse:
     DB = ConfigDB()
     cursor = DB.get_db_cursor()
     if get_user(cursor, email) is not None:
@@ -174,6 +172,7 @@ async def register(
     cursor.close()
     DB.connector.close()
     expiry = datetime.datetime.now(datetime.timezone.utc) + timedelta(days=1)
+    response = templates.TemplateResponse(name="dashboard.html", context={"request": request})
     response.set_cookie(
         key="ICARUS-Login",
         value=f"{user.cookie}",
@@ -181,14 +180,13 @@ async def register(
         secure=True,
         samesite="none",
     )
-    return templates.TemplateResponse(name="index.html", context={"request": request})
+    return response
 
 
 @router.post("/login")
 async def login(
     email: Annotated[str, Form()],
     password: Annotated[str, Form()],
-    response: Response,
     request: Request,
 ):
     DB = ConfigDB()
@@ -206,6 +204,7 @@ async def login(
     cursor.close()
     DB.connector.close()
     expiry = datetime.datetime.now(datetime.timezone.utc) + timedelta(days=1)
+    response = templates.TemplateResponse(name="dashboard.html", context={"request": request})
     response.set_cookie(
         key="ICARUS-Login",
         value=f"{cookie_value}",
@@ -213,6 +212,4 @@ async def login(
         secure=True,
         samesite="none",
     )
-    return templates.TemplateResponse(
-        name="dashboard.html", context={"request": request}
-    )
+    return response
