@@ -1,4 +1,5 @@
 from fastapi import Request
+from fastapi.responses import HTMLResponse
 from config.db_config import ConfigDB
 from models.user_model import User
 from services.cookie_services import set_cookie, set_response_cookie
@@ -34,7 +35,7 @@ def request_login(DB: ConfigDB, cursor: psycopg2.connect, email: str, password: 
 
 
 @db_vars
-def request_register(DB: ConfigDB, cursor: psycopg2.connect, request: Request, email: str, password: str, name: str, forename: str):
+def request_register(DB: ConfigDB, cursor: psycopg2.connect, request: Request, email: str, password: str, name: str, forename: str) -> HTMLResponse:
     user = User()
     if user.get_user(cursor, email=email) is not None:
         return None
