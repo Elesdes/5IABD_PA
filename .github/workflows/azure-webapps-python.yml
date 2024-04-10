@@ -22,19 +22,17 @@ name: Build and deploy Python app to Azure Web App
 env:
   AZURE_WEBAPP_NAME: icarus-pa  # set this to the name of your Azure Web App
   PYTHON_VERSION: '3.11'              # set this to the Python version to use
+  WORKING_DIRECTORY: '/home/site/wwwroot'
+  STARTUP_COMMAND: 'uvicorn main:app --reload'
 
 on:
   push:
     branches: [ "main" ]
   workflow_dispatch:
 
-permissions:
-  contents: read
-
 jobs:
-  build:
+  build-and-deploy:
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v4
 
@@ -44,14 +42,13 @@ jobs:
           python-version: ${{ env.PYTHON_VERSION }}
           # cache: 'pip'
 
-      - name: Create and start virtual environment
+      - name: Create and start virtual environment and install dependencies
         run: |
-          python -m venv venv
-          source venv/bin/activate
-
-      - name: Install dependencies
-        run: pip install -r ../../requirements.txt
-        working-directory: 'api/src'
+          apt install python${{ env.PYTHON_VERSION }}-venv
+          python -m venv --copies antenv
+          source antenv/bin/activate
+          pip install setuptools
+          pip install -r requirements.txt
 
       # Optional: Add step to run tests here (PyTest, Django test suites, etc.)
 
@@ -85,4 +82,9 @@ jobs:
         with:
           app-name: ${{ env.AZURE_WEBAPP_NAME }}
           publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
-          
+          startup-command: ${{ env.STARTUP_COMMAND }}
+          target-path:
+            '/home/site/wwwroot'
+          clean:
+            true
+            
