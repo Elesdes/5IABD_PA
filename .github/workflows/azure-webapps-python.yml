@@ -44,13 +44,15 @@ jobs:
           python-version: ${{ env.PYTHON_VERSION }}
           # cache: 'pip'
 
-      - name: Create and start virtual environment
+      - name: Create, start virtual environment and install dependencies
         run: |
           python -m venv venv
           source venv/bin/activate
+          pip install -r requirements.txt
 
-      - name: Install dependencies
-        run: pip install -r requirements.txt
+      - name: Package project for deployment
+        run: |
+          zip -r python-app.zip .
 
       # Optional: Add step to run tests here (PyTest, Django test suites, etc.)
 
@@ -86,9 +88,5 @@ jobs:
         with:
           app-name: ${{ env.AZURE_WEBAPP_NAME }}
           publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
-          startup-command: |
-            cd /home/site/wwwroot
-            python -m venv venv
-            source venv/bin/activate
-            pip install -r requirements.txt
-            
+          package: ./python-app.zip
+          
