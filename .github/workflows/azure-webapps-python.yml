@@ -44,15 +44,13 @@ jobs:
           python-version: ${{ env.PYTHON_VERSION }}
           # cache: 'pip'
 
-      - name: Create, start virtual environment and install dependencies
+      - name: Create and start virtual environment
         run: |
           python -m venv venv
           source venv/bin/activate
-          pip install -r requirements.txt
 
-      - name: Package project for deployment
-        run: |
-          zip -r python-app.zip .
+      - name: Install dependencies
+        run: pip install -r requirements.txt
 
       # Optional: Add step to run tests here (PyTest, Django test suites, etc.)
 
@@ -63,6 +61,7 @@ jobs:
           path: |
             api/
             requirements.txt
+            !venv/
 
   deploy:
     permissions:
@@ -82,12 +81,15 @@ jobs:
             api/
             requirements.txt
 
+      - name: Log in to Azure CLI
+        uses: azure/login@v3
+        with:
+          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
+
       - name: 'Deploy to Azure Web App'
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v2
         with:
           app-name: ${{ env.AZURE_WEBAPP_NAME }}
-          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
-          package: ./python-app.zip
-          
+          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}          
           
