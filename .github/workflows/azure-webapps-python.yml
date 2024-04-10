@@ -81,11 +81,6 @@ jobs:
             api/
             requirements.txt
 
-      - name: Log in to Azure CLI
-        uses: azure/login@v3
-        with:
-          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
-
       - name: 'Deploy to Azure Web App'
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v2
