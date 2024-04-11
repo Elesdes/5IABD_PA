@@ -1,0 +1,8 @@
+fastapi
+uvicorn[standard]
+requests
+numpngw
+psycopg2-binary
+python-multipart
+passlib
+jinja2
