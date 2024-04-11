@@ -1,0 +1,44 @@
+version: '3.9'
+
+networks:
+  icarus-pa:
+
+volumes:
+  icarus-volume:
+
+services:
+  projet-postgres:
+    build:
+      context: .
+      dockerfile: db_Dockerfile
+    environment:
+      POSTGRES_USER: hqvdqqhguy
+      POSTGRES_PASSWORD: PYZLO1052XB6ZVPQ$
+      POSTGRES_DB: icarus-pa-database
+    ports:
+      - "5432:5432"
+    networks:
+      - icarus-pa
+    volumes:
+      - ./sql:/docker-entrypoint-initdb.d
+    command: ["postgres", "-c", "log_statement=all"]
+
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U myuser"]
+      interval: 2s
+      timeout: 30s
+      retries: 5
+      start_period: 2s
+
+  projet-web:
+    depends_on:
+      projet-postgres:
+        condition: service_healthy
+        restart: true
+    build:
+      context: .
+      dockerfile: web_Dockerfile
+    ports:
+      - "8000:8000"
+    networks:
+      - icarus-pa
