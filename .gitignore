@@ -4,3 +4,4 @@ test
 *.png
 __pycache__
 .vscode
+src2
