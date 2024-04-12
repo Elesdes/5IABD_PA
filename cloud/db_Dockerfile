@@ -5,8 +5,9 @@ LABEL version="1.0"
 
 WORKDIR .
 
-# COPY sql/create_database_mysql.sql /create_database_mysql.sql
-
-RUN psql -U hqvdqqhguy -d icarus-pa-database -f /sql/create_database_postgresql.sql
+#COPY sql/create_database_postgresql.sql /create_database_postgresql.sql
+#RUN psql -U hqvdqqhguy -d icarus-pa-database -f /sql/create_database_postgresql.sql
 
 EXPOSE 5432
+
+CMD ["psql", "-U", "hqvdqqhguy", "-d", "icarus-pa-database", "-f","/sql/create_database_postgresql.sql"]
