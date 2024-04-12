@@ -1,3 +1,6 @@
+from models.user_model import User
+from fastapi import Request
+import psycopg2
 import zipfile
 import os
 import logging
@@ -44,3 +47,21 @@ def generate_zip_file(*, input_file_path: str, output_file_path: str) -> None:
         logging.error(f"File not found: {input_file_path}")
     except Exception as e:
         logging.error(f"Error generating ZIP archive: {e}")
+
+
+def verify_role_and_profil(request: Request, cursor: psycopg2, id_users: int = None, email: str = None, cookie: str = None) -> bool:
+    """
+    Used in order to check the privileges of the current user.
+    :param request: request metadata of the user
+    :param cursor: cursor of the BDD
+    :param id_users: id of the user
+    :param email: email of the user
+    :param cookie: cookie registered in the BDD of the user
+    :return:
+    True if the user is allowed. False if not.
+    """
+    current_user = User().get_user(cursor, cookie=request.cookies.get("ICARUS-Login"))
+    request_target = User().get_user(cursor, id_users=id_users, email=email, cookie=cookie)
+    if current_user.role == 1 or current_user.email == request_target.email:
+        return True
+    return False
