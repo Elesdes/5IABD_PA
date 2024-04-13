@@ -69,8 +69,9 @@ function editModel(model) {
     })
     .catch(error => {
         console.error('Une erreur s\'est produite lors de l\'édition du modèle:', error);
+    }).finally(() => {
+        window.location.reload();
     });
-    window.location.reload()
 }
 
 function deleteModel(idUsers, idModel) {
@@ -88,6 +89,7 @@ function deleteModel(idUsers, idModel) {
     })
     .catch(error => {
         console.error('Une erreur s\'est produite lors de la suppression du modèle:', error);
+    }).finally(() => {
+        window.location.reload();
     });
-    window.location.reload()
 }

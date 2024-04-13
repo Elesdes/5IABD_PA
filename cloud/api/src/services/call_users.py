@@ -64,7 +64,7 @@ def get_users(request: Request) -> list[dict[str, str | list[str] | int]]:
         )
 
 
-@router.delete("/del_users/{idUsers}")
+@router.delete("/del_users/{idUsers}", status_code=200)
 def del_users(request: Request, idUsers: str) -> None:
     DB = ConfigDB()
     cursor = DB.get_db_cursor()
@@ -76,7 +76,6 @@ def del_users(request: Request, idUsers: str) -> None:
         DB.connector.commit()
         cursor.close()
         DB.connector.close()
-        # TODO : Voir pour retourner un code 20X
     else:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,

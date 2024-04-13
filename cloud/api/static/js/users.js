@@ -72,8 +72,9 @@ function editUser(user) {
     })
     .catch(error => {
         console.error('Une erreur s\'est produite lors de l\'édition de l\'utilisateur:', error);
+    }).finally(() => {
+        window.location.reload();
     });
-    window.location.reload()
 }
 
 function deleteUser(idUsers) {
@@ -91,6 +92,7 @@ function deleteUser(idUsers) {
     })
     .catch(error => {
         console.error('Une erreur s\'est produite lors de la suppression de l\'utilisateur:', error);
+    }).finally(() => {
+        window.location.reload();
     });
-    window.location.reload()
 }
