@@ -1,12 +1,7 @@
-from fastapi import (
-    APIRouter,
-    Request
-)
+from fastapi import Request, APIRouter
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
-from passlib.context import CryptContext
 
-pwd_context = CryptContext(schemes=["md5_crypt"], deprecated="auto")
 router = APIRouter(
     prefix="/dashboard",
     tags=["dashboard"],
@@ -28,3 +23,9 @@ async def models(request: Request):
         name="models.html", context={"request": request}
     )
 
+
+@router.get("/profile", response_class=HTMLResponse)
+async def profile(request: Request):
+    return templates.TemplateResponse(
+        name="profile.html", context={"request": request}
+    )

@@ -49,7 +49,7 @@ def generate_zip_file(*, input_file_path: str, output_file_path: str) -> None:
         logging.error(f"Error generating ZIP archive: {e}")
 
 
-def verify_role_and_profil(request: Request, cursor: psycopg2, id_users: int = None, email: str = None, cookie: str = None) -> bool:
+def verify_role_and_profile(request: Request, cursor: psycopg2, id_users: int = None, email: str = None, cookie: str = None) -> bool:
     """
     Used in order to check the privileges of the current user.
     :param request: request metadata of the user
@@ -61,6 +61,10 @@ def verify_role_and_profil(request: Request, cursor: psycopg2, id_users: int = N
     True if the user is allowed. False if not.
     """
     current_user = User().get_user(cursor, cookie=request.cookies.get("ICARUS-Login"))
+    # First check to determine if we only need to check the role. Else request_target.email will make a runtime error.
+    if current_user.role == 2 and email == "":
+        return False
+
     request_target = User().get_user(cursor, id_users=id_users, email=email, cookie=cookie)
     if current_user.role == 1 or current_user.email == request_target.email:
         return True

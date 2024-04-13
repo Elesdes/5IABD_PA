@@ -1,7 +1,7 @@
 import datetime
 from fastapi import APIRouter, status, HTTPException, Request
 from config.db_config import ConfigDB
-from utils.files_utils import verify_role_and_profil
+from utils.files_utils import verify_role_and_profile
 
 
 router = APIRouter(
@@ -16,9 +16,9 @@ def get_models(request: Request) -> list[dict[str, str | datetime.datetime | int
     DB = ConfigDB()
     cursor = DB.get_db_cursor()
     models = []
-    # Set the mail to "" because the verify_role_and_profil will fail the second test. Therefore, only an admin car get all users.
+    # Set the mail to "" because the verify_role_and_profile will fail the second test. Therefore, only an admin car get all users.
     email = ""
-    if verify_role_and_profil(request, cursor, email=email):
+    if verify_role_and_profile(request, cursor, email=email):
         SQL_query = (
             f"SELECT idmodel, path, date, idusers FROM MODEL"
         )
@@ -42,7 +42,7 @@ def get_model(request: Request, idUsers: str) -> list[dict[str, str | list[str]]
     DB = ConfigDB()
     cursor = DB.get_db_cursor()
     models = []
-    if verify_role_and_profil(request, cursor, id_users=idUsers):
+    if verify_role_and_profile(request, cursor, id_users=idUsers):
         SQL_query = (
             f"SELECT idmodel, path, date, email FROM MODEL WHERE idUsers='{idUsers}'"
         )
@@ -65,7 +65,7 @@ def get_model(request: Request, idUsers: str) -> list[dict[str, str | list[str]]
 def del_models(request: Request, idUsers: str, idModel: int) -> None:
     DB = ConfigDB()
     cursor = DB.get_db_cursor()
-    if verify_role_and_profil(request, cursor, id_users=idUsers):
+    if verify_role_and_profile(request, cursor, id_users=idUsers):
         SQL_query = (
             f"DELETE FROM MODEL WHERE idModel='{idModel}'"
         )
@@ -84,7 +84,7 @@ def del_models(request: Request, idUsers: str, idModel: int) -> None:
 def update_model(request: Request, idModel: str, path: str, date: datetime.datetime, idUsers: str) -> None:
     DB = ConfigDB()
     cursor = DB.get_db_cursor()
-    if verify_role_and_profil(request, cursor, id_users=idUsers):
+    if verify_role_and_profile(request, cursor, id_users=idUsers):
         SQL_query = (
             f"UPDATE MODEL SET path = '{path}', date = '{date}', idusers = '{idUsers}' WHERE idModel = '{idModel}'"
         )
