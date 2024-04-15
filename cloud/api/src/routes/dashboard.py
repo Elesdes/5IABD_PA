@@ -23,6 +23,12 @@ async def models(request: Request):
         name="models.html", context={"request": request}
     )
 
+@router.get("/mymodels", response_class=HTMLResponse)
+async def mymodels(request: Request):
+    return templates.TemplateResponse(
+        name="mymodels.html", context={"request": request}
+    )
+
 
 @router.get("/profile", response_class=HTMLResponse)
 async def profile(request: Request):
