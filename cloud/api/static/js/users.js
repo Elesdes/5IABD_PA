@@ -58,6 +58,8 @@ function editUser(user) {
     let selectValues = $(tabletrIdUsers).find("select").map(function() {
         return $(this).val();
     }).get();
+    console.log(user)
+    console.log(inputValues)
     fetch(`/api/update_users/?idUsers=${user.idUsers}&name=${inputValues[1]}&forename=${inputValues[0]}&email=${inputValues[2]}&role=${selectValues[0]}`, {
         method: 'POST'
     })

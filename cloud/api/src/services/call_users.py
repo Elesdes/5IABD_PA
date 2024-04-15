@@ -83,6 +83,26 @@ def del_users(request: Request, idUsers: str) -> None:
         )
 
 
+@router.get("/del_profile/", status_code=200, response_class=HTMLResponse)
+def del_profile(request: Request) -> HTMLResponse:
+    DB = ConfigDB()
+    cursor = DB.get_db_cursor()
+    if verify_role_and_profile(request, cursor, cookie=request.cookies.get('ICARUS-Login')):
+        SQL_query = (
+            f"DELETE FROM USERS WHERE cookie='{request.cookies.get('ICARUS-Login')}'"
+        )
+        cursor.execute(SQL_query)
+        DB.connector.commit()
+        cursor.close()
+        DB.connector.close()
+        return templates.TemplateResponse(name="index.html", context={"request": request})
+    else:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Invalid profile.",
+        )
+
+
 @router.post("/update_users/")
 def update_users(request: Request, idUsers: str, name: str, forename: str, email: str, role: str) -> None:
     DB = ConfigDB()
