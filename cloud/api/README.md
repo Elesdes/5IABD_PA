@@ -6,7 +6,7 @@ In order to connect the website to our BDD, you need to have either a cloud stru
 
 ### Windows
 
-#### Download and install PostgreSQL
+#### Setup & Run PostgreSQL
 
 Go to the official website of PostgreSQL and download the latest app wizard.
 
@@ -27,7 +27,7 @@ Copy and paste to query tool and execute the file : `cloud/sql/create_database_p
 
 ### Linux (Ubuntu)
 
-#### Download and install PostgreSQL
+#### Setup & Run PostgreSQL
 
 First, run these commands :
 ```bash
@@ -35,23 +35,41 @@ sudo apt-get update
 sudo apt install postgresql postgresql-contrib libgconf-2-4 libatk1.0-0 libatk-bridge2.0-0 libgdk-pixbuf2.0-0 libgtk-3-0 libgbm-dev libnss3-dev libxss-dev libasound2
 ```
 
-Then, run this :
+Then, to start the PostgreSQL service, run this :
 ```bash
 sudo service postgresql start
 sudo -i -u postgres
 ```
 
-Then, run this :
+Now, you can access the PostgreSQL CLI by running this command :
 ```bash
 psql
 ```
 
-Lastly, run this :
+#### Create the database
+You can create the database by running this command :
 ```sql
 CREATE DATABASE icarus_db;
+```
 
-CREATE TABLE IF NOT EXISTS USERS(
-    IdUsers SERIAL NOT NULL PRIMARY KEY,
+Before the next step, we need to access the database. To do so, run this command :
+```sql
+\c icarus_db
+```
+
+Here, we need to create a user and give him the right to access the database. To do so, run this command :
+```sql
+CREATE USER icarus WITH PASSWORD 'icarus';
+GRANT ALL PRIVILEGES ON DATABASE icarus_db TO icarus;
+GRANT ALL PRIVILEGES ON TABLE users TO icarus;
+GRANT ALL PRIVILEGES ON TABLE models TO icarus;
+```
+
+You can then create the tables by running this query :
+```sql
+CREATE TABLE IF NOT EXISTS USERS
+(
+    IdUser SERIAL NOT NULL PRIMARY KEY,
 	Email VARCHAR(255) NOT NULL,
 	Name VARCHAR(255) NOT NULL,
 	Forename VARCHAR(255) NOT NULL,
@@ -60,14 +78,16 @@ CREATE TABLE IF NOT EXISTS USERS(
 	Role INT NOT NULL
 );
 
-CREATE TABLE IF NOT EXISTS MODEL
+CREATE TABLE IF NOT EXISTS MODELS
 (
     IdModel SERIAL NOT NULL PRIMARY KEY,
 	Path VARCHAR(255) NOT NULL,
 	Date TIMESTAMP NOT NULL,
-	IdUsers SERIAL REFERENCES USERS(IdUsers)
+	IdUser SERIAL REFERENCES USERS(IdUser)
 );
 ```
+
+You can now exit the PostgreSQL CLI.
 
 ## Install Requirements
 

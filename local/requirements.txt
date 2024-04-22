@@ -1,6 +1,3 @@
-fastapi
-uvicorn[standard]
-requests
 pandas
 tensorflow[and-cuda]
 numpy
@@ -10,13 +7,8 @@ pybullet
 qibullet
 gputil
 numpngw
-psycopg2-binary
-python-multipart
-passlib
-jinja2
 tqdm
 gym
 gymnasium[classic-control]
 scipy
-PyVirtualDisplay
 imageio[ffmpeg]
