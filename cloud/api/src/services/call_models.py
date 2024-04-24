@@ -1,7 +1,7 @@
 import datetime
-
-from fastapi import APIRouter
+from fastapi import APIRouter, status, HTTPException, Request
 from config.db_config import ConfigDB
+from utils.files_utils import verify_role_and_profile
 
 
 router = APIRouter(
@@ -12,64 +12,141 @@ router = APIRouter(
 
 
 @router.get("/get_models")
-def get_models() -> list[dict[str, str | datetime.datetime | int]]:
+def get_models(request: Request) -> list[dict[str, str | datetime.datetime | int]]:
     DB = ConfigDB()
     cursor = DB.get_db_cursor()
     models = []
-    SQL_query = (
-        f"SELECT idmodel, path, date, idusers FROM MODEL"
-    )
-    cursor.execute(SQL_query)
-    model_data = cursor.fetchall()
-    model_data = [dict(row) for row in model_data]
-    for model in model_data:
-        models.append({"idModel": model["idmodel"], "path": model["path"], "date": model["date"], "idUsers": model["idusers"]})
-    cursor.close()
-    DB.connector.close()
-    return models
+    # Set the mail to "" because the verify_role_and_profile will fail the second test. Therefore, only an admin car get all users.
+    email = ""
+    if verify_role_and_profile(request, cursor, email=email):
+        SQL_query = (
+            f"SELECT idmodel, path, date, idusers FROM MODEL"
+        )
+        cursor.execute(SQL_query)
+        model_data = cursor.fetchall()
+        model_data = [dict(row) for row in model_data]
+        for model in model_data:
+            models.append({"idModel": model["idmodel"], "path": model["path"], "date": model["date"], "idUsers": model["idusers"]})
+        cursor.close()
+        DB.connector.close()
+        return models
+    else:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Invalid profile.",
+        )
 
 
 @router.get("/get_model/{idUsers}")
-def get_model(idUsers: str) -> list[dict[str, str | list[str]]]:
+def get_model(request: Request, idUsers: str) -> list[dict[str, str | list[str]]]:
     DB = ConfigDB()
     cursor = DB.get_db_cursor()
     models = []
-    SQL_query = (
-        f"SELECT idmodel, path, date, email FROM MODEL WHERE idUsers='{idUsers}'"
-    )
-    cursor.execute(SQL_query)
-    model_data = cursor.fetchall()
-    model_data = [dict(row) for row in model_data]
-    for model in model_data:
-        models.append({"idModel": model["idmodel"], "path": model["path"], "date": model["date"], "idUsers": model["idusers"]})
-    cursor.close()
-    DB.connector.close()
-    return models
+    if verify_role_and_profile(request, cursor, id_users=idUsers):
+        SQL_query = (
+            f"SELECT idmodel, path, date, email FROM MODEL WHERE idUsers='{idUsers}'"
+        )
+        cursor.execute(SQL_query)
+        model_data = cursor.fetchall()
+        model_data = [dict(row) for row in model_data]
+        for model in model_data:
+            models.append({"idModel": model["idmodel"], "path": model["path"], "date": model["date"], "idUsers": model["idusers"]})
+        cursor.close()
+        DB.connector.close()
+        return models
+    else:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Invalid profile.",
+        )
+
+
+@router.get("/get_mymodel/")
+def get_mymodel(request: Request) -> list[dict[str, str | datetime.datetime | int]]:
+    DB = ConfigDB()
+    cursor = DB.get_db_cursor()
+    models = []
+    cookie_value = request.cookies.get('ICARUS-Login')
+    if verify_role_and_profile(request, cursor, cookie=cookie_value):
+        SQL_query = (
+            f"SELECT idusers FROM USERS WHERE cookie='{cookie_value}'"
+        )
+        cursor.execute(SQL_query)
+        SQL_query = (
+            f"SELECT idmodel, path, date FROM MODEL WHERE idUsers='{cursor.fetchone()['idusers']}'"
+        )
+        cursor.execute(SQL_query)
+        model_data = cursor.fetchall()
+        model_data = [dict(row) for row in model_data]
+        for model in model_data:
+            models.append({"idModel": model["idmodel"], "path": model["path"], "date": model["date"]})
+        cursor.close()
+        DB.connector.close()
+        return models
+    else:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Invalid profile.",
+        )
 
 
 @router.delete("/del_models/")
-def del_models(idUsers: str, idModel: int) -> None:
-    # Todo : On doit impérativement vérifier le rôle de l'utilisateur avec le cookie et le mail.
+def del_models(request: Request, idUsers: str, idModel: int) -> None:
     DB = ConfigDB()
     cursor = DB.get_db_cursor()
+    if verify_role_and_profile(request, cursor, id_users=idUsers):
+        SQL_query = (
+            f"DELETE FROM MODEL WHERE idModel='{idModel}'"
+        )
+        cursor.execute(SQL_query)
+        DB.connector.commit()
+        cursor.close()
+        DB.connector.close()
+    else:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Invalid profile.",
+        )
+
+
+@router.delete("/del_mymodels/")
+def del_mymodels(request: Request, idModel: int) -> None:
+    DB = ConfigDB()
+    cursor = DB.get_db_cursor()
+    cookie_value = request.cookies.get('ICARUS-Login')
     SQL_query = (
-        f"DELETE FROM MODEL WHERE idModel='{idModel}'"
+        f"SELECT idusers FROM MODEL WHERE idmodel='{idModel}'"
     )
     cursor.execute(SQL_query)
-    DB.connector.commit()
-    cursor.close()
-    DB.connector.close()
+    if verify_role_and_profile(request, cursor, id_users=cursor.fetchone()['idusers']):
+        SQL_query = (
+            f"DELETE FROM MODEL WHERE idModel='{idModel}'"
+        )
+        cursor.execute(SQL_query)
+        DB.connector.commit()
+        cursor.close()
+        DB.connector.close()
+    else:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Invalid profile.",
+        )
 
 
 @router.post("/update_model/")
-def update_model(idModel: str, path: str, date: datetime.datetime, idUsers: str) -> None:
-    # TODO : Attention aux cookies!
+def update_model(request: Request, idModel: str, path: str, date: datetime.datetime, idUsers: str) -> None:
     DB = ConfigDB()
     cursor = DB.get_db_cursor()
-    SQL_query = (
-        f"UPDATE MODEL SET path = '{path}', date = '{date}', idusers = '{idUsers}' WHERE idModel = '{idModel}'"
-    )
-    cursor.execute(SQL_query)
-    DB.connector.commit()
-    cursor.close()
-    DB.connector.close()
+    if verify_role_and_profile(request, cursor, id_users=idUsers):
+        SQL_query = (
+            f"UPDATE MODEL SET path = '{path}', date = '{date}', idusers = '{idUsers}' WHERE idModel = '{idModel}'"
+        )
+        cursor.execute(SQL_query)
+        DB.connector.commit()
+        cursor.close()
+        DB.connector.close()
+    else:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Invalid profile.",
+        )

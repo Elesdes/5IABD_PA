@@ -34,7 +34,7 @@ async def dashboard(request: Request):
 
 
 @router.get("/logout", response_class=HTMLResponse)
-def logout(request: Request):
+async def logout(request: Request):
     response = templates.TemplateResponse(name="index.html", context={"request": request})
     response.delete_cookie(key="ICARUS-Login")
     return response

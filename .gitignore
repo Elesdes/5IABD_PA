@@ -1,8 +1,4 @@
 logs
 data
-test
-*.png
-*.mp4
 __pycache__
-.vscode
-src2
+cloud/api/src/config/db_config.py

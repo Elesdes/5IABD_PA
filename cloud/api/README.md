@@ -35,7 +35,7 @@ sudo apt-get update
 sudo apt install postgresql postgresql-contrib libgconf-2-4 libatk1.0-0 libatk-bridge2.0-0 libgdk-pixbuf2.0-0 libgtk-3-0 libgbm-dev libnss3-dev libxss-dev libasound2
 ```
 
-Then, to start the PostgreSQL service, run this :
+Then, to start the PostgreSQL service, run these :
 ```bash
 sudo service postgresql start
 sudo -i -u postgres
@@ -57,12 +57,10 @@ Before the next step, we need to access the database. To do so, run this command
 \c icarus_db
 ```
 
-Here, we need to create a user and give him the right to access the database. To do so, run this command :
+Here, we need to create a user and give him the right to access the database. To do so, run these commands :
 ```sql
 CREATE USER icarus WITH PASSWORD 'icarus';
 GRANT ALL PRIVILEGES ON DATABASE icarus_db TO icarus;
-GRANT ALL PRIVILEGES ON TABLE users TO icarus;
-GRANT ALL PRIVILEGES ON TABLE models TO icarus;
 ```
 
 You can then create the tables by running this query :
@@ -73,7 +71,7 @@ CREATE TABLE IF NOT EXISTS USERS
 	Email VARCHAR(255) NOT NULL,
 	Name VARCHAR(255) NOT NULL,
 	Forename VARCHAR(255) NOT NULL,
-    password CHAR(255) NOT NULL,
+    Password CHAR(255) NOT NULL,
     Cookie VARCHAR(255),
 	Role INT NOT NULL
 );
@@ -85,6 +83,14 @@ CREATE TABLE IF NOT EXISTS MODELS
 	Date TIMESTAMP NOT NULL,
 	IdUser SERIAL REFERENCES USERS(IdUser)
 );
+```
+
+Finally, to grant the user all the rights necessary, run these commands :
+```sql
+GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO icarus;
+ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL PRIVILEGES ON TABLES TO icarus;
+GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA public TO icarus;
+ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL PRIVILEGES ON SEQUENCES TO icarus;
 ```
 
 You can now exit the PostgreSQL CLI.

@@ -58,6 +58,8 @@ function editUser(user) {
     let selectValues = $(tabletrIdUsers).find("select").map(function() {
         return $(this).val();
     }).get();
+    console.log(user)
+    console.log(inputValues)
     fetch(`/api/update_users/?idUsers=${user.idUsers}&name=${inputValues[1]}&forename=${inputValues[0]}&email=${inputValues[2]}&role=${selectValues[0]}`, {
         method: 'POST'
     })
@@ -72,8 +74,9 @@ function editUser(user) {
     })
     .catch(error => {
         console.error('Une erreur s\'est produite lors de l\'édition de l\'utilisateur:', error);
+    }).finally(() => {
+        window.location.reload();
     });
-    window.location.reload()
 }
 
 function deleteUser(idUsers) {
@@ -91,6 +94,7 @@ function deleteUser(idUsers) {
     })
     .catch(error => {
         console.error('Une erreur s\'est produite lors de la suppression de l\'utilisateur:', error);
+    }).finally(() => {
+        window.location.reload();
     });
-    window.location.reload()
 }

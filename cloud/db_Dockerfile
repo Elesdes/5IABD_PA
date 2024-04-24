@@ -1,0 +1,13 @@
+FROM postgres:latest
+
+LABEL maintainer="ICARUS"
+LABEL version="1.0"
+
+WORKDIR .
+
+#COPY sql/create_database_postgresql.sql /create_database_postgresql.sql
+#RUN psql -U hqvdqqhguy -d icarus-pa-database -f /sql/create_database_postgresql.sql
+
+EXPOSE 5432
+
+CMD ["psql", "-U", "hqvdqqhguy", "-d", "icarus-pa-database", "-f","/sql/create_database_postgresql.sql"]

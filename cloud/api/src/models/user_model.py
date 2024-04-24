@@ -2,12 +2,13 @@ from fastapi import Depends
 from passlib.hash import md5_crypt
 from config.db_config import ConfigDB
 from typing import Self
+import psycopg2
 import string
 import random
 
 
 class User:
-    def __init__(self, email=None, password=None, name=None, forename=None, role=None, cookie=None):
+    def __init__(self, email: str = None, password: str = None, name: str = None, forename: str = None, role: int = None, cookie: int = None):
         self.email = email
         self.password = password
         self.name = name
@@ -15,14 +16,14 @@ class User:
         self.role = role
         self.cookie = cookie
 
-    def verify_password(self, plain_password) -> str:
+    def verify_password(self, plain_password: str) -> str:
         parts = self.password.split("$")
         scheme, salt, stored_hash = parts[1], parts[2], parts[3]
         stored_hash = stored_hash.strip()
         new_hash = md5_crypt.using(salt=salt).hash(plain_password)
         return new_hash == f"${scheme}${salt}${stored_hash}"
 
-    def get_user(self, cursor, id_users=None, email=None, cookie=None) -> Self | None:
+    def get_user(self, cursor: psycopg2, id_users: int = None, email: str = None, cookie: str = None) -> Self | None:
         SQL_query = (
             f"SELECT email, password, name, forename, role, cookie FROM USERS WHERE 1 = 1"
         )
@@ -50,7 +51,7 @@ class User:
             return user.role
         return None
 
-    def insert_user(self, connector, cursor, email, password, name, forename) -> Self:
+    def insert_user(self, connector: psycopg2.connect, cursor: psycopg2, email: str, password: str, name: str, forename: str) -> Self:
         cursor.execute(
             f"INSERT INTO users(email, password, name, forename, role, cookie) VALUES('{email}', '{password}', '{name}', '{forename}', 2, '')"
         )
@@ -61,7 +62,7 @@ class User:
         return User(email, password, name, forename, 2, cookie_value)
 
     # A voir où est-ce qu'on le range
-    def set_cookie(self, connector, cursor, email, cookie_value) -> None:
+    def set_cookie(self, connector: psycopg2.connect, cursor: psycopg2, email: str, cookie_value: str) -> None:
         sql = f"UPDATE USERS SET cookie = '{cookie_value}' WHERE email = '{email}'"
         self.cookie = cookie_value
         cursor.execute(sql)
