@@ -6,7 +6,7 @@ ICARUS is an open-source student project aimed at developing a system for contro
 
 ![Architecture](/docs/architecture.jpg)
 
-## Project Setup
+## Project Global Setup
 
 ### Install WSL Distribution
 
@@ -42,33 +42,9 @@ conda activate ICARUS
 yes | pip install -r requirements.txt
 ```
 
-### Make PyBullet Work
-
-```bash
-yes | sudo apt update && sudo apt upgrade
-sudo ln -s /usr/lib/wsl/lib/libcuda.so.1 /usr/local/cuda/lib64/libcuda.so
-yes | sudo apt-get install xorg-dev libgl1-mesa-dri libgl1-mesa-glx mesa-utils libglu1-mesa-dev freeglut3-dev mesa-common-dev
-export MESA_D3D12_DEFAULT_ADAPTER_NAME=NVIDIA
-export MESA_GL_VERSION_OVERRIDE=3.3
-export MESA_GLSL_VERSION_OVERRIDE=330
-sudo ln -sf /opt/bin/nvidia-smi /usr/bin/nvidia-smi
-```
-
-You can then check if PyBullet works by running the notebook `notebooks/pybullet/pybullet_hello_world.ipynb`.
-
-## How To Run Locally
-
-### Run EMG Recording
-
-TODO
-
-### Run the Prosthesis Simulation
-
-TODO
-
-### Run FastAPI Local Server
-
-Execute the code in `api/src/main.py`.
+### If you want to run the API on your local machine, or even run the simulation, please refer to these READMEs :
+- [API](/cloud/README.md)
+- [Simulation](/local/README.md)
 
 ## Work Based On
 
