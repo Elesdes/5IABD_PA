@@ -51,7 +51,9 @@ yes | pip install -r requirements.txt
 This project has been influenced by the following works:
 
 - [TactHand](https://github.com/pslade2/TactHand) (Open source model of a 3D-printed hand prosthesis)
-- [PyBullet](https://github.com/bulletphysics/bullet3) (Open source physics engine)
+- [InMoov](https://inmoov.fr/hand-i2/) (An other open source model of a 3D-printed hand prosthesis)
+- [PyBullet](https://github.com/bulletphysics/bullet3) (Open source physics engine for Python)
+- [Pyomyo](https://github.com/PerlinWarp/pyomyo) (Open source code for interfacing with Myo armbands)
 
 We would like to express our gratitude to these authors for their groundbreaking work and contributions to the open-source community.
 
