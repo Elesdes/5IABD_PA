@@ -24,7 +24,36 @@ You can then check if PyBullet works by running the notebook `notebooks/pybullet
 
 ## Run EMG Recording
 
-TODO
+### Running EMG Recording on Windows
+
+Run the script located in `emg/emg_recording.py` to record EMG data.
+
+### Running EMG Recording on WSL
+
+Follow this link to install the latest version of package [usbipd-win](https://github.com/dorssel/usbipd-win/releases).
+
+Next steps must be run on an Administrator PowerShell :
+
+- To see the list of available devices :
+```pwsh
+usbipd list
+```
+
+You must be able to see the device you want to bind to WSL.
+
+- To bind the device to WSL :
+```pwsh
+usbipd bind --busid <busid>
+usbipd attach --wsl --busid <busid>
+```
+
+Now, open your WSL distro and run the following command to make sure that it's binded :
+
+```bash
+lsusb
+```
+
+Finally, you can run the script located in `emg/emg_recording.py` to record EMG data.
 
 ## Run the Prosthesis Simulation
 
