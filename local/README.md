@@ -35,6 +35,7 @@ Follow this link to install the latest version of package [usbipd-win](https://g
 Next steps must be run on an Administrator PowerShell :
 
 - To see the list of available devices :
+
 ```pwsh
 usbipd list
 ```
@@ -42,6 +43,7 @@ usbipd list
 You must be able to see the device you want to bind to WSL.
 
 - To bind the device to WSL :
+
 ```pwsh
 usbipd bind --busid <busid>
 usbipd attach --wsl --busid <busid>
