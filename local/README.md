@@ -10,6 +10,12 @@ pip install -r requirements.txt
 
 ## Make PyBullet Work
 
+### Windows
+
+You can follow this guide [here](https://deepakjogi.medium.com/how-to-install-pybullet-physics-simulation-in-windows-e1f16baa26f6).
+
+### Linux (Ubuntu)
+
 ```bash
 yes | sudo apt update && sudo apt upgrade
 sudo ln -s /usr/lib/wsl/lib/libcuda.so.1 /usr/local/cuda/lib64/libcuda.so
