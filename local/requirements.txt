@@ -13,3 +13,5 @@ gymnasium[classic-control]
 scipy
 imageio[ffmpeg]
 pyserial
+watchdog
+click
