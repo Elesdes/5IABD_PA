@@ -3,8 +3,6 @@ tensorflow[and-cuda]
 numpy
 matplotlib
 ipykernel
-pybullet
-qibullet
 gputil
 numpngw
 tqdm
@@ -13,5 +11,4 @@ gymnasium[classic-control]
 scipy
 imageio[ffmpeg]
 pyserial
-watchdog
 click
