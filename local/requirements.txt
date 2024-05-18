@@ -13,3 +13,4 @@ imageio[ffmpeg]
 pyserial
 click
 scikit-learn
+opencv-python
