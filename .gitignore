@@ -1,4 +1,9 @@
+# File system
+__pycache__
+
+# Project generated files
 logs
 data
-__pycache__
+
+# Configurations
 cloud/api/src/config/db_config.py
