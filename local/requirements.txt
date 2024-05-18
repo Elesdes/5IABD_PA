@@ -12,3 +12,4 @@ scipy
 imageio[ffmpeg]
 pyserial
 click
+scikit-learn
