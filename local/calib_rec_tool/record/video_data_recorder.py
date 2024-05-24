@@ -46,7 +46,7 @@ class Gui(object):
         self.record_file_name = 'default_file'
         self.start_time = 0
         self.record_time_start = 0
-        self.record_time = 20
+        self.record_time = 30
         self.acceleration_data = deque(maxlen=1)
         self.gyroscope_data = deque(maxlen=1)
         self.orientation_data = deque(maxlen=1)
@@ -81,12 +81,12 @@ class Gui(object):
         self.entry_record_label.grid(row=0, column=1, pady=10)
 
         # Record time slider
-        self.record_time_slider = ttk.Scale(master=self.appWin, from_=1, to=100, value=20,
+        self.record_time_slider = ttk.Scale(master=self.appWin, from_=1, to=100, value=30,
                                             command=self.slider_value_changed)
         self.record_time_slider.grid(row=1, column=0)
 
         # Record slider value text
-        self.record_time_slider_text = ttk.Label(master=self.appWin, text="Record Time: 20s", foreground='black')
+        self.record_time_slider_text = ttk.Label(master=self.appWin, text="Record Time: 30s", foreground='black')
         self.record_time_slider_text.grid(row=1, column=1)
 
         # Myo Record Button
@@ -285,7 +285,7 @@ class EmgCollector(myo.DeviceListener):
 def start_recording(output_filename: str,
                     frame_res: Tuple[int, int] = (640, 480),
                     fps: float = 30.0,
-                    duration: float = 20,
+                    duration: float = 30,
                     out: cv2.VideoWriter = None,
                     cap: cv2.VideoCapture = None):
 
