@@ -5,17 +5,18 @@ import os
 
 def record_video(
     output_filepath: str,
+    *,
     frame_res: Tuple[int, int] = (640, 480),
     fps: float = 20.0,
     duration: float = 10,
 ):
-    if not os.path.exists(output_path):
-        os.makedirs(output_path)
+    if not os.path.exists(output_filepath):
+        os.makedirs(output_filepath)
 
     # Define the codec and create a VideoWriter object
     fourcc = cv2.VideoWriter_fourcc(*"XVID")
     out = cv2.VideoWriter(
-        os.path.join(output_path, output_filename),
+        output_filepath,
         fourcc,
         fps,
         frame_res,
@@ -32,7 +33,7 @@ def record_video(
         return
 
     print(
-        f"Recording video to {os.path.join(output_path, output_filename)} for {duration} seconds..."
+        f"Recording video to {output_filepath} for {duration} seconds..."
     )
 
     # Record video for the specified duration
@@ -57,8 +58,7 @@ def record_video(
 
 
 if __name__ == "__main__":
-    output_path = input("Enter the output directory: ")
-    output_filename = input("Enter the output filename (e.g., output.avi): ")
+    output_filepath = "output"
     duration = int(input("Enter the duration of the video in seconds: "))
 
-    record_video(os.path.join(output_path, output_filename), duration=duration)
+    record_video(output_filepath, duration=duration)
