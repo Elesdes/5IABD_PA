@@ -1,3 +1,4 @@
+adafruit-circuitpython-servokit
 pandas
 tensorflow[and-cuda]
 numpy
