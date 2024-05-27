@@ -1,5 +1,6 @@
 # File system
 __pycache__
+.idea
 
 # Project generated files
 logs
