@@ -8,7 +8,7 @@ CONFIG = ConfigModel()
 DOWNLOAD_PATH: str = "./model/"
 SESSION_PATH: str = "erwanduprey/"
 
-# Mettre tout ce qu'il y a en dessous dans un fichier type models/file_model.py, 
+# Mettre tout ce qu'il y a en dessous dans un fichier type models/file_model.py,
 # faire hériter à ConfigModel, le tout pour gérer la config des fichiers individuellement
 FILE_PATH: str = "FINALE.keras"
 

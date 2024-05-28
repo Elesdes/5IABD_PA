@@ -13,6 +13,7 @@ MAX_ANGLE: Final = [80, 140, 140, 140, 140]
 # Fingers order
 # thumb, index, middle, ring, pinky
 
+
 class Hand:
     def __init__(self):
         self.pca = ServoKit(channels=16)
@@ -27,7 +28,7 @@ class Hand:
     def move(self, servoId: int, angle: int):
         if angle < MIN_ANGLE[servoId] or angle > MAX_ANGLE[servoId]:
             raise ValueError(f"Angle {angle} is out of range for servo {servoId}")
-        
+
         self.servos[servoId].angle = angle
 
     def moveAll(self, angles: list):
@@ -38,7 +39,10 @@ class Hand:
             self.servos[i].angle = angles[i]
 
     def moveRandom(self):
-        angles = [random.randint(MIN_ANGLE[servo_idx], MAX_ANGLE[servo_idx]) for servo_idx in range(self.nbServo)]
+        angles = [
+            random.randint(MIN_ANGLE[servo_idx], MAX_ANGLE[servo_idx])
+            for servo_idx in range(self.nbServo)
+        ]
         self.moveAll(angles)
 
     def moveAllToMin(self):
@@ -48,7 +52,10 @@ class Hand:
         self.moveAll([MAX_ANGLE[i] for i in range(self.nbServo)])
 
     def moveFromCategoricalList(self, categorical: list):
-        angles = [MIN_ANGLE[i] if categorical[i] == 0 else MAX_ANGLE[i] for i in range(self.nbServo)]
+        angles = [
+            MIN_ANGLE[i] if categorical[i] == 0 else MAX_ANGLE[i]
+            for i in range(self.nbServo)
+        ]
         self.moveAll(angles)
 
     def reset(self):

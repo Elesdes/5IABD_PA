@@ -4,6 +4,7 @@ import os
 from datetime import datetime
 from pathlib import Path
 
+
 @dataclass
 class PathModel:
     api_dir_path = Path(__file__).resolve().parent.parent.parent

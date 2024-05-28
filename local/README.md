@@ -1,6 +1,6 @@
 # Run Simulation on Local
 
-You must follow these documentations before proceeding: 
+You must follow these documentations before proceeding:
 - [Connect Myo Armband](../docs/local/connect_myo_armband.md)
 - [Setup ROS](../docs/local/setup_ros.md)
 

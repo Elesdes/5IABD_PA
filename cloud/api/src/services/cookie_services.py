@@ -11,9 +11,13 @@ from datetime import timedelta, timezone, datetime
 templates = Jinja2Templates(directory="../templates/")
 
 
-def set_response_cookie(request: Request, web_page: str, cookie_value: str) -> HTMLResponse:
+def set_response_cookie(
+    request: Request, web_page: str, cookie_value: str
+) -> HTMLResponse:
     expiry = datetime.now(timezone.utc) + timedelta(days=1)
-    response = templates.TemplateResponse(name=f"{web_page}", context={"request": request})
+    response = templates.TemplateResponse(
+        name=f"{web_page}", context={"request": request}
+    )
     response.set_cookie(
         key="ICARUS-Login",
         value=f"{cookie_value}",

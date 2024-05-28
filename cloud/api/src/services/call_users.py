@@ -21,10 +21,10 @@ templates = Jinja2Templates(directory="../templates/")
 def get_profile(request: Request) -> list[dict[str, str | list[str] | int]]:
     DB = ConfigDB()
     cursor = DB.get_db_cursor()
-    if verify_role_and_profile(request, cursor, cookie=request.cookies.get("ICARUS-Login")):
-        SQL_query = (
-            f"SELECT forename, name, email FROM USERS WHERE cookie='{request.cookies.get('ICARUS-Login')}'"
-        )
+    if verify_role_and_profile(
+        request, cursor, cookie=request.cookies.get("ICARUS-Login")
+    ):
+        SQL_query = f"SELECT forename, name, email FROM USERS WHERE cookie='{request.cookies.get('ICARUS-Login')}'"
         cursor.execute(SQL_query)
         user_data = cursor.fetchall()
         user_data = [dict(row) for row in user_data]
@@ -46,14 +46,20 @@ def get_users(request: Request) -> list[dict[str, str | list[str] | int]]:
     email = ""
     users = []
     if verify_role_and_profile(request, cursor, email=email):
-        SQL_query = (
-            f"SELECT idusers, forename, name, email, role FROM USERS"
-        )
+        SQL_query = f"SELECT idusers, forename, name, email, role FROM USERS"
         cursor.execute(SQL_query)
         user_data = cursor.fetchall()
         user_data = [dict(row) for row in user_data]
         for user in user_data:
-            users.append({"idUsers": user["idusers"], "forename": user["forename"], "name": user["name"], "email": user["email"], "role": user["role"]})
+            users.append(
+                {
+                    "idUsers": user["idusers"],
+                    "forename": user["forename"],
+                    "name": user["name"],
+                    "email": user["email"],
+                    "role": user["role"],
+                }
+            )
         cursor.close()
         DB.connector.close()
         return users
@@ -69,9 +75,7 @@ def del_users(request: Request, idUsers: str) -> None:
     DB = ConfigDB()
     cursor = DB.get_db_cursor()
     if verify_role_and_profile(request, cursor, id_users=idUsers):
-        SQL_query = (
-            f"DELETE FROM USERS WHERE idusers='{idUsers}'"
-        )
+        SQL_query = f"DELETE FROM USERS WHERE idusers='{idUsers}'"
         cursor.execute(SQL_query)
         DB.connector.commit()
         cursor.close()
@@ -87,7 +91,9 @@ def del_users(request: Request, idUsers: str) -> None:
 def del_profile(request: Request) -> HTMLResponse:
     DB = ConfigDB()
     cursor = DB.get_db_cursor()
-    if verify_role_and_profile(request, cursor, cookie=request.cookies.get('ICARUS-Login')):
+    if verify_role_and_profile(
+        request, cursor, cookie=request.cookies.get("ICARUS-Login")
+    ):
         SQL_query = (
             f"DELETE FROM USERS WHERE cookie='{request.cookies.get('ICARUS-Login')}'"
         )
@@ -95,7 +101,9 @@ def del_profile(request: Request) -> HTMLResponse:
         DB.connector.commit()
         cursor.close()
         DB.connector.close()
-        return templates.TemplateResponse(name="index.html", context={"request": request})
+        return templates.TemplateResponse(
+            name="index.html", context={"request": request}
+        )
     else:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
@@ -104,20 +112,22 @@ def del_profile(request: Request) -> HTMLResponse:
 
 
 @router.post("/update_users/")
-def update_users(request: Request, idUsers: str, name: str, forename: str, email: str, role: str) -> None:
+def update_users(
+    request: Request, idUsers: str, name: str, forename: str, email: str, role: str
+) -> None:
     DB = ConfigDB()
     cursor = DB.get_db_cursor()
     if verify_role_and_profile(request, cursor, id_users=idUsers):
         # If the request come from a User, he can't set the user_role to Admin.
         # Technically, he can't access the webpage to this, but he can still tinker the request himself.
-        user_role = User().get_current_user_role(request.cookies.get("ICARUS-Login"), cursor)
+        user_role = User().get_current_user_role(
+            request.cookies.get("ICARUS-Login"), cursor
+        )
         if user_role == 2:
             role = 2
         else:
             role = 1 if role == "Admin" else 2
-        SQL_query = (
-            f"UPDATE USERS SET name = '{name}', forename = '{forename}', email = '{email}', role = '{role}' WHERE idusers = '{idUsers}'"
-        )
+        SQL_query = f"UPDATE USERS SET name = '{name}', forename = '{forename}', email = '{email}', role = '{role}' WHERE idusers = '{idUsers}'"
         cursor.execute(SQL_query)
         DB.connector.commit()
         cursor.close()
@@ -131,18 +141,20 @@ def update_users(request: Request, idUsers: str, name: str, forename: str, email
 
 # Very similar to the previous function but not called the same way. Thus, we shouldn't try a refacto.
 @router.post("/update_profile", response_class=HTMLResponse)
-async def update_profile(request: Request, email: Annotated[str, Form()], forename: Annotated[str, Form()], name: Annotated[str, Form()], password: Optional[str] = Form(None)) -> HTMLResponse:
+async def update_profile(
+    request: Request,
+    email: Annotated[str, Form()],
+    forename: Annotated[str, Form()],
+    name: Annotated[str, Form()],
+    password: Optional[str] = Form(None),
+) -> HTMLResponse:
     DB = ConfigDB()
     cursor = DB.get_db_cursor()
     if verify_role_and_profile(request, cursor, email=email):
         if password is None:
-            SQL_query = (
-                f"UPDATE USERS SET forename='{forename}', name='{name}' WHERE cookie='{request.cookies.get('ICARUS-Login')}'"
-            )
+            SQL_query = f"UPDATE USERS SET forename='{forename}', name='{name}' WHERE cookie='{request.cookies.get('ICARUS-Login')}'"
         else:
-            SQL_query = (
-                f"UPDATE USERS SET forename='{forename}', name='{name}', password='{password}' WHERE cookie='{request.cookies.get('ICARUS-Login')}'"
-            )
+            SQL_query = f"UPDATE USERS SET forename='{forename}', name='{name}', password='{password}' WHERE cookie='{request.cookies.get('ICARUS-Login')}'"
         cursor.execute(SQL_query)
         DB.connector.commit()
         cursor.close()

@@ -990,7 +990,7 @@ if __name__ == "__main__":
     buffer = []
 
     try:
-        while True:                
+        while True:
             m.run()
 
     except KeyboardInterrupt:

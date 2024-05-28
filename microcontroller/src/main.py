@@ -38,8 +38,16 @@ if __name__ == "__main__":
     m.vibrate(1)
     print(f"{'*'* 10}Connected{'*'* 10}")
 
-
-    myo_cols = ["sensor1", "sensor2", "sensor3", "sensor4", "sensor5", "sensor6", "sensor7", "sensor8"]
+    myo_cols = [
+        "sensor1",
+        "sensor2",
+        "sensor3",
+        "sensor4",
+        "sensor5",
+        "sensor6",
+        "sensor7",
+        "sensor8",
+    ]
     chunk_size = 300
 
     try:

@@ -13,7 +13,7 @@ def is_valid_mime(file_name: str) -> bool:
     :return:
     If its a PNG or JPG, then it's true. Else it's false.
     """
-    valid_extensions: list[str] = ['.png', '.jpg', '.jpeg']
+    valid_extensions: list[str] = [".png", ".jpg", ".jpeg"]
     ext: str = os.path.splitext(file_name)[-1].lower()
     return ext in valid_extensions
 
@@ -49,7 +49,13 @@ def generate_zip_file(*, input_file_path: str, output_file_path: str) -> None:
         logging.error(f"Error generating ZIP archive: {e}")
 
 
-def verify_role_and_profile(request: Request, cursor: psycopg2, id_users: int = None, email: str = None, cookie: str = None) -> bool:
+def verify_role_and_profile(
+    request: Request,
+    cursor: psycopg2,
+    id_users: int = None,
+    email: str = None,
+    cookie: str = None,
+) -> bool:
     """
     Used in order to check the privileges of the current user.
     :param request: request metadata of the user
@@ -65,7 +71,9 @@ def verify_role_and_profile(request: Request, cursor: psycopg2, id_users: int = 
     if current_user.role == 2 and email == "":
         return False
 
-    request_target = User().get_user(cursor, id_users=id_users, email=email, cookie=cookie)
+    request_target = User().get_user(
+        cursor, id_users=id_users, email=email, cookie=cookie
+    )
     if current_user.role == 1 or current_user.email == request_target.email:
         return True
     return False

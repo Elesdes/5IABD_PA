@@ -19,14 +19,19 @@ def get_models(request: Request) -> list[dict[str, str | datetime.datetime | int
     # Set the mail to "" because the verify_role_and_profile will fail the second test. Therefore, only an admin car get all users.
     email = ""
     if verify_role_and_profile(request, cursor, email=email):
-        SQL_query = (
-            f"SELECT idmodel, path, date, idusers FROM MODEL"
-        )
+        SQL_query = f"SELECT idmodel, path, date, idusers FROM MODEL"
         cursor.execute(SQL_query)
         model_data = cursor.fetchall()
         model_data = [dict(row) for row in model_data]
         for model in model_data:
-            models.append({"idModel": model["idmodel"], "path": model["path"], "date": model["date"], "idUsers": model["idusers"]})
+            models.append(
+                {
+                    "idModel": model["idmodel"],
+                    "path": model["path"],
+                    "date": model["date"],
+                    "idUsers": model["idusers"],
+                }
+            )
         cursor.close()
         DB.connector.close()
         return models
@@ -50,7 +55,14 @@ def get_model(request: Request, idUsers: str) -> list[dict[str, str | list[str]]
         model_data = cursor.fetchall()
         model_data = [dict(row) for row in model_data]
         for model in model_data:
-            models.append({"idModel": model["idmodel"], "path": model["path"], "date": model["date"], "idUsers": model["idusers"]})
+            models.append(
+                {
+                    "idModel": model["idmodel"],
+                    "path": model["path"],
+                    "date": model["date"],
+                    "idUsers": model["idusers"],
+                }
+            )
         cursor.close()
         DB.connector.close()
         return models
@@ -66,20 +78,22 @@ def get_mymodel(request: Request) -> list[dict[str, str | datetime.datetime | in
     DB = ConfigDB()
     cursor = DB.get_db_cursor()
     models = []
-    cookie_value = request.cookies.get('ICARUS-Login')
+    cookie_value = request.cookies.get("ICARUS-Login")
     if verify_role_and_profile(request, cursor, cookie=cookie_value):
-        SQL_query = (
-            f"SELECT idusers FROM USERS WHERE cookie='{cookie_value}'"
-        )
+        SQL_query = f"SELECT idusers FROM USERS WHERE cookie='{cookie_value}'"
         cursor.execute(SQL_query)
-        SQL_query = (
-            f"SELECT idmodel, path, date FROM MODEL WHERE idUsers='{cursor.fetchone()['idusers']}'"
-        )
+        SQL_query = f"SELECT idmodel, path, date FROM MODEL WHERE idUsers='{cursor.fetchone()['idusers']}'"
         cursor.execute(SQL_query)
         model_data = cursor.fetchall()
         model_data = [dict(row) for row in model_data]
         for model in model_data:
-            models.append({"idModel": model["idmodel"], "path": model["path"], "date": model["date"]})
+            models.append(
+                {
+                    "idModel": model["idmodel"],
+                    "path": model["path"],
+                    "date": model["date"],
+                }
+            )
         cursor.close()
         DB.connector.close()
         return models
@@ -95,9 +109,7 @@ def del_models(request: Request, idUsers: str, idModel: int) -> None:
     DB = ConfigDB()
     cursor = DB.get_db_cursor()
     if verify_role_and_profile(request, cursor, id_users=idUsers):
-        SQL_query = (
-            f"DELETE FROM MODEL WHERE idModel='{idModel}'"
-        )
+        SQL_query = f"DELETE FROM MODEL WHERE idModel='{idModel}'"
         cursor.execute(SQL_query)
         DB.connector.commit()
         cursor.close()
@@ -113,15 +125,11 @@ def del_models(request: Request, idUsers: str, idModel: int) -> None:
 def del_mymodels(request: Request, idModel: int) -> None:
     DB = ConfigDB()
     cursor = DB.get_db_cursor()
-    cookie_value = request.cookies.get('ICARUS-Login')
-    SQL_query = (
-        f"SELECT idusers FROM MODEL WHERE idmodel='{idModel}'"
-    )
+    cookie_value = request.cookies.get("ICARUS-Login")
+    SQL_query = f"SELECT idusers FROM MODEL WHERE idmodel='{idModel}'"
     cursor.execute(SQL_query)
-    if verify_role_and_profile(request, cursor, id_users=cursor.fetchone()['idusers']):
-        SQL_query = (
-            f"DELETE FROM MODEL WHERE idModel='{idModel}'"
-        )
+    if verify_role_and_profile(request, cursor, id_users=cursor.fetchone()["idusers"]):
+        SQL_query = f"DELETE FROM MODEL WHERE idModel='{idModel}'"
         cursor.execute(SQL_query)
         DB.connector.commit()
         cursor.close()
@@ -134,13 +142,13 @@ def del_mymodels(request: Request, idModel: int) -> None:
 
 
 @router.post("/update_model/")
-def update_model(request: Request, idModel: str, path: str, date: datetime.datetime, idUsers: str) -> None:
+def update_model(
+    request: Request, idModel: str, path: str, date: datetime.datetime, idUsers: str
+) -> None:
     DB = ConfigDB()
     cursor = DB.get_db_cursor()
     if verify_role_and_profile(request, cursor, id_users=idUsers):
-        SQL_query = (
-            f"UPDATE MODEL SET path = '{path}', date = '{date}', idusers = '{idUsers}' WHERE idModel = '{idModel}'"
-        )
+        SQL_query = f"UPDATE MODEL SET path = '{path}', date = '{date}', idusers = '{idUsers}' WHERE idModel = '{idModel}'"
         cursor.execute(SQL_query)
         DB.connector.commit()
         cursor.close()

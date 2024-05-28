@@ -26,7 +26,9 @@ def request_dashboard(request: Request) -> bool:
 
 
 @db_vars
-def request_login(DB: ConfigDB, cursor: psycopg2.connect, email: str, password: str) -> User | None:
+def request_login(
+    DB: ConfigDB, cursor: psycopg2.connect, email: str, password: str
+) -> User | None:
     user = User().get_user(cursor, email=email)
     if not user or not user.verify_password(password):
         return None
@@ -35,9 +37,24 @@ def request_login(DB: ConfigDB, cursor: psycopg2.connect, email: str, password: 
 
 
 @db_vars
-def request_register(DB: ConfigDB, cursor: psycopg2.connect, request: Request, email: str, password: str, name: str, forename: str) -> HTMLResponse:
+def request_register(
+    DB: ConfigDB,
+    cursor: psycopg2.connect,
+    request: Request,
+    email: str,
+    password: str,
+    name: str,
+    forename: str,
+) -> HTMLResponse:
     user = User()
     if user.get_user(cursor, email=email) is not None:
         return None
-    user = user.insert_user(DB.connector, cursor, email, pwd_context.hash(password, scheme="md5_crypt"), name, forename)
+    user = user.insert_user(
+        DB.connector,
+        cursor,
+        email,
+        pwd_context.hash(password, scheme="md5_crypt"),
+        name,
+        forename,
+    )
     return set_response_cookie(request, "dashboard.html", user.cookie)
