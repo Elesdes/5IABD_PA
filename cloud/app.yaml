@@ -6,21 +6,21 @@
 runtime: python311
 
 env_variables:
-  CLOUD_SQL_USERNAME: $CLOUD_SQL_USERNAME
-  CLOUD_SQL_PASSWORD: $CLOUD_SQL_PASSWORD
-  CLOUD_SQL_DATABASE_NAME: $CLOUD_SQL_DATABASE_NAME
-  CLOUD_SQL_CONNECTION_NAME: $CLOUD_SQL_CONNECTION_NAME
-  CLOUD_PRIVATE_IP: $CLOUD_PRIVATE_IP
+  CLOUD_SQL_USERNAME: <CLOUD_SQL_USERNAME>
+  CLOUD_SQL_PASSWORD: <CLOUD_SQL_PASSWORD>
+  CLOUD_SQL_DATABASE_NAME: <CLOUD_SQL_DATABASE_NAME>
+  CLOUD_SQL_CONNECTION_NAME: <CLOUD_SQL_CONNECTION_NAME>
+  CLOUD_PRIVATE_IP: <CLOUD_PRIVATE_IP>
   PRIVATE_IP: TRUE
 # Set App Engine instance class (defaults to F1)
 # See https://cloud.google.com/appengine/docs/standard/#instance_classes
 instance_class: F1
 
 beta_settings:
-  cloud_sql_instances: $CLOUD_SQL_INSTANCES
+  cloud_sql_instances: <CLOUD_SQL_INSTANCES>
 
 vpc_access_connector:
-  name: $VPS_ACCESS_CONNECTOR_NAME
+  name: <VPS_ACCESS_CONNECTOR_NAME>
 
 # Set entrypoint to locate FastAPI app, which is 'application' in module app/main.py
 # Configure gunicorn worker count via --workers arg based on the App Engine instance class
