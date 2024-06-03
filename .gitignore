@@ -5,6 +5,3 @@ __pycache__
 # Project generated files
 logs
 data
-
-# Configurations
-cloud/src/config/db_config.py

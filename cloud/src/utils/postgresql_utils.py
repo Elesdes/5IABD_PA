@@ -13,10 +13,7 @@ class PostgreSQLUtils:
         Establish a database connection and return the cursor.
         This method is called when entering the context (using 'with' statement).
         """
-        if connection_string := os.getenv("AZURE_POSTGRESQL_CONNECTIONSTRING"):
-            self.conn = psycopg2.connect(connection_string)
-        else:
-            self.conn = psycopg2.connect(**self.config)
+        self.conn = psycopg2.connect(**self.config)
         self.cur = self.conn.cursor()
         return self.cur
 
