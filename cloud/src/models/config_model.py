@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 
-from models.path_model import PathModel
-from utils.files_utils import get_extension, empty_file_content
+from src.models.path_model import PathModel
+from src.utils.files_utils import get_extension, empty_file_content
 import os
 
 

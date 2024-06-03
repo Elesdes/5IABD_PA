@@ -1,6 +1,6 @@
 from fastapi import Depends
 from passlib.hash import md5_crypt
-from config.db_config import ConfigDB
+from src.config.db_config import ConfigDB
 from typing import Self
 import psycopg2
 import string
@@ -75,7 +75,7 @@ class User:
         forename: str,
     ) -> Self:
         cursor.execute(
-            f"INSERT INTO users(email, password, name, forename, role, cookie) VALUES('{email}', '{password}', '{name}', '{forename}', 2, '')"
+            f"INSERT INTO USERS(email, password, name, forename, role, cookie) VALUES('{email}', '{password}', '{name}', '{forename}', 2, '')"
         )
         connector.commit()
         letters = string.ascii_lowercase

@@ -1,9 +1,9 @@
 from fastapi import Request
 from fastapi.responses import HTMLResponse
-from config.db_config import ConfigDB
-from models.user_model import User
-from services.cookie_services import set_cookie, set_response_cookie
-from decorators.db_decorator import db_vars
+from src.config.db_config import ConfigDB
+from src.models.user_model import User
+from src.services.cookie_services import set_cookie, set_response_cookie
+from src.decorators.db_decorator import db_vars
 from passlib.context import CryptContext
 import psycopg2
 

@@ -1,6 +1,6 @@
-from models.config_model import ConfigModel
+# from src.models.config_model import ConfigModel
 
-CONFIG = ConfigModel()
+# CONFIG = ConfigModel()
 
 # A mettre dans le fichier models/path_model.py
 # Utiliser des chemins relatifs plutôt que des chemins absolus

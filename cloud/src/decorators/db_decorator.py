@@ -1,4 +1,4 @@
-from config.db_config import ConfigDB
+from src.config.db_config import ConfigDB
 
 
 def db_vars(func):

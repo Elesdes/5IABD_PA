@@ -1,4 +1,4 @@
-from models.db_model import DataBaseModel
+from src.models.db_model import DataBaseModel
 import os
 
 config_db = DataBaseModel(

@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Request, UploadFile, File, HTTPException
 from fastapi.responses import FileResponse
-from config import app_config as config
-from utils.files_utils import is_valid_mime
+from src.config import app_config as config
+from src.utils.files_utils import is_valid_mime
 import os
 import zipfile
 

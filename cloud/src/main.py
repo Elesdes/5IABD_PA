@@ -4,13 +4,12 @@ from fastapi.middleware.cors import CORSMiddleware
 from starlette.exceptions import HTTPException as StarletteHTTPException
 from starlette.responses import HTMLResponse
 from starlette.templating import Jinja2Templates
-from services import download_upload, call_users, call_models
-from routes import user, dashboard
+from src.services import download_upload, call_users, call_models
+from src.routes import user, dashboard
 import uvicorn
-import os
 
 app = FastAPI()
-app.mount("/static", StaticFiles(directory="../static"), name="static")
+app.mount("/static", StaticFiles(directory="./static"), name="static")
 app.include_router(download_upload.router)
 app.include_router(user.router)
 app.include_router(dashboard.router)
@@ -25,7 +24,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-templates = Jinja2Templates(directory="../templates")
+templates = Jinja2Templates(directory="./templates")
 
 
 @app.get("/", response_class=HTMLResponse, include_in_schema=False)
@@ -58,7 +57,7 @@ async def test_error():
 
 
 def run():
-    uvicorn.run(app, host="127.0.0.1", port=8000)
+    uvicorn.run('main:app', host='0.0.0.0', port=3100)
 
 
 if __name__ == "__main__":
