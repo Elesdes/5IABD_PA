@@ -1,16 +1,17 @@
 from fastapi import FastAPI, Request, HTTPException
-from fastapi.staticfiles import StaticFiles
+
+"""from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
 from starlette.exceptions import HTTPException as StarletteHTTPException
 from starlette.responses import HTMLResponse
 from starlette.templating import Jinja2Templates
 from services import download_upload, call_users, call_models
 from routes import user, dashboard
-import uvicorn
+import uvicorn"""
 import os
 
 app = FastAPI()
-app.mount("/static", StaticFiles(directory="../static"), name="static")
+"""app.mount("/static", StaticFiles(directory="../static"), name="static")
 app.include_router(download_upload.router)
 app.include_router(user.router)
 app.include_router(dashboard.router)
@@ -55,16 +56,18 @@ async def test_error():
 @app.get("/test-error/404")
 async def test_error():
     raise HTTPException(status_code=404, detail="Test d'erreur 404")
+"""
 
 
-@app.get("/get-env-vars")
+@app.get("/")
 async def get_env_vars():
     return {key: os.environ[key] for key in os.environ}
 
 
-def run():
+"""def run():
     uvicorn.run(app, host="127.0.0.1", port=8000)
 
 
 if __name__ == "__main__":
     run()
+"""
