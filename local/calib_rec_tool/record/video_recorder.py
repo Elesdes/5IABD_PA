@@ -32,9 +32,7 @@ def record_video(
         print("Error: Could not open webcam.")
         return
 
-    print(
-        f"Recording video to {output_filepath} for {duration} seconds..."
-    )
+    print(f"Recording video to {output_filepath} for {duration} seconds...")
 
     # Record video for the specified duration
     num_frames = int(fps * duration)

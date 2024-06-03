@@ -1,8 +1,11 @@
 fastapi
 uvicorn[standard]
+gunicorn
 requests
 numpngw
+psycopg2
 psycopg2-binary
 python-multipart
 passlib
 jinja2
+cloud-sql-python-connector[pg8000]
