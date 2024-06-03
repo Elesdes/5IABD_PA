@@ -7,6 +7,7 @@ from starlette.templating import Jinja2Templates
 from services import download_upload, call_users, call_models
 from routes import user, dashboard
 import uvicorn
+import os
 
 app = FastAPI()
 app.mount("/static", StaticFiles(directory="../static"), name="static")
@@ -54,6 +55,11 @@ async def test_error():
 @app.get("/test-error/404")
 async def test_error():
     raise HTTPException(status_code=404, detail="Test d'erreur 404")
+
+
+@app.get("/get-env-vars")
+async def get_env_vars():
+    return {key: os.environ[key] for key in os.environ}
 
 
 def run():
