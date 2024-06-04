@@ -51,11 +51,11 @@ def get_users(request: Request) -> list[dict[str, str | list[str] | int]]:
             for user in user_data:
                 users.append(
                     {
-                        "idUsers": user["idusers"],
-                        "forename": user["forename"],
-                        "name": user["name"],
-                        "email": user["email"],
-                        "role": user["role"],
+                        "idUsers": user[0],
+                        "forename": user[1],
+                        "name": user[2],
+                        "email": user[3],
+                        "role": user[4],
                     }
                 )
             return users

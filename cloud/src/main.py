@@ -57,16 +57,6 @@ async def test_error_404():
     raise HTTPException(status_code=404, detail="Test d'erreur 404")
 
 
-@app.get("/test_base")
-def test_base():
-    db_utils = PostgreSQLUtils()
-    with db_utils as cursor:
-        SQL_query = f"SELECT forename, name, email FROM USERS"
-        cursor.execute(SQL_query)
-        user_data = cursor.fetchall()
-    return user_data
-
-
 def run():
     uvicorn.run('main:app', host='0.0.0.0', port=3100)
 

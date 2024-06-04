@@ -48,12 +48,12 @@ class User:
         cursor.execute(SQL_query)
         user_data = cursor.fetchone()
         if user_data:
-            self.email = user_data["email"]
-            self.password = user_data["password"]
-            self.name = user_data["name"]
-            self.forename = user_data["forename"]
-            self.role = user_data["role"]
-            self.cookie = user_data["cookie"]
+            self.email = user_data[0]
+            self.password = user_data[1]
+            self.name = user_data[2]
+            self.forename = user_data[3]
+            self.role = user_data[4]
+            self.cookie = user_data[5]
             return self
         return None
 

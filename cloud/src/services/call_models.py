@@ -26,10 +26,10 @@ def get_models(request: Request) -> list[dict[str, str | datetime.datetime | int
             for model in model_data:
                 models.append(
                     {
-                        "idModel": model["idmodel"],
-                        "path": model["path"],
-                        "date": model["date"],
-                        "idUsers": model["idusers"],
+                        "idModel": model[0],
+                        "path": model[1],
+                        "date": model[2],
+                        "idUsers": model[3],
                     }
                 )
             return models
@@ -55,10 +55,10 @@ def get_model(request: Request, idUsers: str) -> list[dict[str, str | list[str]]
             for model in model_data:
                 models.append(
                     {
-                        "idModel": model["idmodel"],
-                        "path": model["path"],
-                        "date": model["date"],
-                        "idUsers": model["idusers"],
+                        "idModel": model[0],
+                        "path": model[1],
+                        "date": model[2],
+                        "idUsers": idUsers,
                     }
                 )
             return models
@@ -78,16 +78,16 @@ def get_mymodel(request: Request) -> list[dict[str, str | datetime.datetime | in
         if verify_role_and_profile(request, cursor, cookie=cookie_value):
             SQL_query = f"SELECT idusers FROM USERS WHERE cookie='{cookie_value}'"
             cursor.execute(SQL_query)
-            SQL_query = f"SELECT idmodel, path, date FROM MODELS WHERE idUsers='{cursor.fetchone()['idusers']}'"
+            SQL_query = f"SELECT idmodel, path, date FROM MODELS WHERE idUsers='{cursor.fetchone()[0]}'"
             cursor.execute(SQL_query)
             model_data = cursor.fetchall()
             model_data = [dict(row) for row in model_data]
             for model in model_data:
                 models.append(
                     {
-                        "idModel": model["idmodel"],
-                        "path": model["path"],
-                        "date": model["date"],
+                        "idModel": model[0],
+                        "path": model[1],
+                        "date": model[2],
                     }
                 )
             return models
@@ -119,7 +119,7 @@ def del_mymodels(request: Request, idModel: int) -> None:
     SQL_query = f"SELECT idusers FROM MODELS WHERE idmodel='{idModel}'"
     with db_utils as cursor:
         cursor.execute(SQL_query)
-        if verify_role_and_profile(request, cursor, id_users=cursor.fetchone()["idusers"]):
+        if verify_role_and_profile(request, cursor, id_users=cursor.fetchone()[0]):
             SQL_query = f"DELETE FROM MODELS WHERE idModel='{idModel}'"
             cursor.execute(SQL_query)
         else:
