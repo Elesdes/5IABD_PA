@@ -22,7 +22,7 @@ def get_models(request: Request) -> list[dict[str, str | datetime.datetime | int
             SQL_query = f"SELECT idmodel, path, date, idusers FROM MODELS"
             cursor.execute(SQL_query)
             model_data = cursor.fetchall()
-            model_data = [dict(row) for row in model_data]
+            # model_data = [dict(row) for row in model_data]
             for model in model_data:
                 models.append(
                     {
@@ -51,7 +51,7 @@ def get_model(request: Request, idUsers: str) -> list[dict[str, str | list[str]]
             )
             cursor.execute(SQL_query)
             model_data = cursor.fetchall()
-            model_data = [dict(row) for row in model_data]
+            # model_data = [dict(row) for row in model_data]
             for model in model_data:
                 models.append(
                     {
@@ -81,7 +81,7 @@ def get_mymodel(request: Request) -> list[dict[str, str | datetime.datetime | in
             SQL_query = f"SELECT idmodel, path, date FROM MODELS WHERE idUsers='{cursor.fetchone()[0]}'"
             cursor.execute(SQL_query)
             model_data = cursor.fetchall()
-            model_data = [dict(row) for row in model_data]
+            # model_data = [dict(row) for row in model_data]
             for model in model_data:
                 models.append(
                     {

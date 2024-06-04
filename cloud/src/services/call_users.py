@@ -27,7 +27,7 @@ def get_profile(request: Request) -> list[dict[str, str | list[str] | int]]:
             SQL_query = f"SELECT forename, name, email FROM USERS WHERE cookie='{request.cookies.get('ICARUS-Login')}'"
             cursor.execute(SQL_query)
             user_data = cursor.fetchall()
-            user_data = [dict(row) for row in user_data]
+            # user_data = [dict(row) for row in user_data]
             return user_data
         else:
             raise HTTPException(
@@ -47,7 +47,7 @@ def get_users(request: Request) -> list[dict[str, str | list[str] | int]]:
             SQL_query = f"SELECT idusers, forename, name, email, role FROM USERS"
             cursor.execute(SQL_query)
             user_data = cursor.fetchall()
-            user_data = [dict(row) for row in user_data]
+            # user_data = [dict(row) for row in user_data]
             for user in user_data:
                 users.append(
                     {

@@ -68,11 +68,9 @@ def test_db():
         for user in user_data:
             users.append(
                 {
-                    "idUsers": user[0],
-                    "forename": user[1],
-                    "name": user[2],
-                    "email": user[3],
-                    "role": user[4],
+                    "forename": user[0],
+                    "name": user[1],
+                    "email": user[2]
                 }
             )
     return users
