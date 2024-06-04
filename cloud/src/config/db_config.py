@@ -6,5 +6,5 @@ config_db = DataBaseModel(
     user=os.getenv("CLOUD_SQL_USERNAME"),
     password=os.getenv("CLOUD_SQL_PASSWORD"),
     host=os.getenv("CLOUD_PRIVATE_IP"),
-    port=os.getenv("PORT"),
+    port="5432",
 )
