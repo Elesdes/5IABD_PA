@@ -2,7 +2,6 @@ from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
 from fastapi import Request
 from src.models.user_model import User
-from src.utils.postgresql_utils import PostgreSQLUtils
 import psycopg2
 import string
 import random
