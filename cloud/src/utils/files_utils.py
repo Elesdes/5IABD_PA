@@ -1,4 +1,4 @@
-from models.user_model import User
+from src.models.user_model import User
 from fastapi import Request
 import psycopg2
 import zipfile

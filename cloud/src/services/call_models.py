@@ -1,7 +1,7 @@
 import datetime
 from fastapi import APIRouter, status, HTTPException, Request
-from config.db_config import ConfigDB
-from utils.files_utils import verify_role_and_profile
+from src.config.db_config import ConfigDB
+from src.utils.files_utils import verify_role_and_profile
 
 
 router = APIRouter(
@@ -19,7 +19,7 @@ def get_models(request: Request) -> list[dict[str, str | datetime.datetime | int
     # Set the mail to "" because the verify_role_and_profile will fail the second test. Therefore, only an admin car get all users.
     email = ""
     if verify_role_and_profile(request, cursor, email=email):
-        SQL_query = f"SELECT idmodel, path, date, idusers FROM MODEL"
+        SQL_query = f"SELECT idmodel, path, date, idusers FROM MODELS"
         cursor.execute(SQL_query)
         model_data = cursor.fetchall()
         model_data = [dict(row) for row in model_data]
@@ -49,7 +49,7 @@ def get_model(request: Request, idUsers: str) -> list[dict[str, str | list[str]]
     models = []
     if verify_role_and_profile(request, cursor, id_users=idUsers):
         SQL_query = (
-            f"SELECT idmodel, path, date, email FROM MODEL WHERE idUsers='{idUsers}'"
+            f"SELECT idmodel, path, date, email FROM MODELS WHERE idUsers='{idUsers}'"
         )
         cursor.execute(SQL_query)
         model_data = cursor.fetchall()
@@ -82,7 +82,7 @@ def get_mymodel(request: Request) -> list[dict[str, str | datetime.datetime | in
     if verify_role_and_profile(request, cursor, cookie=cookie_value):
         SQL_query = f"SELECT idusers FROM USERS WHERE cookie='{cookie_value}'"
         cursor.execute(SQL_query)
-        SQL_query = f"SELECT idmodel, path, date FROM MODEL WHERE idUsers='{cursor.fetchone()['idusers']}'"
+        SQL_query = f"SELECT idmodel, path, date FROM MODELS WHERE idUsers='{cursor.fetchone()['idusers']}'"
         cursor.execute(SQL_query)
         model_data = cursor.fetchall()
         model_data = [dict(row) for row in model_data]
@@ -109,7 +109,7 @@ def del_models(request: Request, idUsers: str, idModel: int) -> None:
     DB = ConfigDB()
     cursor = DB.get_db_cursor()
     if verify_role_and_profile(request, cursor, id_users=idUsers):
-        SQL_query = f"DELETE FROM MODEL WHERE idModel='{idModel}'"
+        SQL_query = f"DELETE FROM MODELS WHERE idModel='{idModel}'"
         cursor.execute(SQL_query)
         DB.connector.commit()
         cursor.close()
@@ -126,10 +126,10 @@ def del_mymodels(request: Request, idModel: int) -> None:
     DB = ConfigDB()
     cursor = DB.get_db_cursor()
     cookie_value = request.cookies.get("ICARUS-Login")
-    SQL_query = f"SELECT idusers FROM MODEL WHERE idmodel='{idModel}'"
+    SQL_query = f"SELECT idusers FROM MODELS WHERE idmodel='{idModel}'"
     cursor.execute(SQL_query)
     if verify_role_and_profile(request, cursor, id_users=cursor.fetchone()["idusers"]):
-        SQL_query = f"DELETE FROM MODEL WHERE idModel='{idModel}'"
+        SQL_query = f"DELETE FROM MODELS WHERE idModel='{idModel}'"
         cursor.execute(SQL_query)
         DB.connector.commit()
         cursor.close()
@@ -148,7 +148,7 @@ def update_model(
     DB = ConfigDB()
     cursor = DB.get_db_cursor()
     if verify_role_and_profile(request, cursor, id_users=idUsers):
-        SQL_query = f"UPDATE MODEL SET path = '{path}', date = '{date}', idusers = '{idUsers}' WHERE idModel = '{idModel}'"
+        SQL_query = f"UPDATE MODELS SET path = '{path}', date = '{date}', idusers = '{idUsers}' WHERE idModel = '{idModel}'"
         cursor.execute(SQL_query)
         DB.connector.commit()
         cursor.close()

@@ -7,7 +7,7 @@ router = APIRouter(
     tags=["dashboard"],
     responses={404: {"description": "Not found"}},
 )
-templates = Jinja2Templates(directory="../templates/")
+templates = Jinja2Templates(directory="./templates/")
 
 
 @router.get("/users", response_class=HTMLResponse)

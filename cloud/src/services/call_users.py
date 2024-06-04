@@ -1,7 +1,7 @@
 from fastapi import APIRouter, status, HTTPException, Request, Form
-from models.user_model import User
-from config.db_config import ConfigDB
-from utils.files_utils import verify_role_and_profile
+from src.models.user_model import User
+from src.config.db_config import ConfigDB
+from src.utils.files_utils import verify_role_and_profile
 from passlib.context import CryptContext
 from fastapi.templating import Jinja2Templates
 from fastapi.responses import HTMLResponse
@@ -14,7 +14,7 @@ router = APIRouter(
     responses={404: {"description": "Not found"}},
 )
 pwd_context = CryptContext(schemes=["md5_crypt"], deprecated="auto")
-templates = Jinja2Templates(directory="../templates/")
+templates = Jinja2Templates(directory="./templates/")
 
 
 @router.get("/get_profile")

@@ -1,14 +1,14 @@
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
 from fastapi import Request
-from models.user_model import User
-from config.db_config import ConfigDB
+from src.models.user_model import User
+from src.config.db_config import ConfigDB
 import string
 import random
 from datetime import timedelta, timezone, datetime
 
 
-templates = Jinja2Templates(directory="../templates/")
+templates = Jinja2Templates(directory="../../templates/")
 
 
 def set_response_cookie(

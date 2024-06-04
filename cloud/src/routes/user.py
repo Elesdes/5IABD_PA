@@ -3,8 +3,8 @@ from typing import Annotated
 from fastapi import Request, HTTPException, APIRouter, status, Form
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
-from services.user_services import request_dashboard, request_login, request_register
-from services.cookie_services import set_response_cookie
+from src.services.user_services import request_dashboard, request_login, request_register
+from src.services.cookie_services import set_response_cookie
 
 
 router = APIRouter(
@@ -12,7 +12,7 @@ router = APIRouter(
     tags=["pages"],
     responses={404: {"description": "Not found"}},
 )
-templates = Jinja2Templates(directory="../templates/")
+templates = Jinja2Templates(directory="./templates/")
 
 
 @router.get("/about", response_class=HTMLResponse)

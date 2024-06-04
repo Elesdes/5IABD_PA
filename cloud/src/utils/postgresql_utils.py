@@ -1,7 +1,7 @@
 import os
 import psycopg2
-from config.db_config import config_db
-from models.db_model import DataBaseModel
+from src.config.db_config import config_db
+from src.models.db_model import DataBaseModel
 
 
 class PostgreSQLUtils:
