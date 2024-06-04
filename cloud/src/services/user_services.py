@@ -1,6 +1,6 @@
 from fastapi import Request
 from fastapi.responses import HTMLResponse
-from src.config.db_config import ConfigDB
+from src.utils.postgresql_utils import PostgreSQLUtils
 from src.models.user_model import User
 from src.services.cookie_services import set_cookie, set_response_cookie
 from src.decorators.db_decorator import db_vars
@@ -14,32 +14,25 @@ pwd_context = CryptContext(schemes=["md5_crypt"], deprecated="auto")
 def request_dashboard(request: Request) -> bool:
     cookie_value = request.cookies.get("ICARUS-Login")
     if cookie_value is not None:
-        DB = ConfigDB()
-        cursor = DB.get_db_cursor()
-        if User().get_user(cursor, cookie=cookie_value) is not None:
-            cursor.close()
-            DB.connector.close()
-            return True
-        cursor.close()
-        DB.connector.close()
+        db_utils = PostgreSQLUtils()
+        with db_utils as cursor:
+            if User().get_user(cursor, cookie=cookie_value) is not None:
+                return True
     return False
 
 
-@db_vars
 def request_login(
-    DB: ConfigDB, cursor: psycopg2.connect, email: str, password: str
+    cursor: psycopg2.connect, email: str, password: str
 ) -> User | None:
     user = User().get_user(cursor, email=email)
     if not user or not user.verify_password(password):
         return None
-    user = set_cookie(user, DB, email)
+    user = set_cookie(user, cursor, email)
     return user
 
 
-@db_vars
 def request_register(
-    DB: ConfigDB,
-    cursor: psycopg2.connect,
+    cursor: psycopg2,
     request: Request,
     email: str,
     password: str,
@@ -50,7 +43,6 @@ def request_register(
     if user.get_user(cursor, email=email) is not None:
         return None
     user = user.insert_user(
-        DB.connector,
         cursor,
         email,
         pwd_context.hash(password, scheme="md5_crypt"),

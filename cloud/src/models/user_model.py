@@ -1,6 +1,6 @@
 from fastapi import Depends
 from passlib.hash import md5_crypt
-from src.config.db_config import ConfigDB
+from src.utils.postgresql_utils import PostgreSQLUtils
 from typing import Self
 import psycopg2
 import string
@@ -58,7 +58,7 @@ class User:
         return None
 
     def get_current_user_role(
-        self, cookie: str, cursor=Depends(ConfigDB().get_db_cursor())
+        self, cookie: str, cursor=Depends(PostgreSQLUtils())
     ) -> int | None:
         user = self.get_user(cursor, cookie=cookie)
         if user:
@@ -67,7 +67,6 @@ class User:
 
     def insert_user(
         self,
-        connector: psycopg2.connect,
         cursor: psycopg2,
         email: str,
         password: str,
@@ -77,16 +76,14 @@ class User:
         cursor.execute(
             f"INSERT INTO USERS(email, password, name, forename, role, cookie) VALUES('{email}', '{password}', '{name}', '{forename}', 2, '')"
         )
-        connector.commit()
         letters = string.ascii_lowercase
         cookie_value = "".join(random.choice(letters) for _ in range(255))
-        self.set_cookie(connector, cursor, email, cookie_value)
+        self.set_cookie(cursor, email, cookie_value)
         return User(email, password, name, forename, 2, cookie_value)
 
     # A voir où est-ce qu'on le range
     def set_cookie(
         self,
-        connector: psycopg2.connect,
         cursor: psycopg2,
         email: str,
         cookie_value: str,
@@ -94,4 +91,3 @@ class User:
         sql = f"UPDATE USERS SET cookie = '{cookie_value}' WHERE email = '{email}'"
         self.cookie = cookie_value
         cursor.execute(sql)
-        connector.commit()
