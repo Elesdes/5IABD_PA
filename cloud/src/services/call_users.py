@@ -18,7 +18,7 @@ templates = Jinja2Templates(directory="./templates/")
 
 
 @router.get("/get_profile")
-def get_profile(request: Request) -> list[dict[str, str | list[str] | int]]:
+def get_profile(request: Request) -> dict[dict[str, str | list[str] | int]]:
     db_utils = PostgreSQLUtils()
     with db_utils as cursor:
         if verify_role_and_profile(
