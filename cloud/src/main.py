@@ -6,6 +6,7 @@ from starlette.responses import HTMLResponse
 from starlette.templating import Jinja2Templates
 from src.services import download_upload, call_users, call_models
 from src.routes import user, dashboard
+from src.utils.postgresql_utils import PostgreSQLUtils
 import uvicorn
 
 app = FastAPI()
@@ -47,13 +48,24 @@ async def http_exception_handler(request: Request, exc: HTTPException):
 
 
 @app.get("/test-error/500")
-async def test_error():
+async def test_error_500():
     raise HTTPException(status_code=500, detail="Test d'erreur 500")
 
 
 @app.get("/test-error/404")
-async def test_error():
+async def test_error_404():
     raise HTTPException(status_code=404, detail="Test d'erreur 404")
+
+
+@app.get("/test_base")
+def test_base():
+    db_utils = PostgreSQLUtils()
+    with db_utils as cursor:
+        SQL_query = f"SELECT forename, name, email FROM USERS"
+        cursor.execute(SQL_query)
+        user_data = cursor.fetchall()
+        user_data = [dict(row) for row in user_data]
+        return user_data
 
 
 def run():
