@@ -21,12 +21,14 @@ def request_dashboard(request: Request) -> bool:
 
 
 def request_login(
-    cursor: psycopg2.connect, email: str, password: str
+    email: str, password: str
 ) -> User | None:
-    user = User().get_user(cursor, email=email)
-    if not user or not user.verify_password(password):
-        return None
-    user = set_cookie(user, cursor, email)
+    db_utils = PostgreSQLUtils()
+    with db_utils as cursor:
+        user = User().get_user(cursor, email=email)
+        if not user or not user.verify_password(password):
+            return None
+        user = set_cookie(user, cursor, email)
     return user
 
 
