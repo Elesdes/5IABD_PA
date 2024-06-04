@@ -65,6 +65,7 @@ def test_db():
         SQL_query = f"SELECT forename, name, email FROM USERS"
         cursor.execute(SQL_query)
         user_data = cursor.fetchall()
+        """
         user_data = [dict(row) for row in user_data]
         for user in user_data:
             users.append(
@@ -76,7 +77,8 @@ def test_db():
                     "role": user[4],
                 }
             )
-    return users
+        """
+    return user_data
 
 
 def run():
