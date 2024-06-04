@@ -63,7 +63,7 @@ def test_base():
     with db_utils as cursor:
         SQL_query = f"SELECT forename, name, email FROM USERS"
         cursor.execute(SQL_query)
-        user_data = cursor.fetchone()
+        user_data = cursor.fetchall()
     return user_data
 
 
