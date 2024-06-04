@@ -37,7 +37,7 @@ def get_profile(request: Request) -> list[dict[str, str | list[str] | int]]:
                         "email": user[2]
                     }
                 )
-            return user_data
+            return users
         else:
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
