@@ -77,7 +77,10 @@ async def login(
     if user:
         return set_response_cookie(request, "dashboard.html", user.cookie)
     else:
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Invalid username or password",
+        posts = [{
+                     "bad_profile": '<div class="alert alert-warning" role="alert">Mauvais identifiants</div>'}]
+        context = {"posts": posts,
+                   "request": request}
+        return templates.TemplateResponse(
+            name="login.html", context=context
         )
