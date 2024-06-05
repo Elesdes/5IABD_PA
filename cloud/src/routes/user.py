@@ -60,9 +60,11 @@ async def register(
 ) -> HTMLResponse:
     response = request_register(request, email, password, name, forename)
     if not response:
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="User already exists or wrong profile.",
+        posts = [{"bad_profile": '<div class="alert alert-warning" role="alert">Le profil existe déjà ou les informations données ne rentrent pas dans les critères</div>'}]
+        context = {"posts": posts,
+                   "request": request}
+        return templates.TemplateResponse(
+            name="register.html", context=context
         )
     return response
 
