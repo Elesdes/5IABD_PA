@@ -79,9 +79,8 @@ def test_blob():
     client = storage.Client()
     bucket = client.get_bucket("icarus-gcp.appspot.com")
     blob = bucket.blob("test")
-    blob.upload_from_filename("../README.md")
+    blob.upload_from_filename("README.md")
     return templates.TemplateResponse(name="index.html")
-
 
 
 def run():
