@@ -74,13 +74,13 @@ def test_db():
             )
     return users
 
-@app.get("/test_blob")
-def test_blob():
+@app.get("/test_blob", response_class=HTMLResponse, include_in_schema=False)
+def test_blob(request: Request):
     client = storage.Client()
     bucket = client.get_bucket("icarus-gcp.appspot.com")
     blob = bucket.blob("test")
     blob.upload_from_filename("main.py")
-    return templates.TemplateResponse(name="index.html")
+    return templates.TemplateResponse(name="index.html", context={"request": request})
 
 
 def run():
