@@ -20,6 +20,17 @@ def request_dashboard(request: Request) -> bool:
     return False
 
 
+def request_admin(request: Request) -> bool:
+    cookie_value = request.cookies.get("ICARUS-Login")
+    if cookie_value is not None:
+        db_utils = PostgreSQLUtils()
+        with db_utils as cursor:
+            user = User().get_user(cursor, cookie=cookie_value)
+            if user is not None and user.role == 1:
+                return True
+    return False
+
+
 def request_login(
     email: str, password: str
 ) -> User | None:
