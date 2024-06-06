@@ -9,3 +9,4 @@ python-multipart
 passlib
 jinja2
 cloud-sql-python-connector[pg8000]
+google-cloud-storage

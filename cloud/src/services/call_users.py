@@ -28,7 +28,16 @@ def get_profile(request: Request) -> list[dict[str, str | list[str] | int]]:
             cursor.execute(SQL_query)
             user_data = cursor.fetchall()
             # user_data = [dict(row) for row in user_data]
-            return user_data
+            users = []
+            for user in user_data:
+                users.append(
+                    {
+                        "forename": user[0],
+                        "name": user[1],
+                        "email": user[2]
+                    }
+                )
+            return users
         else:
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,

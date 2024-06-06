@@ -20,6 +20,17 @@ def request_dashboard(request: Request) -> bool:
     return False
 
 
+def request_admin(request: Request) -> bool:
+    cookie_value = request.cookies.get("ICARUS-Login")
+    if cookie_value is not None:
+        db_utils = PostgreSQLUtils()
+        with db_utils as cursor:
+            user = User().get_user(cursor, cookie=cookie_value)
+            if user is not None and user.role == 1:
+                return True
+    return False
+
+
 def request_login(
     email: str, password: str
 ) -> User | None:
@@ -33,21 +44,22 @@ def request_login(
 
 
 def request_register(
-    cursor: psycopg2,
     request: Request,
     email: str,
     password: str,
     name: str,
     forename: str,
-) -> HTMLResponse:
+) -> HTMLResponse | None:
     user = User()
-    if user.get_user(cursor, email=email) is not None:
-        return None
-    user = user.insert_user(
-        cursor,
-        email,
-        pwd_context.hash(password, scheme="md5_crypt"),
-        name,
-        forename,
-    )
+    db_utils = PostgreSQLUtils()
+    with db_utils as cursor:
+        if user.get_user(cursor, email=email) is not None:
+            return None
+        user = user.insert_user(
+            cursor,
+            email,
+            pwd_context.hash(password, scheme="md5_crypt"),
+            name,
+            forename,
+        )
     return set_response_cookie(request, "dashboard.html", user.cookie)

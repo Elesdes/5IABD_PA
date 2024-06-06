@@ -7,6 +7,7 @@ from starlette.templating import Jinja2Templates
 from src.services import download_upload, call_users, call_models
 from src.routes import user, dashboard
 from src.utils.postgresql_utils import PostgreSQLUtils
+from google.cloud import storage
 import uvicorn
 
 app = FastAPI()
@@ -39,6 +40,12 @@ async def http_exception_handler(request: Request, exc: HTTPException):
         return templates.TemplateResponse(
             "500.html", {"request": request}, status_code=500
         )
+    if exc.status_code == 401:
+        return templates.TemplateResponse(
+            "401.html",
+            {"request": request, "status_code": exc.status_code, "detail": exc.detail},
+            status_code=exc.status_code,
+        )
     if exc.status_code == 404:
         return templates.TemplateResponse(
             "404.html",
@@ -62,18 +69,24 @@ def test_db():
     db_utils = PostgreSQLUtils()
     users = []
     with db_utils as cursor:
-        SQL_query = f"SELECT forename, name, email FROM USERS"
+        SQL_query = f"SELECT forename FROM USERS"
         cursor.execute(SQL_query)
         user_data = cursor.fetchall()
         for user in user_data:
             users.append(
                 {
-                    "forename": user[0],
-                    "name": user[1],
-                    "email": user[2]
+                    "forename": user[0]
                 }
             )
     return users
+
+@app.get("/test_blob", response_class=HTMLResponse, include_in_schema=False)
+def test_blob(request: Request):
+    client = storage.Client()
+    bucket = client.get_bucket("icarus-gcp.appspot.com")
+    blob = bucket.blob("test")
+    blob.upload_from_filename("README.md")
+    return templates.TemplateResponse(name="index.html", context={"request": request})
 
 
 def run():
