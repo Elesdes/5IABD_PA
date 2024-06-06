@@ -5,3 +5,6 @@ __pycache__
 # Project generated files
 logs
 data
+build
+install
+log
