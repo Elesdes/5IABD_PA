@@ -7,6 +7,10 @@ document.addEventListener("DOMContentLoaded", function() {
                 document.querySelectorAll('.admin-only').forEach(element => {
                     element.style.visibility = 'visible';
                 });
+            }else {
+                document.querySelectorAll('.admin-only').forEach(element => {
+                    element.style.visibility = 'hidden';
+                });
             }
         })
         .catch(error => {
