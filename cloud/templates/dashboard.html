@@ -12,12 +12,12 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.js" defer></script>
     <script src="{{ url_for('static', path='js/charts-lines.js') }}" defer></script>
     <script src="{{ url_for('static', path='js/charts-pie.js') }}" defer></script>
-    <script src="{{ url_for('static', path='js/admin.js')}}"></script>
     <style>
         .admin-only {
             visibility: hidden;
         }
     </style>
+    <script src="{{ url_for('static', path='js/admin.js')}}"></script>
   </head>
   <body>
     <div class="flex h-screen bg-gray-50 dark:bg-gray-900" :class="{ 'overflow-hidden': isSideMenuOpen }">
