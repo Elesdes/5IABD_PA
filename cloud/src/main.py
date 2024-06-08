@@ -1,6 +1,7 @@
 from fastapi import FastAPI, Request, HTTPException
 from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import FileResponse
 from starlette.exceptions import HTTPException as StarletteHTTPException
 from starlette.responses import HTMLResponse
 from starlette.templating import Jinja2Templates
@@ -87,6 +88,11 @@ def test_blob(request: Request):
     blob = bucket.blob("test")
     blob.upload_from_filename("README.md")
     return templates.TemplateResponse(name="index.html", context={"request": request})
+
+
+@app.get('/favicon.ico', include_in_schema=False)
+async def favicon():
+    return FileResponse("static/favicon.ico")
 
 
 def run():
