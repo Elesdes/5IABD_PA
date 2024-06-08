@@ -5,7 +5,7 @@ document.addEventListener("DOMContentLoaded", function() {
         .then(data => {
             if (data) {
                 document.querySelectorAll('.admin-only').forEach(element => {
-                    element.style.display = 'list-item';
+                    element.classList.remove('admin-only');
                 });
             }
         })
