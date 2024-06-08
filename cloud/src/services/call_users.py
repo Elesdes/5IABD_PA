@@ -75,6 +75,25 @@ def get_users(request: Request) -> list[dict[str, str | list[str] | int]]:
             )
 
 
+@router.get("/get_role")
+def get_role(request: Request) -> bool:
+    db_utils = PostgreSQLUtils()
+    with db_utils as cursor:
+        cookie = request.cookies.get("ICARUS-Login")
+        if verify_role_and_profile(request, cursor, cookie=cookie):
+            SQL_query = f"SELECT role FROM USERS where cookie='{cookie}"
+            cursor.execute(SQL_query)
+            user_data = cursor.fetchone()
+            if user_data[0] == 1:
+                return True
+            return False
+        else:
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Invalid profile.",
+            )
+
+
 @router.delete("/del_users/{idUsers}", status_code=200)
 def del_users(request: Request, idUsers: str) -> None:
     db_utils = PostgreSQLUtils()
