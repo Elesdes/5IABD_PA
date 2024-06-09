@@ -80,8 +80,9 @@ class User:
         name: str,
         forename: str,
     ) -> Self:
+        request_str = "INSERT INTO USERS(email, password, name, forename, role, cookie) VALUES(%s, %s, %s, %s, 2, '')"
         cursor.execute(
-            f"INSERT INTO USERS(email, password, name, forename, role, cookie) VALUES('{email}', '{password}', '{name}', '{forename}', 2, '')"
+            request_str, (email, password, name, forename)
         )
         letters = string.ascii_lowercase
         cookie_value = "".join(random.choice(letters) for _ in range(255))
@@ -95,6 +96,6 @@ class User:
         email: str,
         cookie_value: str,
     ) -> None:
-        sql = f"UPDATE USERS SET cookie = '{cookie_value}' WHERE email = '{email}'"
+        sql = f"UPDATE USERS SET cookie = %s WHERE email = %s"
         self.cookie = cookie_value
-        cursor.execute(sql)
+        cursor.execute(sql, (cookie_value, email))

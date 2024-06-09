@@ -19,7 +19,7 @@ def get_models(request: Request) -> list[dict[str, str | datetime.datetime | int
     email = ""
     with db_utils as cursor:
         if verify_role_and_profile(request, cursor, email=email):
-            SQL_query = f"SELECT idmodel, path, date, idusers FROM MODELS"
+            SQL_query = "SELECT idmodel, path, date, idusers FROM MODELS"
             cursor.execute(SQL_query)
             model_data = cursor.fetchall()
             # model_data = [dict(row) for row in model_data]
@@ -47,9 +47,9 @@ def get_model(request: Request, idUsers: str) -> list[dict[str, str | list[str]]
     with db_utils as cursor:
         if verify_role_and_profile(request, cursor, id_users=idUsers):
             SQL_query = (
-                f"SELECT idmodel, path, date, email FROM MODELS WHERE idUsers='{idUsers}'"
+                "SELECT idmodel, path, date, email FROM MODELS WHERE idUsers=%s"
             )
-            cursor.execute(SQL_query)
+            cursor.execute(SQL_query, (idUsers))
             model_data = cursor.fetchall()
             # model_data = [dict(row) for row in model_data]
             for model in model_data:
@@ -76,10 +76,10 @@ def get_mymodel(request: Request) -> list[dict[str, str | datetime.datetime | in
     cookie_value = request.cookies.get("ICARUS-Login")
     with db_utils as cursor:
         if verify_role_and_profile(request, cursor, cookie=cookie_value):
-            SQL_query = f"SELECT idusers FROM USERS WHERE cookie='{cookie_value}'"
-            cursor.execute(SQL_query)
-            SQL_query = f"SELECT idmodel, path, date FROM MODELS WHERE idUsers='{cursor.fetchone()[0]}'"
-            cursor.execute(SQL_query)
+            SQL_query = "SELECT idusers FROM USERS WHERE cookie=%s"
+            cursor.execute(SQL_query, (cookie_value))
+            SQL_query = "SELECT idmodel, path, date FROM MODELS WHERE idUsers=%s"
+            cursor.execute(SQL_query, (cursor.fetchone()[0]))
             model_data = cursor.fetchall()
             # model_data = [dict(row) for row in model_data]
             for model in model_data:
@@ -103,8 +103,8 @@ def del_models(request: Request, idUsers: str, idModel: int) -> None:
     db_utils = PostgreSQLUtils()
     with db_utils as cursor:
         if verify_role_and_profile(request, cursor, id_users=idUsers):
-            SQL_query = f"DELETE FROM MODELS WHERE idModel='{idModel}'"
-            cursor.execute(SQL_query)
+            SQL_query = "DELETE FROM MODELS WHERE idModel=%s"
+            cursor.execute(SQL_query, (idModel))
         else:
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
@@ -116,12 +116,12 @@ def del_models(request: Request, idUsers: str, idModel: int) -> None:
 def del_mymodels(request: Request, idModel: int) -> None:
     db_utils = PostgreSQLUtils()
     cookie_value = request.cookies.get("ICARUS-Login")
-    SQL_query = f"SELECT idusers FROM MODELS WHERE idmodel='{idModel}'"
+    SQL_query = "SELECT idusers FROM MODELS WHERE idmodel=%s"
     with db_utils as cursor:
-        cursor.execute(SQL_query)
+        cursor.execute(SQL_query, (idModel))
         if verify_role_and_profile(request, cursor, id_users=cursor.fetchone()[0]):
-            SQL_query = f"DELETE FROM MODELS WHERE idModel='{idModel}'"
-            cursor.execute(SQL_query)
+            SQL_query = "DELETE FROM MODELS WHERE idModel=%s"
+            cursor.execute(SQL_query, (idModel))
         else:
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
@@ -136,8 +136,8 @@ def update_model(
     db_utils = PostgreSQLUtils()
     with db_utils as cursor:
         if verify_role_and_profile(request, cursor, id_users=idUsers):
-            SQL_query = f"UPDATE MODELS SET path = '{path}', date = '{date}', idusers = '{idUsers}' WHERE idModel = '{idModel}'"
-            cursor.execute(SQL_query)
+            SQL_query = "UPDATE MODELS SET path = %s, date = %s, idusers = %s WHERE idModel = %s"
+            cursor.execute(SQL_query, (path, date, idUsers, idModel))
         else:
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,

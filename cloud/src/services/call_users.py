@@ -24,8 +24,8 @@ def get_profile(request: Request) -> list[dict[str, str | list[str] | int]]:
         if verify_role_and_profile(
             request, cursor, cookie=request.cookies.get("ICARUS-Login")
         ):
-            SQL_query = f"SELECT forename, name, email FROM USERS WHERE cookie='{request.cookies.get('ICARUS-Login')}'"
-            cursor.execute(SQL_query)
+            SQL_query = "SELECT forename, name, email FROM USERS WHERE cookie=%s"
+            cursor.execute(SQL_query, (request.cookies.get('ICARUS-Login')))
             user_data = cursor.fetchall()
             # user_data = [dict(row) for row in user_data]
             users = []
@@ -53,7 +53,7 @@ def get_users(request: Request) -> list[dict[str, str | list[str] | int]]:
     users = []
     with db_utils as cursor:
         if verify_role_and_profile(request, cursor, email=email):
-            SQL_query = f"SELECT idusers, forename, name, email, role FROM USERS"
+            SQL_query = "SELECT idusers, forename, name, email, role FROM USERS"
             cursor.execute(SQL_query)
             user_data = cursor.fetchall()
             # user_data = [dict(row) for row in user_data]
@@ -81,8 +81,8 @@ def get_role(request: Request) -> bool:
     with db_utils as cursor:
         cookie = request.cookies.get("ICARUS-Login")
         if verify_role_and_profile(request, cursor, cookie=cookie):
-            SQL_query = f"SELECT role FROM USERS where cookie='{cookie}'"
-            cursor.execute(SQL_query)
+            SQL_query = "SELECT role FROM USERS where cookie=%s"
+            cursor.execute(SQL_query, (cookie))
             user_data = cursor.fetchone()
             if user_data[0] == 1:
                 return True
@@ -99,8 +99,8 @@ def del_users(request: Request, idUsers: str) -> None:
     db_utils = PostgreSQLUtils()
     with db_utils as cursor:
         if verify_role_and_profile(request, cursor, id_users=idUsers):
-            SQL_query = f"DELETE FROM USERS WHERE idusers='{idUsers}'"
-            cursor.execute(SQL_query)
+            SQL_query = "DELETE FROM USERS WHERE idusers=%s"
+            cursor.execute(SQL_query, (idUsers))
         else:
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
@@ -116,9 +116,9 @@ def del_profile(request: Request) -> HTMLResponse:
             request, cursor, cookie=request.cookies.get("ICARUS-Login")
         ):
             SQL_query = (
-                f"DELETE FROM USERS WHERE cookie='{request.cookies.get('ICARUS-Login')}'"
+                "DELETE FROM USERS WHERE cookie=%s"
             )
-            cursor.execute(SQL_query)
+            cursor.execute(SQL_query, (request.cookies.get('ICARUS-Login')))
             return templates.TemplateResponse(
                 name="index.html", context={"request": request}
             )
@@ -145,8 +145,8 @@ def update_users(
                 role = 2
             else:
                 role = 1 if role == "Admin" else 2
-            SQL_query = f"UPDATE USERS SET name = '{name}', forename = '{forename}', email = '{email}', role = '{role}' WHERE idusers = '{idUsers}'"
-            cursor.execute(SQL_query)
+            SQL_query = "UPDATE USERS SET name = %s, forename = %s, email = %s, role = %s WHERE idusers = %s"
+            cursor.execute(SQL_query, (name, forename, email, role, idUsers))
         else:
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
@@ -167,10 +167,11 @@ async def update_profile(
     with db_utils as cursor:
         if verify_role_and_profile(request, cursor, email=email):
             if password is None:
-                SQL_query = f"UPDATE USERS SET forename='{forename}', name='{name}' WHERE cookie='{request.cookies.get('ICARUS-Login')}'"
+                SQL_query = "UPDATE USERS SET forename=%s, name=%s WHERE cookie=%s"
+                cursor.execute(SQL_query, (forename, name, request.cookies.get('ICARUS-Login')))
             else:
-                SQL_query = f"UPDATE USERS SET forename='{forename}', name='{name}', password='{password}' WHERE cookie='{request.cookies.get('ICARUS-Login')}'"
-            cursor.execute(SQL_query)
+                SQL_query = "UPDATE USERS SET forename=%s, name=%s, password=%s WHERE cookie=%s"
+                cursor.execute(SQL_query, (forename, name, password, request.cookies.get('ICARUS-Login')))
             return templates.TemplateResponse(
                 name="profile.html", context={"request": request}
             )
