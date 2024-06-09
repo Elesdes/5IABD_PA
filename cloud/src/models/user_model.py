@@ -1,11 +1,14 @@
 from fastapi import Depends
 from passlib.hash import md5_crypt
+from passlib.context import CryptContext
 from src.utils.postgresql_utils import PostgreSQLUtils
 from typing import Self
 import psycopg2
 import string
 import random
 
+
+pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 class User:
     def __init__(
@@ -25,11 +28,14 @@ class User:
         self.cookie = cookie
 
     def verify_password(self, plain_password: str) -> str:
+        """
         parts = self.password.split("$")
         scheme, salt, stored_hash = parts[1], parts[2], parts[3]
         stored_hash = stored_hash.strip()
         new_hash = md5_crypt.using(salt=salt).hash(plain_password)
         return new_hash == f"${scheme}${salt}${stored_hash}"
+        """
+        return pwd_context.verify(plain_password, self.password)
 
     def get_user(
         self,

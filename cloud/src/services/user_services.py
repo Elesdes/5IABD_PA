@@ -7,7 +7,7 @@ from passlib.context import CryptContext
 import psycopg2
 
 
-pwd_context = CryptContext(schemes=["md5_crypt"], deprecated="auto")
+pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 
 def request_dashboard(request: Request) -> bool:
@@ -58,7 +58,7 @@ def request_register(
         user = user.insert_user(
             cursor,
             email,
-            pwd_context.hash(password, scheme="md5_crypt"),
+            pwd_context.hash(password),
             name,
             forename,
         )

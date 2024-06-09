@@ -13,7 +13,7 @@ router = APIRouter(
     tags=["api"],
     responses={404: {"description": "Not found"}},
 )
-pwd_context = CryptContext(schemes=["md5_crypt"], deprecated="auto")
+pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 templates = Jinja2Templates(directory="./templates/")
 
 
