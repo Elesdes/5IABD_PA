@@ -174,7 +174,7 @@ async def update_profile(
                 cursor.execute(SQL_query, (forename, name, email, cookie))
             else:
                 SQL_query = "UPDATE USERS SET forename=%s, name=%s, email=%s, password=%s WHERE cookie=%s"
-                cursor.execute(SQL_query, (forename, name, email, password, cookie))
+                cursor.execute(SQL_query, (forename, name, email, pwd_context.hash(password), cookie))
             return templates.TemplateResponse(
                 name="profile.html", context={"request": request}
             )

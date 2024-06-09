@@ -27,7 +27,7 @@ class User:
         self.role = role
         self.cookie = cookie
 
-    def verify_password(self, plain_password: str) -> str:
+    def verify_password(self, plain_password: str) -> bool:
         """
         parts = self.password.split("$")
         scheme, salt, stored_hash = parts[1], parts[2], parts[3]
