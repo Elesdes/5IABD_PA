@@ -25,7 +25,7 @@ def get_profile(request: Request) -> list[dict[str, str | list[str] | int]]:
             request, cursor, cookie=request.cookies.get("ICARUS-Login")
         ):
             SQL_query = "SELECT forename, name, email FROM USERS WHERE cookie=%s"
-            cursor.execute(SQL_query, (request.cookies.get('ICARUS-Login')))
+            cursor.execute(SQL_query, request.cookies.get('ICARUS-Login'))
             user_data = cursor.fetchall()
             # user_data = [dict(row) for row in user_data]
             users = []
@@ -82,7 +82,7 @@ def get_role(request: Request) -> bool:
         cookie = request.cookies.get("ICARUS-Login")
         if verify_role_and_profile(request, cursor, cookie=cookie):
             SQL_query = "SELECT role FROM USERS where cookie=%s"
-            cursor.execute(SQL_query, (cookie))
+            cursor.execute(SQL_query, cookie)
             user_data = cursor.fetchone()
             if user_data[0] == 1:
                 return True
@@ -100,7 +100,7 @@ def del_users(request: Request, idUsers: str) -> None:
     with db_utils as cursor:
         if verify_role_and_profile(request, cursor, id_users=idUsers):
             SQL_query = "DELETE FROM USERS WHERE idusers=%s"
-            cursor.execute(SQL_query, (idUsers))
+            cursor.execute(SQL_query, idUsers)
         else:
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
@@ -112,13 +112,14 @@ def del_users(request: Request, idUsers: str) -> None:
 def del_profile(request: Request) -> HTMLResponse:
     db_utils = PostgreSQLUtils()
     with db_utils as cursor:
+        cookie = request.cookies.get("ICARUS-Login")
         if verify_role_and_profile(
-            request, cursor, cookie=request.cookies.get("ICARUS-Login")
+            request, cursor, cookie=cookie
         ):
             SQL_query = (
                 "DELETE FROM USERS WHERE cookie=%s"
             )
-            cursor.execute(SQL_query, (request.cookies.get('ICARUS-Login')))
+            cursor.execute(SQL_query, cookie)
             return templates.TemplateResponse(
                 name="index.html", context={"request": request}
             )
