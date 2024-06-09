@@ -21,11 +21,12 @@ templates = Jinja2Templates(directory="./templates/")
 def get_profile(request: Request) -> list[dict[str, str | list[str] | int]]:
     db_utils = PostgreSQLUtils()
     with db_utils as cursor:
+        cookie = request.cookies.get("ICARUS-Login")
         if verify_role_and_profile(
-            request, cursor, cookie=request.cookies.get("ICARUS-Login")
+            request, cursor, cookie=cookie
         ):
             SQL_query = "SELECT forename, name, email FROM USERS WHERE cookie=%s"
-            cursor.execute(SQL_query, (request.cookies.get('ICARUS-Login'),))
+            cursor.execute(SQL_query, (cookie,))
             user_data = cursor.fetchall()
             # user_data = [dict(row) for row in user_data]
             users = []
@@ -166,13 +167,14 @@ async def update_profile(
 ) -> HTMLResponse:
     db_utils = PostgreSQLUtils()
     with db_utils as cursor:
-        if verify_role_and_profile(request, cursor, email=email):
+        cookie = request.cookies.get('ICARUS-Login')
+        if verify_role_and_profile(request, cursor, cookie=cookie):
             if password is None:
                 SQL_query = "UPDATE USERS SET forename=%s, name=%s WHERE cookie=%s"
-                cursor.execute(SQL_query, (forename, name, request.cookies.get('ICARUS-Login')))
+                cursor.execute(SQL_query, (forename, name, cookie))
             else:
                 SQL_query = "UPDATE USERS SET forename=%s, name=%s, password=%s WHERE cookie=%s"
-                cursor.execute(SQL_query, (forename, name, password, request.cookies.get('ICARUS-Login')))
+                cursor.execute(SQL_query, (forename, name, password, cookie))
             return templates.TemplateResponse(
                 name="profile.html", context={"request": request}
             )
