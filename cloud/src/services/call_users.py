@@ -81,7 +81,7 @@ def get_role(request: Request) -> bool:
     with db_utils as cursor:
         cookie = request.cookies.get("ICARUS-Login")
         if verify_role_and_profile(request, cursor, cookie=cookie):
-            SQL_query = "SELECT role FROM USERS where cookie=%s"
+            SQL_query = "SELECT role FROM USERS where cookie=%d"
             cursor.execute(SQL_query, cookie)
             user_data = cursor.fetchone()
             if user_data[0] == 1:
