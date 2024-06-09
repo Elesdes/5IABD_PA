@@ -170,11 +170,11 @@ async def update_profile(
         cookie = request.cookies.get('ICARUS-Login')
         if verify_role_and_profile(request, cursor, cookie=cookie):
             if password is None:
-                SQL_query = "UPDATE USERS SET forename=%s, name=%s WHERE cookie=%s"
-                cursor.execute(SQL_query, (forename, name, cookie))
+                SQL_query = "UPDATE USERS SET forename=%s, name=%s, email=%s WHERE cookie=%s"
+                cursor.execute(SQL_query, (forename, name, email, cookie))
             else:
-                SQL_query = "UPDATE USERS SET forename=%s, name=%s, password=%s WHERE cookie=%s"
-                cursor.execute(SQL_query, (forename, name, password, cookie))
+                SQL_query = "UPDATE USERS SET forename=%s, name=%s, email=%s, password=%s WHERE cookie=%s"
+                cursor.execute(SQL_query, (forename, name, email, password, cookie))
             return templates.TemplateResponse(
                 name="profile.html", context={"request": request}
             )
