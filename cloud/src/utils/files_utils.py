@@ -77,3 +77,29 @@ def verify_role_and_profile(
     if current_user.role == 1 or current_user.email == request_target.email:
         return True
     return False
+
+
+def verify_model_and_profile(
+    request: Request,
+    cursor: psycopg2,
+    id_model: int = None,
+) -> bool:
+    """
+    Used in order to check if the model belongs to the current user or if he is an admin.
+    :param request: request metadata of the user
+    :param cursor: cursor of the BDD
+    :param id_users: id of the user
+    :param email: email of the user
+    :param cookie: cookie registered in the BDD of the user
+    :return:
+    True if the user is allowed. False if not.
+    """
+    current_user = User().get_user(cursor, cookie=request.cookies.get("ICARUS-Login"))
+    if current_user.role == 1:
+        return True
+    SQL_query =( "SELECT idmodel FROM MODELS WHERE idmodel = %s AND idusers = %s" )
+    cursor.execute(SQL_query, (id_model, current_user.id))
+    model_data = cursor.fetchall()
+    if model_data:
+        return False
+    return True
