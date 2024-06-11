@@ -1,9 +1,7 @@
 document.addEventListener('DOMContentLoaded', (event) => {
     const passwordInput = document.getElementById('password');
-    const passwordErrors = document.getElementById('passwordErrors');
     const passwordSuccess = document.getElementById('passwordSuccess');
     const submitBtn = document.getElementById('submitBtn');
-
     const passwordErrorLength = document.getElementById('passwordErrorLength');
     const passwordErrorUppercase = document.getElementById('passwordErrorUppercase');
     const passwordErrorLowercase = document.getElementById('passwordErrorLowercase');
@@ -50,11 +48,9 @@ document.addEventListener('DOMContentLoaded', (event) => {
         }
 
         if (isValid) {
-            passwordErrors.style.display = 'none';
             passwordSuccess.style.display = 'block';
             submitBtn.disabled = false;
         } else {
-            passwordErrors.style.display = 'block';
             passwordSuccess.style.display = 'none';
             submitBtn.disabled = true;
         }
@@ -62,8 +58,12 @@ document.addEventListener('DOMContentLoaded', (event) => {
 
     passwordInput.addEventListener('blur', validatePassword);
     passwordInput.addEventListener('focus', (event) => {
-        passwordErrors.style.display = 'none';
         passwordSuccess.style.display = 'none';
+        passwordErrorLength.style.display = 'none';
+        passwordErrorUppercase.style.display = 'none';
+        passwordErrorLowercase.style.display = 'none';
+        passwordErrorNumber.style.display = 'none';
+        passwordErrorSpecial.style.display = 'none';
     });
 
     passwordInput.addEventListener('input', validatePassword);
