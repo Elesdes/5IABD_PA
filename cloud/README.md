@@ -30,62 +30,71 @@ Copy and paste to query tool and execute the file : `cloud/sql/create_database_p
 #### Setup & Run PostgreSQL
 
 First, run these commands :
+
 ```bash
 sudo apt-get update
 sudo apt install postgresql postgresql-contrib libgconf-2-4 libatk1.0-0 libatk-bridge2.0-0 libgdk-pixbuf2.0-0 libgtk-3-0 libgbm-dev libnss3-dev libxss-dev libasound2
 ```
 
 Then, to start the PostgreSQL service, run these :
+
 ```bash
 sudo service postgresql start
 sudo -i -u postgres
 ```
 
 Now, you can access the PostgreSQL CLI by running this command :
+
 ```bash
 psql
 ```
 
 #### Create the database
+
 You can create the database by running this command :
+
 ```sql
 CREATE DATABASE icarus_db;
 ```
 
 Before the next step, we need to access the database. To do so, run this command :
+
 ```sql
 \c icarus_db
 ```
 
 Here, we need to create a user and give him the right to access the database. To do so, run these commands :
+
 ```sql
 CREATE USER icarus WITH PASSWORD 'icarus';
 GRANT ALL PRIVILEGES ON DATABASE icarus_db TO icarus;
 ```
 
 You can then create the tables by running this query :
+
 ```sql
 CREATE TABLE IF NOT EXISTS USERS
 (
     IdUser SERIAL NOT NULL PRIMARY KEY,
-	Email VARCHAR(255) NOT NULL,
-	Name VARCHAR(255) NOT NULL,
-	Forename VARCHAR(255) NOT NULL,
+ Email VARCHAR(255) NOT NULL,
+ Name VARCHAR(255) NOT NULL,
+ Forename VARCHAR(255) NOT NULL,
     Password CHAR(255) NOT NULL,
     Cookie VARCHAR(255),
-	Role INT NOT NULL
+ Role INT NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS MODELS
 (
     IdModel SERIAL NOT NULL PRIMARY KEY,
-	Path VARCHAR(255) NOT NULL,
-	Date TIMESTAMP NOT NULL,
-	IdUser SERIAL REFERENCES USERS(IdUser)
+ Path VARCHAR(255) NOT NULL,
+ Date TIMESTAMP NOT NULL,
+ IdUser SERIAL REFERENCES USERS(IdUser)
 );
 ```
 
 Finally, to grant the user all the rights necessary, run these commands :
+
 ```sql
 GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO icarus;
 ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL PRIVILEGES ON TABLES TO icarus;
