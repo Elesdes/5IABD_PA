@@ -20,13 +20,14 @@
   <body>
     <div class="flex h-screen bg-gray-50 dark:bg-gray-900" :class="{ 'overflow-hidden': isSideMenuOpen}">
       <!-- Desktop sidebar -->
-      <aside class="z-20 flex-shrink-0 hidden w-64 overflow-y-auto bg-white dark:bg-gray-800 md:block">
+      <aside class="z-20 flex-shrink-0 hidden w-64 overflow-y-auto dark:bg-gray-800 md:block">
         <div class="py-4 text-gray-500 dark:text-gray-400">
           <a class="ml-6 text-lg font-bold text-gray-800 dark:text-gray-100" href="#">
             Icarus
           </a>
           <ul class="mt-6">
             <li class="relative px-6 py-3">
+              <span class="absolute inset-y-0 left-0 w-1 bg-purple-600 rounded-tr-lg rounded-br-lg" aria-hidden="true"></span>
               <a class="inline-flex items-center w-full text-sm font-semibold text-gray-800 transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200 dark:text-gray-100" href="{{url_for('dashboard')}}">
                 <svg class="w-5 h-5" aria-hidden="true" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" stroke="currentColor">
                   <path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
@@ -63,7 +64,6 @@
               </a>
             </li>
             <li class="relative px-6 py-3 admin-only">
-              <span class="absolute inset-y-0 left-0 w-1 bg-purple-600 rounded-tr-lg rounded-br-lg" aria-hidden="true"></span>
               <a class="inline-flex items-center w-full text-sm font-semibold text-gray-800 transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200 dark:text-gray-100" href="{{url_for('users')}}">
                 <svg class="w-5 h-5" aria-hidden="true" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" stroke="currentColor">
                   <path d="M4 6h16M4 10h16M4 14h16M4 18h16"></path>
@@ -82,6 +82,7 @@
           <a class="ml-6 text-lg font-bold text-gray-800 dark:text-gray-100" href="#">Icarus</a>
           <ul class="mt-6">
             <li class="relative px-6 py-3">
+              <span class="absolute inset-y-0 left-0 w-1 bg-purple-600 rounded-tr-lg rounded-br-lg" aria-hidden="true"></span>
               <a class="inline-flex items-center w-full text-sm font-semibold text-gray-800 transition-colors duration-150 text-gray-800 dark:text-gray-200 hover:text-gray-800 dark:hover:text-gray-200 dark:text-gray-100" href="{{url_for('dashboard')}}">
                 <svg class="w-5 h-5" aria-hidden="true" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" stroke="currentColor">
                   <path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
@@ -119,7 +120,6 @@
               </a>
             </li>
             <li class="relative px-6 py-3 admin-only">
-              <span class="absolute inset-y-0 left-0 w-1 bg-purple-600 rounded-tr-lg rounded-br-lg" aria-hidden="true"></span>
               <a class="inline-flex items-center w-full text-sm font-semibold text-gray-800 transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200 dark:text-gray-100" href="{{url_for('users')}}">
                 <svg class="w-5 h-5" aria-hidden="true" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" stroke="currentColor">
                   <path d="M4 6h16M4 10h16M4 14h16M4 18h16"></path>
@@ -131,7 +131,7 @@
         </div>
       </aside>
       <div class="flex flex-col flex-1 w-full">
-        <header class="z-10 py-4 bg-white shadow-md dark:bg-gray-800">
+        <header class="z-10 py-4 shadow-md dark:bg-gray-800">
           <div class="container flex items-center justify-between h-full px-6 mx-auto text-purple-600 dark:text-purple-300">
             <!-- Mobile hamburger -->
             <button class="p-1 mr-5 -ml-1 rounded-md md:hidden focus:outline-none focus:shadow-outline-purple" @click="toggleSideMenu" aria-label="Menu">
@@ -197,13 +197,13 @@
             <div class="w-full overflow-hidden rounded-lg shadow-xs">
               <div class="w-full overflow-x-auto">
                  <div class="col-sm-12 col-xl-6">
-                    <div class="bg-light rounded h-100 p-4">
+                    <div class="rounded h-100 p-4">
                         <form id="profile-form" action="{{ url_for('update_profile') }}" method="post">
                         </form>
                     </div>
-                   <div class="bg-light rounded h-100 p-4">
+                   <div class="rounded h-100 p-4">
                      <form action="{{ url_for('del_profile') }}" method="get">
-                        <button type="submit" class="btn btn-danger">Delete account</button>
+                        <button type="submit" class="btn btn-danger text-gray-800 dark:text-gray-100">Delete account</button>
                      </form>
                    </div>
                  </div>
