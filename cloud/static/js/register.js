@@ -57,6 +57,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
     }
 
     passwordInput.addEventListener('blur', validatePassword);
+    /*
     passwordInput.addEventListener('focus', (event) => {
         passwordSuccess.style.display = 'none';
         passwordErrorLength.style.display = 'none';
@@ -65,6 +66,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
         passwordErrorNumber.style.display = 'none';
         passwordErrorSpecial.style.display = 'none';
     });
+    */
 
     passwordInput.addEventListener('input', validatePassword);
 
