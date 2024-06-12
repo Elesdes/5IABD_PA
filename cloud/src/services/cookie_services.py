@@ -23,7 +23,7 @@ def set_response_cookie(
         value=f"{cookie_value}",
         expires=expiry,
         secure=True,
-        samesite="none",
+        samesite="strict",
     )
     return response
 

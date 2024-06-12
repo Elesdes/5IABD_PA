@@ -12,12 +12,12 @@ document.addEventListener("DOMContentLoaded", function() {
                   <td class="px-4 py-3">
                     <div class="flex items-center text-sm">
                       <div>
-                        <p class="font-semibold"><input type="text" value="${user.forename}"><input type="text" value="${user.name}"></p>
+                        <p class="font-semibold"><input class="form-control dark:bg-gray-800 dark:text-gray-200" type="text" value="${user.forename}"><input class="form-control dark:bg-gray-800 dark:text-gray-200" type="text" value="${user.name}"></p>
                       </div>
                     </div>
                   </td>
                   <td class="px-4 py-3 text-sm">
-                    <input type="text" value="${user.email}">
+                    <input class="form-control dark:bg-gray-800 dark:text-gray-200" type="text" value="${user.email}">
                   </td>
                   <td class="px-4 py-3 text-xs">
                     <span>
