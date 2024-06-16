@@ -59,3 +59,7 @@ class ProstheticHandEnv(gym.Env):
     def render(self, mode="human"):
         # TODO: Implement rendering
         pass
+
+
+# Register the environment with Gym
+gym.envs.registration.register(id="ProstheticHand-v0", entry_point=ProstheticHandEnv)
