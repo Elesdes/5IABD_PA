@@ -11,7 +11,11 @@ from src.utils.postgresql_utils import PostgreSQLUtils
 from google.cloud import storage
 import uvicorn
 
-app = FastAPI()
+app = FastAPI(
+    docs_url=None,
+    redoc_url=None,
+    openapi_url=None,
+)
 app.mount("/static", StaticFiles(directory="./static"), name="static")
 app.include_router(download_upload.router)
 app.include_router(user.router)
@@ -74,12 +78,9 @@ def test_db():
         cursor.execute(SQL_query)
         user_data = cursor.fetchall()
         for user in user_data:
-            users.append(
-                {
-                    "forename": user[0]
-                }
-            )
+            users.append({"forename": user[0]})
     return users
+
 
 @app.get("/test_blob", response_class=HTMLResponse, include_in_schema=False)
 def test_blob(request: Request):
@@ -90,13 +91,13 @@ def test_blob(request: Request):
     return templates.TemplateResponse(name="index.html", context={"request": request})
 
 
-@app.get('/favicon.ico', include_in_schema=False)
+@app.get("/favicon.ico", include_in_schema=False)
 async def favicon():
     return FileResponse("static/images/favicon.ico")
 
 
 def run():
-    uvicorn.run('main:app', host='0.0.0.0', port=3100)
+    uvicorn.run("main:app", host="0.0.0.0", port=3100)
 
 
 if __name__ == "__main__":
