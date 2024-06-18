@@ -24,7 +24,13 @@ document.addEventListener("DOMContentLoaded", function() {
                     </div>
                 </div>
                 <div class="row mb-3">
-                    <label for="password" class="col-sm-2 col-form-label text-gray-800 dark:text-gray-200 dark:text-gray-100">Change Password</label>
+                    <label for="oldPassword" class="col-sm-2 col-form-label text-gray-800 dark:text-gray-200 dark:text-gray-100">Old Password</label>
+                    <div class="col-sm-10 dark:bg-gray-200">
+                        <input type="text" class="form-control dark:bg-gray-800 dark:text-gray-200" id="oldPassword" name="oldPassword">
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <label for="password" class="col-sm-2 col-form-label text-gray-800 dark:text-gray-200 dark:text-gray-100">New Password</label>
                     <div class="col-sm-10 dark:bg-gray-200">
                         <input type="text" class="form-control dark:bg-gray-800 dark:text-gray-200" id="password" name="password">
                     </div>

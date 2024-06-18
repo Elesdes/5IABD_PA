@@ -163,6 +163,7 @@ async def update_profile(
     email: Annotated[str, Form()],
     forename: Annotated[str, Form()],
     name: Annotated[str, Form()],
+    oldPassword: Optional[str] = Form(None),
     password: Optional[str] = Form(None),
 ) -> HTMLResponse:
     db_utils = PostgreSQLUtils()
@@ -173,8 +174,10 @@ async def update_profile(
                 SQL_query = "UPDATE USERS SET forename=%s, name=%s, email=%s WHERE cookie=%s"
                 cursor.execute(SQL_query, (forename, name, email, cookie))
             else:
-                SQL_query = "UPDATE USERS SET forename=%s, name=%s, email=%s, password=%s WHERE cookie=%s"
-                cursor.execute(SQL_query, (forename, name, email, pwd_context.hash(password), cookie))
+                current_user = User().get_user_by_cookie(cursor, cookie=request.cookies.get("ICARUS-Login"))
+                if current_user.verify_password(oldPassword):
+                    SQL_query = "UPDATE USERS SET forename=%s, name=%s, email=%s, password=%s WHERE cookie=%s"
+                    cursor.execute(SQL_query, (forename, name, email, pwd_context.hash(password), cookie))
             return templates.TemplateResponse(
                 name="profile.html", context={"request": request}
             )
