@@ -1,7 +1,7 @@
 from fastapi import APIRouter, status, HTTPException, Request, Form
 from src.models.user_model import User
 from src.utils.postgresql_utils import PostgreSQLUtils
-from src.utils.files_utils import verify_role_and_profile
+from src.utils.files_utils import verify_role_and_profile, verify_mail
 from passlib.context import CryptContext
 from fastapi.templating import Jinja2Templates
 from fastapi.responses import HTMLResponse
@@ -170,17 +170,30 @@ async def update_profile(
     with db_utils as cursor:
         cookie = request.cookies.get('ICARUS-Login')
         if verify_role_and_profile(request, cursor, cookie=cookie):
-            if password is None:
-                SQL_query = "UPDATE USERS SET forename=%s, name=%s, email=%s WHERE cookie=%s"
-                cursor.execute(SQL_query, (forename, name, email, cookie))
+            if verify_mail(request, cursor, email):
+                posts = [{"bad_profile": ''}]
+                if password is None:
+                    SQL_query = "UPDATE USERS SET forename=%s, name=%s, email=%s WHERE cookie=%s"
+                    cursor.execute(SQL_query, (forename, name, email, cookie))
+                else:
+                    current_user = User().get_user_by_cookie(cursor, cookie=request.cookies.get("ICARUS-Login"))
+                    if current_user.verify_password(oldPassword):
+                        SQL_query = "UPDATE USERS SET forename=%s, name=%s, email=%s, password=%s WHERE cookie=%s"
+                        cursor.execute(SQL_query, (forename, name, email, pwd_context.hash(password), cookie))
+                    else:
+                        posts = [{"bad_profile": '<div class="alert alert-warning" role="alert">Mauvais mot de passe fournis</div>'}]
+                context = {"posts": posts,
+                           "request": request}
+                return templates.TemplateResponse(
+                    name="profile.html", context=context
+                )
             else:
-                current_user = User().get_user_by_cookie(cursor, cookie=request.cookies.get("ICARUS-Login"))
-                if current_user.verify_password(oldPassword):
-                    SQL_query = "UPDATE USERS SET forename=%s, name=%s, email=%s, password=%s WHERE cookie=%s"
-                    cursor.execute(SQL_query, (forename, name, email, pwd_context.hash(password), cookie))
-            return templates.TemplateResponse(
-                name="profile.html", context={"request": request}
-            )
+                posts = [{"bad_profile": '<div class="alert alert-warning" role="alert">Adresse mail déjà prise</div>'}]
+                context = {"posts": posts,
+                           "request": request}
+                return templates.TemplateResponse(
+                    name="profile.html", context=context
+                )
         else:
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,

@@ -82,6 +82,27 @@ def verify_role_and_profile(
     return False
 
 
+def verify_mail(
+    request: Request,
+    cursor: psycopg2,
+    email: str = None
+) -> bool:
+    """
+    Used in order to check the privileges of the current user.
+    :param request: request metadata of the user
+    :param cursor: cursor of the BDD
+    :param email: email of the user
+    :return:
+    True if the user is the same as the requested mail
+    """
+    current_user = User().get_user_by_cookie(cursor, cookie=request.cookies.get("ICARUS-Login"))
+    if email:
+        request_target = User().get_user_by_email(cursor, email=email)
+        if current_user.cookie == request_target.cookie:
+            return True
+    return False
+
+
 def verify_model_and_profile(
     request: Request,
     cursor: psycopg2,

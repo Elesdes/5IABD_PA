@@ -175,6 +175,9 @@
               <div class="w-full overflow-x-auto">
                  <div class="col-sm-12 col-xl-6">
                     <div class="rounded h-100 p-4">
+                      {% for post in posts %}
+                        {{post.bad_profile|safe}}
+                      {% endfor %}
                         <form id="profile-form" action="{{ url_for('update_profile') }}" method="post">
                         </form>
                     </div>
