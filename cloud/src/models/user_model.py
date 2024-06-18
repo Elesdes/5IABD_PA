@@ -37,39 +37,6 @@ class User:
         """
         return pwd_context.verify(plain_password, self.password)
 
-    def get_user(
-        self,
-        cursor: psycopg2,
-        id_users: int = None,
-        email: str = None,
-        cookie: str = None,
-    ) -> Self | None:
-        parameters = list()
-        SQL_query = f"SELECT email, password, name, forename, role, cookie FROM USERS WHERE 1 = 1"
-        if id_users is not None:
-            SQL_query += " AND idusers = %s "  # f" AND idusers = '{id_users}' "
-            parameters.append(id_users)
-        if email is not None:
-            SQL_query += " AND email = %s "  #  f" AND email = '{email}' "
-            parameters.append(email)
-        if cookie is not None:
-            SQL_query += " AND cookie = %s"  #f" AND cookie = '{cookie}'"
-            parameters.append(cookie)
-        if len(parameters) > 0:
-            cursor.execute(SQL_query, parameters)
-        else:
-            cursor.execute(SQL_query)
-        user_data = cursor.fetchone()
-        if user_data:
-            self.email = user_data[0]
-            self.password = user_data[1]
-            self.name = user_data[2]
-            self.forename = user_data[3]
-            self.role = user_data[4]
-            self.cookie = user_data[5]
-            return self
-        return None
-
     def get_user_by_id(
         self,
         cursor: psycopg2,
