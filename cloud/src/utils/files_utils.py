@@ -66,10 +66,9 @@ def verify_role_and_profile(
     :return:
     True if the user is allowed. False if not.
     """
-    if id_users is None and email is None and cookie is None:
-        return False
     current_user = User().get_user_by_cookie(cursor, cookie=request.cookies.get("ICARUS-Login"))
-    if current_user is None:
+    # First check to determine if we only need to check the role. Else request_target.email will make a runtime error.
+    if current_user.role == 2 and email == "":
         return False
     request_target = None
     if id_users:
