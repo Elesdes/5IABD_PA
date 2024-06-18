@@ -67,6 +67,7 @@ def verify_role_and_profile(
     True if the user is allowed. False if not.
     """
     current_user = User().get_user_by_cookie(cursor, cookie=request.cookies.get("ICARUS-Login"))
+    print(current_user)
     # First check to determine if we only need to check the role. Else request_target.email will make a runtime error.
     if current_user.role == 2 and email == "":
         return False
