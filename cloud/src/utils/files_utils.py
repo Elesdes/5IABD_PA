@@ -13,7 +13,7 @@ def is_valid_mime(file_name: str) -> bool:
     :return:
     If its a PNG or JPG, then it's true. Else it's false.
     """
-    valid_extensions: list[str] = [".png", ".jpg", ".jpeg"]
+    valid_extensions: list[str] = [".csv"]
     ext: str = os.path.splitext(file_name)[-1].lower()
     return ext in valid_extensions
 
@@ -66,14 +66,20 @@ def verify_role_and_profile(
     :return:
     True if the user is allowed. False if not.
     """
-    current_user = User().get_user(cursor, cookie=request.cookies.get("ICARUS-Login"))
-    # First check to determine if we only need to check the role. Else request_target.email will make a runtime error.
-    if current_user.role == 2 and email == "":
+    if id_users is None and email is None and cookie is None:
         return False
-
-    request_target = User().get_user(
-        cursor, id_users=id_users, email=email, cookie=cookie
-    )
+    current_user = User().get_user_by_cookie(cursor, cookie=request.cookies.get("ICARUS-Login"))
+    if current_user is None:
+        return False
+    request_target = None
+    if id_users:
+        request_target = User().get_user_by_id(cursor, id_users=id_users)
+    if email:
+        request_target = User().get_user_by_email(cursor, email=email)
+    if cookie:
+        request_target = User().get_user_by_cookie(cursor, cookie=cookie)
+    if request_target is None:
+        return False
     if current_user.role == 1 or current_user.email == request_target.email:
         return True
     return False
@@ -94,7 +100,7 @@ def verify_model_and_profile(
     :return:
     True if the user is allowed. False if not.
     """
-    current_user = User().get_user(cursor, cookie=request.cookies.get("ICARUS-Login"))
+    current_user = User().get_user_by_cookie(cursor, cookie=request.cookies.get("ICARUS-Login"))
     if current_user.role == 1:
         return True
     SQL_query =( "SELECT idmodel FROM MODELS WHERE idmodel = %s AND idusers = %s" )

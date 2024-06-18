@@ -24,11 +24,11 @@ def download_mymodels(request: Request, idModel: int) -> FileResponse:
     db_utils = PostgreSQLUtils()
     with db_utils as cursor:
         if verify_model_and_profile(request, cursor, idModel):
-            current_user = User().get_user(cursor, cookie=request.cookies.get("ICARUS-Login"))
+            current_user = User().get_user_by_cookie(cursor, cookie=request.cookies.get("ICARUS-Login"))
             client = storage.Client()
             bucket = client.get_bucket("icarus-gcp.appspot.com")
-            file_path = f"{current_user.email}/{idModel}.zip"
-            blob = bucket.blob(file_path)
+            file_path = f"{idModel}.zip"
+            blob = bucket.blob(f"{current_user.email}/{file_path}")
             blob.download_to_filename(file_path)
             return FileResponse(file_path, filename=f"{idModel}.zip")
         else:
@@ -39,25 +39,29 @@ def download_mymodels(request: Request, idModel: int) -> FileResponse:
 
 
 @router.post("/")
-def upload(files: list[UploadFile] = File(...)):
+def upload(request: Request, files: list[UploadFile] = File(...)):
+    if len(files) > 2:
+        raise HTTPException(
+            status_code=401,
+            detail="Un seul upload possible.",
+        )
     try:
-        if not os.path.exists("./upload_fastapi"):
-            os.makedirs("./upload_fastapi")
-
-        for file in files:
-            # Attention à utiliser une méthode de compression -> https://docs.python.org/3/library/zipfile.html#zipfile-objects
-            # with zipfile.ZipFile(file.file, "r", compression=zipfile.ZIP_DEFLATED) as zip_ref:
-            # Eventuellement, ajouter la fonction de création de zip dans le fichier utils/files_utils.py
-            with zipfile.ZipFile(file.file, "r") as zip_ref:
-                for member in zip_ref.infolist():
-                    if is_valid_mime(member.filename):
-                        zip_ref.extract(member, "./upload_fastapi")
-                    else:
-                        raise HTTPException(
-                            status_code=401,
-                            detail="Les fichiers doivent être de type PNG ou JPG.",
-                        )
-
+        # Eventuellement, ajouter la fonction de création de zip dans le fichier utils/files_utils.py
+        with zipfile.ZipFile(files[0].file, "r") as zip_ref:
+            for member in zip_ref.infolist():
+                if not is_valid_mime(member.filename):
+                    raise HTTPException(
+                        status_code=401,
+                        detail="Les fichiers doivent être de type csv.",
+                    )
+        db_utils = PostgreSQLUtils()
+        with db_utils as cursor:
+            user = User().get_user_by_cookie(cursor=cursor, cookie=request.cookies.get("ICARUS-Login"))
+            client = storage.Client()
+            bucket = client.get_bucket("icarus-gcp.appspot.com")
+            file_path = f"{files[0].filename}"
+            blob = bucket.blob(f"{user.email}/{file_path}")
+            blob.upload_from_filename(file_path)
         return {"message": "Fichiers téléchargés avec succès."}
 
     except Exception as e:

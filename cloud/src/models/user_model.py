@@ -70,10 +70,70 @@ class User:
             return self
         return None
 
+    def get_user_by_id(
+        self,
+        cursor: psycopg2,
+        id_users: int = None,
+    ) -> Self | None:
+        if id_users is None:
+            return None
+        SQL_query = f"SELECT email, password, name, forename, role, cookie FROM USERS WHERE idusers = %s"
+        cursor.execute(SQL_query, (id_users, ))
+        user_data = cursor.fetchone()
+        if user_data:
+            self.email = user_data[0]
+            self.password = user_data[1]
+            self.name = user_data[2]
+            self.forename = user_data[3]
+            self.role = user_data[4]
+            self.cookie = user_data[5]
+            return self
+        return None
+
+    def get_user_by_email(
+            self,
+            cursor: psycopg2,
+            email: str = None,
+    ) -> Self | None:
+        if email is None:
+            return None
+        SQL_query = f"SELECT email, password, name, forename, role, cookie FROM USERS WHERE email = %s"
+        cursor.execute(SQL_query, (email,))
+        user_data = cursor.fetchone()
+        if user_data:
+            self.email = user_data[0]
+            self.password = user_data[1]
+            self.name = user_data[2]
+            self.forename = user_data[3]
+            self.role = user_data[4]
+            self.cookie = user_data[5]
+            return self
+        return None
+
+    def get_user_by_cookie(
+            self,
+            cursor: psycopg2,
+            cookie: str = None,
+    ) -> Self | None:
+        if cookie is None:
+            return None
+        SQL_query = f"SELECT email, password, name, forename, role, cookie FROM USERS WHERE cookie = %s"
+        cursor.execute(SQL_query, (cookie,))
+        user_data = cursor.fetchone()
+        if user_data:
+            self.email = user_data[0]
+            self.password = user_data[1]
+            self.name = user_data[2]
+            self.forename = user_data[3]
+            self.role = user_data[4]
+            self.cookie = user_data[5]
+            return self
+        return None
+
     def get_current_user_role(
         self, cookie: str, cursor=Depends(PostgreSQLUtils())
     ) -> int | None:
-        user = self.get_user(cursor, cookie=cookie)
+        user = self.get_user_by_cookie(cursor, cookie=cookie)
         if user:
             return user.role
         return None

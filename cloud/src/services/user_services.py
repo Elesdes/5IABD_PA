@@ -15,7 +15,7 @@ def request_dashboard(request: Request) -> bool:
     if cookie_value is not None:
         db_utils = PostgreSQLUtils()
         with db_utils as cursor:
-            if User().get_user(cursor, cookie=cookie_value) is not None:
+            if User().get_user_by_cookie(cursor, cookie=cookie_value) is not None:
                 return True
     return False
 
@@ -25,7 +25,7 @@ def request_admin(request: Request) -> bool:
     if cookie_value is not None:
         db_utils = PostgreSQLUtils()
         with db_utils as cursor:
-            user = User().get_user(cursor, cookie=cookie_value)
+            user = User().get_user_by_cookie(cursor, cookie=cookie_value)
             if user is not None and user.role == 1:
                 return True
     return False
@@ -36,7 +36,7 @@ def request_login(
 ) -> User | None:
     db_utils = PostgreSQLUtils()
     with db_utils as cursor:
-        user = User().get_user(cursor, email=email)
+        user = User().get_user_by_email(cursor, email=email)
         if not user or not user.verify_password(password):
             return None
         user = set_cookie(user, cursor, email)
@@ -53,7 +53,7 @@ def request_register(
     user = User()
     db_utils = PostgreSQLUtils()
     with db_utils as cursor:
-        if user.get_user(cursor, email=email) is not None:
+        if user.get_user_by_email(cursor, email=email) is not None:
             return None
         user = user.insert_user(
             cursor,
