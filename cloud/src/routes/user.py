@@ -19,15 +19,15 @@ templates = Jinja2Templates(directory="./templates/")
 async def about(request: Request):
     return templates.TemplateResponse(name="about.html", context={"request": request})
 
-"""
+
 @router.get("/dashboard", response_class=HTMLResponse)
 async def dashboard(request: Request):
     if request_dashboard(request):
         return templates.TemplateResponse(
-            name="dashboard.html", context={"request": request}
+            name="mymodels.html", context={"request": request}
         )
     return templates.TemplateResponse(name="login.html", context={"request": request})
-"""
+
 
 @router.get("/logout", response_class=HTMLResponse)
 async def logout(request: Request):
