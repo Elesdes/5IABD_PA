@@ -49,7 +49,7 @@ def get_profile(request: Request) -> list[dict[str, str | list[str] | int]]:
 @router.get("/get_users")
 def get_users(request: Request) -> list[dict[str, str | list[str] | int]]:
     db_utils = PostgreSQLUtils()
-    # Set the mail to "" because the verify_role_and_profile will fail the second test. Therefore, only an admin car get all users.
+    # Set the mail to "" because the verify_role_and_profile will fail the second test. Therefore, only an admin can get all users.
     email = ""
     users = []
     with db_utils as cursor:
