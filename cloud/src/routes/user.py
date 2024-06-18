@@ -19,7 +19,7 @@ templates = Jinja2Templates(directory="./templates/")
 async def about(request: Request):
     return templates.TemplateResponse(name="about.html", context={"request": request})
 
-
+"""
 @router.get("/dashboard", response_class=HTMLResponse)
 async def dashboard(request: Request):
     if request_dashboard(request):
@@ -27,7 +27,7 @@ async def dashboard(request: Request):
             name="dashboard.html", context={"request": request}
         )
     return templates.TemplateResponse(name="login.html", context={"request": request})
-
+"""
 
 @router.get("/logout", response_class=HTMLResponse)
 async def logout(request: Request):
@@ -75,7 +75,7 @@ async def login(
 ) -> HTMLResponse:
     user = request_login(email, password)
     if user:
-        return set_response_cookie(request, "dashboard.html", user.cookie)
+        return set_response_cookie(request, "mymodels.html", user.cookie)
     else:
         posts = [{
                      "bad_profile": '<div class="alert alert-warning" role="alert">Mauvais identifiants</div>'}]

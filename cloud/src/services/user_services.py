@@ -62,4 +62,4 @@ def request_register(
             name,
             forename,
         )
-    return set_response_cookie(request, "dashboard.html", user.cookie)
+    return set_response_cookie(request, "mymodels.html", user.cookie)

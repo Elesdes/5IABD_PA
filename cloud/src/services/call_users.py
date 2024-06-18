@@ -58,7 +58,6 @@ def get_users(request: Request) -> list[dict[str, str | list[str] | int]]:
             cursor.execute(SQL_query)
             user_data = cursor.fetchall()
             # user_data = [dict(row) for row in user_data]
-            print(user_data)
             for user in user_data:
                 users.append(
                     {
@@ -71,7 +70,6 @@ def get_users(request: Request) -> list[dict[str, str | list[str] | int]]:
                 )
             return users
         else:
-            print("Invalid person?")
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
                 detail="Invalid profile.",
