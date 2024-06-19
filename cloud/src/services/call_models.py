@@ -80,7 +80,7 @@ def get_mymodel(request: Request) -> list[dict[str, str | datetime.datetime | in
             SQL_query = "SELECT idusers FROM USERS WHERE cookie=%s"
             cursor.execute(SQL_query, (cookie_value,))
             SQL_query = "SELECT idmodel, path, date FROM MODELS WHERE idUsers=%s"
-            cursor.execute(SQL_query, cursor.fetchone()[0])
+            cursor.execute(SQL_query, (cursor.fetchone()[0],))
             model_data = cursor.fetchall()
             # model_data = [dict(row) for row in model_data]
             for model in model_data:

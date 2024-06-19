@@ -175,19 +175,18 @@ async def update_profile(
     email = escape(email)
     forename = escape(forename)
     name = escape(name)
-    oldPassword = escape(oldPassword)
-    password = escape(password)
     db_utils = PostgreSQLUtils()
     with db_utils as cursor:
         cookie = request.cookies.get('ICARUS-Login')
         if verify_role_and_profile(request, cursor, cookie=cookie):
             if verify_mail(request, cursor, email):
                 context = {"request": request}
-                print(type(password), password)
                 if password is None:
                     SQL_query = "UPDATE USERS SET forename=%s, name=%s, email=%s WHERE cookie=%s"
                     cursor.execute(SQL_query, (forename, name, email, cookie))
                 else:
+                    oldPassword = escape(oldPassword)
+                    password = escape(password)
                     current_user = User().get_user_by_cookie(cursor, cookie=escape(request.cookies.get("ICARUS-Login")))
                     if current_user.verify_password(oldPassword):
                         SQL_query = "UPDATE USERS SET forename=%s, name=%s, email=%s, password=%s WHERE cookie=%s"
