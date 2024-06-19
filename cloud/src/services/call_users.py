@@ -182,9 +182,7 @@ async def update_profile(
         cookie = request.cookies.get('ICARUS-Login')
         if verify_role_and_profile(request, cursor, cookie=cookie):
             if verify_mail(request, cursor, email):
-                posts = [{"bad_profile": ''}]
-                print(oldPassword)
-                print(password)
+                context = {"request": request}
                 if password is None:
                     SQL_query = "UPDATE USERS SET forename=%s, name=%s, email=%s WHERE cookie=%s"
                     cursor.execute(SQL_query, (forename, name, email, cookie))
@@ -195,8 +193,8 @@ async def update_profile(
                         cursor.execute(SQL_query, (forename, name, email, pwd_context.hash(password), cookie))
                     else:
                         posts = [{"bad_profile": '<div class="alert alert-warning" role="alert">Mauvais mot de passe fournis</div>'}]
-                context = {"posts": posts,
-                           "request": request}
+                        context = {"posts": posts,
+                                   "request": request}
                 return templates.TemplateResponse(
                     name="profile.html", context=context
                 )
