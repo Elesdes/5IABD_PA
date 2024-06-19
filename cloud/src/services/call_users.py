@@ -183,6 +183,7 @@ async def update_profile(
         if verify_role_and_profile(request, cursor, cookie=cookie):
             if verify_mail(request, cursor, email):
                 context = {"request": request}
+                print(type(password), password)
                 if password is None:
                     SQL_query = "UPDATE USERS SET forename=%s, name=%s, email=%s WHERE cookie=%s"
                     cursor.execute(SQL_query, (forename, name, email, cookie))
