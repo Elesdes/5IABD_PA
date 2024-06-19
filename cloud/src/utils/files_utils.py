@@ -99,6 +99,8 @@ def verify_mail(
     current_user = User().get_user_by_cookie(cursor, cookie=escape(request.cookies.get("ICARUS-Login")))
     if email:
         request_target = User().get_user_by_email(cursor, email=email)
+        if not request_target:
+            return True
         if current_user.cookie == request_target.cookie:
             return True
     return False
