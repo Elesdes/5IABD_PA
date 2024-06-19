@@ -5,7 +5,7 @@ from src.utils.files_utils import is_valid_mime, verify_model_and_profile
 from src.utils.postgresql_utils import PostgreSQLUtils
 from src.models.user_model import User
 from google.cloud import storage
-import os
+from markupsafe import escape
 import zipfile
 
 
@@ -21,10 +21,11 @@ router = APIRouter(
 @router.get("/{idModel}")
 # def download(filename: str = "FINALE.keras", request: Request = None):
 def download_mymodels(request: Request, idModel: int) -> FileResponse:
+    idModel = escape(idModel)
     db_utils = PostgreSQLUtils()
     with db_utils as cursor:
         if verify_model_and_profile(request, cursor, idModel):
-            current_user = User().get_user_by_cookie(cursor, cookie=request.cookies.get("ICARUS-Login"))
+            current_user = User().get_user_by_cookie(cursor, cookie=escape(request.cookies.get("ICARUS-Login")))
             client = storage.Client()
             bucket = client.get_bucket("icarus-gcp.appspot.com")
             file_path = f"{idModel}.zip"
@@ -56,7 +57,7 @@ def upload(request: Request, files: list[UploadFile] = File(...)):
                     )
         db_utils = PostgreSQLUtils()
         with db_utils as cursor:
-            user = User().get_user_by_cookie(cursor=cursor, cookie=request.cookies.get("ICARUS-Login"))
+            user = User().get_user_by_cookie(cursor=cursor, cookie=escape(request.cookies.get("ICARUS-Login")))
             client = storage.Client()
             bucket = client.get_bucket("icarus-gcp.appspot.com")
             file_path = f"{files[0].filename}"

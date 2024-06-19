@@ -1,6 +1,6 @@
 from typing import Annotated
-
-from fastapi import Request, HTTPException, APIRouter, status, Form
+from markupsafe import escape
+from fastapi import Request, APIRouter, Form
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
 from src.services.user_services import request_dashboard, request_login, request_register
@@ -58,6 +58,10 @@ async def register(
     name: Annotated[str, Form()],
     forename: Annotated[str, Form()],
 ) -> HTMLResponse:
+    email = escape(email)
+    password = escape(password)
+    name = escape(name)
+    forename = escape(forename)
     response = request_register(request, email, password, name, forename)
     if not response:
         posts = [{"bad_profile": '<div class="alert alert-warning" role="alert">Le profil existe déjà ou les informations données ne rentrent pas dans les critères</div>'}]
@@ -73,12 +77,13 @@ async def register(
 async def login(
     request: Request, email: Annotated[str, Form()], password: Annotated[str, Form()]
 ) -> HTMLResponse:
+    email = escape(email)
+    password = escape(password)
     user = request_login(email, password)
     if user:
         return set_response_cookie(request, "mymodels.html", user.cookie)
     else:
-        posts = [{
-                     "bad_profile": '<div class="alert alert-warning" role="alert">Mauvais identifiants</div>'}]
+        posts = [{"bad_profile": '<div class="alert alert-warning" role="alert">Mauvais identifiants</div>'}]
         context = {"posts": posts,
                    "request": request}
         return templates.TemplateResponse(

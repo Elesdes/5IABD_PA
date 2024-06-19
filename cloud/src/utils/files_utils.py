@@ -1,5 +1,6 @@
 from src.models.user_model import User
 from fastapi import Request
+from markupsafe import escape
 import psycopg2
 import zipfile
 import os
@@ -66,7 +67,7 @@ def verify_role_and_profile(
     :return:
     True if the user is allowed. False if not.
     """
-    current_user = User().get_user_by_cookie(cursor, cookie=request.cookies.get("ICARUS-Login"))
+    current_user = User().get_user_by_cookie(cursor, cookie=escape(request.cookies.get("ICARUS-Login")))
     # First check to determine if we only need to check the role. Else request_target.email will make a runtime error.
     if current_user.role == 2 and email == "":
         return False
@@ -95,7 +96,7 @@ def verify_mail(
     :return:
     True if the user is the same as the requested mail
     """
-    current_user = User().get_user_by_cookie(cursor, cookie=request.cookies.get("ICARUS-Login"))
+    current_user = User().get_user_by_cookie(cursor, cookie=escape(request.cookies.get("ICARUS-Login")))
     if email:
         request_target = User().get_user_by_email(cursor, email=email)
         if current_user.cookie == request_target.cookie:
@@ -118,7 +119,7 @@ def verify_model_and_profile(
     :return:
     True if the user is allowed. False if not.
     """
-    current_user = User().get_user_by_cookie(cursor, cookie=request.cookies.get("ICARUS-Login"))
+    current_user = User().get_user_by_cookie(cursor, cookie=escape(request.cookies.get("ICARUS-Login")))
     if current_user.role == 1:
         return True
     SQL_query =( "SELECT idmodel FROM MODELS WHERE idmodel = %s AND idusers = %s" )

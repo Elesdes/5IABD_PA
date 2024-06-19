@@ -2,7 +2,7 @@ import datetime
 from fastapi import APIRouter, status, HTTPException, Request
 from src.utils.postgresql_utils import PostgreSQLUtils
 from src.utils.files_utils import verify_role_and_profile
-
+from markupsafe import escape
 
 router = APIRouter(
     prefix="/api",
@@ -42,6 +42,7 @@ def get_models(request: Request) -> list[dict[str, str | datetime.datetime | int
 
 @router.get("/get_model/{idUsers}")
 def get_model(request: Request, idUsers: str) -> list[dict[str, str | list[str]]]:
+    idUsers = escape(idUsers)
     db_utils = PostgreSQLUtils()
     models = []
     with db_utils as cursor:
@@ -73,7 +74,7 @@ def get_model(request: Request, idUsers: str) -> list[dict[str, str | list[str]]
 def get_mymodel(request: Request) -> list[dict[str, str | datetime.datetime | int]]:
     db_utils = PostgreSQLUtils()
     models = []
-    cookie_value = request.cookies.get("ICARUS-Login")
+    cookie_value = escape(request.cookies.get("ICARUS-Login"))
     with db_utils as cursor:
         if verify_role_and_profile(request, cursor, cookie=cookie_value):
             SQL_query = "SELECT idusers FROM USERS WHERE cookie=%s"
@@ -100,6 +101,8 @@ def get_mymodel(request: Request) -> list[dict[str, str | datetime.datetime | in
 
 @router.delete("/del_models/")
 def del_models(request: Request, idUsers: str, idModel: int) -> None:
+    idUsers = escape(idUsers)
+    idModel = escape(idModel)
     db_utils = PostgreSQLUtils()
     with db_utils as cursor:
         if verify_role_and_profile(request, cursor, id_users=idUsers):
@@ -114,6 +117,7 @@ def del_models(request: Request, idUsers: str, idModel: int) -> None:
 
 @router.delete("/del_mymodels/")
 def del_mymodels(request: Request, idModel: int) -> None:
+    idModel = escape(idModel)
     db_utils = PostgreSQLUtils()
     # cookie_value = request.cookies.get("ICARUS-Login")
     SQL_query = "SELECT idusers FROM MODELS WHERE idmodel=%s"
@@ -133,6 +137,10 @@ def del_mymodels(request: Request, idModel: int) -> None:
 def update_model(
     request: Request, idModel: str, path: str, date: datetime.datetime, idUsers: str
 ) -> None:
+    idModel = escape(idModel)
+    path = escape(path)
+    date = escape(date)
+    idUsers = escape(idUsers)
     db_utils = PostgreSQLUtils()
     with db_utils as cursor:
         if verify_role_and_profile(request, cursor, id_users=idUsers):

@@ -6,7 +6,7 @@ from passlib.context import CryptContext
 from fastapi.templating import Jinja2Templates
 from fastapi.responses import HTMLResponse
 from typing import Optional, Annotated
-
+from markupsafe import escape
 
 router = APIRouter(
     prefix="/api",
@@ -21,7 +21,7 @@ templates = Jinja2Templates(directory="./templates/")
 def get_profile(request: Request) -> list[dict[str, str | list[str] | int]]:
     db_utils = PostgreSQLUtils()
     with db_utils as cursor:
-        cookie = request.cookies.get("ICARUS-Login")
+        cookie = escape(request.cookies.get("ICARUS-Login"))
         if verify_role_and_profile(
             request, cursor, cookie=cookie
         ):
@@ -80,7 +80,7 @@ def get_users(request: Request) -> list[dict[str, str | list[str] | int]]:
 def get_role(request: Request) -> bool:
     db_utils = PostgreSQLUtils()
     with db_utils as cursor:
-        cookie = request.cookies.get("ICARUS-Login")
+        cookie = escape(request.cookies.get("ICARUS-Login"))
         if verify_role_and_profile(request, cursor, cookie=cookie):
             SQL_query = "SELECT role FROM USERS where cookie=%s"
             cursor.execute(SQL_query, (cookie,))
@@ -97,6 +97,7 @@ def get_role(request: Request) -> bool:
 
 @router.delete("/del_users/{idUsers}", status_code=200)
 def del_users(request: Request, idUsers: str) -> None:
+    idUsers = escape(idUsers)
     db_utils = PostgreSQLUtils()
     with db_utils as cursor:
         if verify_role_and_profile(request, cursor, id_users=idUsers):
@@ -113,7 +114,7 @@ def del_users(request: Request, idUsers: str) -> None:
 def del_profile(request: Request) -> HTMLResponse:
     db_utils = PostgreSQLUtils()
     with db_utils as cursor:
-        cookie = request.cookies.get("ICARUS-Login")
+        cookie = escape(request.cookies.get("ICARUS-Login"))
         if verify_role_and_profile(
             request, cursor, cookie=cookie
         ):
@@ -135,13 +136,18 @@ def del_profile(request: Request) -> HTMLResponse:
 def update_users(
     request: Request, idUsers: str, name: str, forename: str, email: str, role: str
 ) -> None:
+    idUsers = escape(idUsers)
+    name = escape(name)
+    forename = escape(forename)
+    email = escape(email)
+    role = escape(role)
     db_utils = PostgreSQLUtils()
     with db_utils as cursor:
         if verify_role_and_profile(request, cursor, id_users=idUsers):
             # If the request come from a User, he can't set the user_role to Admin.
             # Technically, he can't access the webpage to this, but he can still tinker the request himself.
             user_role = User().get_current_user_role(
-                request.cookies.get("ICARUS-Login"), cursor
+                escape(request.cookies.get("ICARUS-Login")), cursor
             )
             if user_role == 2:
                 role = 2
@@ -166,6 +172,11 @@ async def update_profile(
     oldPassword: Optional[str] = Form(None),
     password: Optional[str] = Form(None),
 ) -> HTMLResponse:
+    email = escape(email)
+    forename = escape(forename)
+    name = escape(name)
+    oldPassword = escape(oldPassword)
+    password = escape(password)
     db_utils = PostgreSQLUtils()
     with db_utils as cursor:
         cookie = request.cookies.get('ICARUS-Login')
@@ -176,7 +187,7 @@ async def update_profile(
                     SQL_query = "UPDATE USERS SET forename=%s, name=%s, email=%s WHERE cookie=%s"
                     cursor.execute(SQL_query, (forename, name, email, cookie))
                 else:
-                    current_user = User().get_user_by_cookie(cursor, cookie=request.cookies.get("ICARUS-Login"))
+                    current_user = User().get_user_by_cookie(cursor, cookie=escape(request.cookies.get("ICARUS-Login")))
                     if current_user.verify_password(oldPassword):
                         SQL_query = "UPDATE USERS SET forename=%s, name=%s, email=%s, password=%s WHERE cookie=%s"
                         cursor.execute(SQL_query, (forename, name, email, pwd_context.hash(password), cookie))

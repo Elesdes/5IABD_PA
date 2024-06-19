@@ -4,6 +4,7 @@ from src.utils.postgresql_utils import PostgreSQLUtils
 from src.models.user_model import User
 from src.services.cookie_services import set_cookie, set_response_cookie
 from passlib.context import CryptContext
+from markupsafe import escape
 import psycopg2
 
 
@@ -11,7 +12,7 @@ pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 
 def request_dashboard(request: Request) -> bool:
-    cookie_value = request.cookies.get("ICARUS-Login")
+    cookie_value = escape(request.cookies.get("ICARUS-Login"))
     if cookie_value is not None:
         db_utils = PostgreSQLUtils()
         with db_utils as cursor:
@@ -21,7 +22,7 @@ def request_dashboard(request: Request) -> bool:
 
 
 def request_admin(request: Request) -> bool:
-    cookie_value = request.cookies.get("ICARUS-Login")
+    cookie_value = escape(request.cookies.get("ICARUS-Login"))
     if cookie_value is not None:
         db_utils = PostgreSQLUtils()
         with db_utils as cursor:

@@ -82,6 +82,7 @@ def test_db():
     return users
 
 
+"""
 @app.get("/test_blob", response_class=HTMLResponse, include_in_schema=False)
 def test_blob(request: Request):
     client = storage.Client()
@@ -89,6 +90,7 @@ def test_blob(request: Request):
     blob = bucket.blob("test")
     blob.upload_from_filename("README.md")
     return templates.TemplateResponse(name="index.html", context={"request": request})
+"""
 
 
 @app.get("/favicon.ico", include_in_schema=False)
