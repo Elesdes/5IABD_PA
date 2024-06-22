@@ -11,11 +11,14 @@ from src.utils.postgresql_utils import PostgreSQLUtils
 from google.cloud import storage
 import uvicorn
 
+"""
 app = FastAPI(
     docs_url=None,
     redoc_url=None,
     openapi_url=None,
 )
+"""
+app = FastAPI()
 app.mount("/static", StaticFiles(directory="./static"), name="static")
 app.include_router(download_upload.router)
 app.include_router(user.router)

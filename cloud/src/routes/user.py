@@ -73,10 +73,21 @@ async def register(
     return response
 
 
+@router.post("/dummy", response_model=HTMLResponse)
+async def dummy(request: Request):
+    username = "username"
+    password = "password"
+    response = request.post('https://icarus-gcp.oa.r.appspot.com/login', data={'username': username, 'password': password})
+    return templates.TemplateResponse(
+        name="index.html", context={"request": request}
+    )
+
+
 @router.post("/login", response_class=HTMLResponse)
 async def login(
-    request: Request, email: Annotated[str, Form()], password: Annotated[str, Form()]
+    request: Request, email: Annotated[str, Form()], password: Annotated[str, Form()], app_type: Annotated[str, Form()] = "web"
 ) -> HTMLResponse:
+    print(email, password, app_type)
     email = escape(email)
     password = escape(password)
     user = request_login(email, password)
@@ -89,3 +100,8 @@ async def login(
         return templates.TemplateResponse(
             name="login.html", context=context
         )
+
+"""
+@router.post("/login-desktop", response_class=HTMLResponse)
+async def login_desktop() -> HTMLResponse:
+"""
