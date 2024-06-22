@@ -1,9 +1,13 @@
-from typing import Annotated, Literal
+from typing import Annotated
 from markupsafe import escape
 from fastapi import Request, APIRouter, Form
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
-from src.services.user_services import request_dashboard, request_login, request_register
+from src.services.user_services import (
+    request_dashboard,
+    request_login,
+    request_register,
+)
 from src.services.cookie_services import set_response_cookie
 
 router = APIRouter(
@@ -51,11 +55,11 @@ async def register_page(request: Request):
 
 @router.post("/register", response_class=HTMLResponse)
 async def register(
-        request: Request,
-        email: Annotated[str, Form()],
-        password: Annotated[str, Form()],
-        name: Annotated[str, Form()],
-        forename: Annotated[str, Form()],
+    request: Request,
+    email: Annotated[str, Form()],
+    password: Annotated[str, Form()],
+    name: Annotated[str, Form()],
+    forename: Annotated[str, Form()],
 ) -> HTMLResponse:
     email = escape(email)
     password = escape(password)
@@ -63,49 +67,30 @@ async def register(
     forename = escape(forename)
     response = request_register(request, email, password, name, forename)
     if not response:
-        posts = [{
-                     "bad_profile": '<div class="alert alert-warning" role="alert">Le profil existe déjà ou les informations données ne rentrent pas dans les critères</div>'}]
-        context = {"posts": posts,
-                   "request": request}
-        return templates.TemplateResponse(
-            name="register.html", context=context
-        )
+        posts = [
+            {
+                "bad_profile": '<div class="alert alert-warning" role="alert">Le profil existe déjà ou les informations données ne rentrent pas dans les critères</div>'
+            }
+        ]
+        context = {"posts": posts, "request": request}
+        return templates.TemplateResponse(name="register.html", context=context)
     return response
-
-
-"""
-@router.post("/dummy", response_model=HTMLResponse)
-async def dummy(request: Request) -> HTMLResponse:
-    username = "username"
-    password = "password"
-    response = request.post('https://icarus-gcp.oa.r.appspot.com/pages/login', data={'username': username, 'password': password})
-    return templates.TemplateResponse(
-        name="index.html", context={"request": request}
-    )
-"""
 
 
 @router.post("/login", response_class=HTMLResponse)
 async def login(
-        request: Request, email: Annotated[str, Form()], password: Annotated[str, Form()],
-        app_type: Annotated[Literal["web", "desktop"], Form()] = "web"
+    request: Request, email: Annotated[str, Form()], password: Annotated[str, Form()]
 ) -> HTMLResponse:
     email = escape(email)
     password = escape(password)
     user = request_login(email, password)
-    if app_type == "web" and user:
+    if user:
         return set_response_cookie(request, "mymodels.html", user.cookie)
-    elif app_type == "desktop" and user:
-        return
-
-    posts = [{"bad_profile": '<div class="alert alert-warning" role="alert">Mauvais identifiants</div>'}]
-    context = {"posts": posts, "request": request}
-    return templates.TemplateResponse(
-        name="login.html", context=context
-    )
-
-
-"""
-@router.post("/login-desktop", response_class=HTMLResponse)
-async def login_desktop() -> HTMLResponse:
-"""
+    else:
+        posts = [
+            {
+                "bad_profile": '<div class="alert alert-warning" role="alert">Mauvais identifiants</div>'
+            }
+        ]
+        context = {"posts": posts, "request": request}
+        return templates.TemplateResponse(name="login.html", context=context)
