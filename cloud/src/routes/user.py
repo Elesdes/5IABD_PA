@@ -1,11 +1,10 @@
-from typing import Annotated
+from typing import Annotated, Literal
 from markupsafe import escape
 from fastapi import Request, APIRouter, Form
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
 from src.services.user_services import request_dashboard, request_login, request_register
 from src.services.cookie_services import set_response_cookie
-
 
 router = APIRouter(
     prefix="/pages",
@@ -52,11 +51,11 @@ async def register_page(request: Request):
 
 @router.post("/register", response_class=HTMLResponse)
 async def register(
-    request: Request,
-    email: Annotated[str, Form()],
-    password: Annotated[str, Form()],
-    name: Annotated[str, Form()],
-    forename: Annotated[str, Form()],
+        request: Request,
+        email: Annotated[str, Form()],
+        password: Annotated[str, Form()],
+        name: Annotated[str, Form()],
+        forename: Annotated[str, Form()],
 ) -> HTMLResponse:
     email = escape(email)
     password = escape(password)
@@ -64,13 +63,15 @@ async def register(
     forename = escape(forename)
     response = request_register(request, email, password, name, forename)
     if not response:
-        posts = [{"bad_profile": '<div class="alert alert-warning" role="alert">Le profil existe déjà ou les informations données ne rentrent pas dans les critères</div>'}]
+        posts = [{
+                     "bad_profile": '<div class="alert alert-warning" role="alert">Le profil existe déjà ou les informations données ne rentrent pas dans les critères</div>'}]
         context = {"posts": posts,
                    "request": request}
         return templates.TemplateResponse(
             name="register.html", context=context
         )
     return response
+
 
 """
 @router.post("/dummy", response_model=HTMLResponse)
@@ -86,21 +87,23 @@ async def dummy(request: Request) -> HTMLResponse:
 
 @router.post("/login", response_class=HTMLResponse)
 async def login(
-    request: Request, email: Annotated[str, Form()], password: Annotated[str, Form()]
+        request: Request, email: Annotated[str, Form()], password: Annotated[str, Form()],
+        app_type: Annotated[Literal["web", "desktop"], Form()] = "web"
 ) -> HTMLResponse:
-    print(email, password)
     email = escape(email)
     password = escape(password)
     user = request_login(email, password)
-    if user:
+    if app_type == "web" and user:
         return set_response_cookie(request, "mymodels.html", user.cookie)
-    else:
-        posts = [{"bad_profile": '<div class="alert alert-warning" role="alert">Mauvais identifiants</div>'}]
-        context = {"posts": posts,
-                   "request": request}
-        return templates.TemplateResponse(
-            name="login.html", context=context
-        )
+    elif app_type == "desktop" and user:
+        return
+
+    posts = [{"bad_profile": '<div class="alert alert-warning" role="alert">Mauvais identifiants</div>'}]
+    context = {"posts": posts, "request": request}
+    return templates.TemplateResponse(
+        name="login.html", context=context
+    )
+
 
 """
 @router.post("/login-desktop", response_class=HTMLResponse)
