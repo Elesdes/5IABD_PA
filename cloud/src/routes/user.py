@@ -77,7 +77,7 @@ async def register(
 async def dummy(request: Request):
     username = "username"
     password = "password"
-    response = request.post('https://icarus-gcp.oa.r.appspot.com/login', data={'username': username, 'password': password})
+    response = request.post('https://icarus-gcp.oa.r.appspot.com/pages/login', data={'username': username, 'password': password})
     return templates.TemplateResponse(
         name="index.html", context={"request": request}
     )
