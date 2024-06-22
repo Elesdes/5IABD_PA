@@ -72,7 +72,7 @@ async def register(
         )
     return response
 
-
+"""
 @router.post("/dummy", response_model=HTMLResponse)
 async def dummy(request: Request) -> HTMLResponse:
     username = "username"
@@ -81,6 +81,7 @@ async def dummy(request: Request) -> HTMLResponse:
     return templates.TemplateResponse(
         name="index.html", context={"request": request}
     )
+"""
 
 
 @router.post("/login", response_class=HTMLResponse)
