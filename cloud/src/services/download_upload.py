@@ -46,8 +46,8 @@ def download_mymodels(idDevice: str) -> FileResponse:
         bucket = client.get_bucket("icarus-gcp.appspot.com")
         # file_path = f"PPO_hand_prosthesis_model.zip"
         blob = bucket.blob(f"{user_data[0]}/{model_data[0]}")
-        blob.download_to_filename(model_data[0])
-        return FileResponse(model_data[0], filename=f"{model_data[0]}")
+        blob.download_to_filename(f"tmp/{model_data[0]}")
+        return FileResponse(f"tmp/{model_data[0]}", filename=f"{model_data[0]}")
 
 
 @router.post("/")
