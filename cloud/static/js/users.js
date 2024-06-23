@@ -51,13 +51,13 @@ document.addEventListener("DOMContentLoaded", function() {
 function editUser(user) {
     user = decodeURIComponent(user)
     user = JSON.parse(user)
-    let tabletrIdUsers = CSS.escape("#tabletr" + user.idUsers)
+    let tabletrIdUsers = "#tabletr" + user.idUsers
     console.log(user)
     console.log(tabletrIdUsers)
-    let inputValues = $(tabletrIdUsers).find("input").map(function() {
+    let inputValues = $(document.getElementById(tabletrIdUsers)).find("input").map(function() {
         return $(this).val();
     }).get();
-    let selectValues = $(tabletrIdUsers).find("select").map(function() {
+    let selectValues = $(document.getElementById(tabletrIdUsers)).find("select").map(function() {
         return $(this).val();
     }).get();
     fetch(`/api/update_users/?idUsers=${user.idUsers}&name=${inputValues[1]}&forename=${inputValues[0]}&email=${inputValues[2]}&role=${selectValues[0]}`, {
