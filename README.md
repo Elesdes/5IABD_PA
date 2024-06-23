@@ -51,9 +51,11 @@ yes | pip install -r requirements.txt
 
 This project has been influenced by the following works:
 
-- [TactHand](https://github.com/pslade2/TactHand) (Open source model of a 3D-printed hand prosthesis)
-- [InMoov](https://inmoov.fr/hand-i2/) (An other open source model of a 3D-printed hand prosthesis)
-- [PyBullet](https://github.com/bulletphysics/bullet3) (Open source physics engine for Python)
+- [TactHand](https://github.com/pslade2/TactHand) (Open-source model of a 3D-printed hand prosthesis)
+- [InMoov](https://inmoov.fr/hand-i2/) (An other open-source model of a 3D-printed hand prosthesis)
+- [PyBullet](https://github.com/bulletphysics/bullet3) (Open-source physics engine for Python)
+- [ROS](https://www.ros.org/) (Open-source framework for robot software development)
+- [Gazebo](https://gazebosim.org/home) (Open-source robotics simulator integrated with ROS)
 - [Pyomyo](https://github.com/PerlinWarp/pyomyo) (Open source code for interfacing with Myo armbands)
 
 We would like to express our gratitude to these authors for their groundbreaking work and contributions to the open-source community.
