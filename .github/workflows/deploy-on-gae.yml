@@ -1,0 +1,58 @@
+name: Deploy on GAE
+
+on:
+  push:
+    branches:
+      - main
+      - dev
+    paths:
+      - 'cloud/**'
+      - '.github/workflows/deploy-on-gae.yml'
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Authenticate to Google Cloud
+        id: auth
+        uses: google-github-actions/auth@v2
+        with:
+          credentials_json: ${{ secrets.CREDENTIALS_JSON }}
+          service_account: ${{ secrets.SERVICE_ACCOUNT }}
+          project_id: ${{ secrets.PROJECT_ID }}
+
+      - name: Set up Cloud SDK
+        uses: google-github-actions/setup-gcloud@v2
+        with:
+          version: ">= 363.0.0"
+
+      - name: Replace secrets in app.yaml
+        run: |
+          sed -i "s|<CLOUD_SQL_USERNAME>|${{ secrets.CLOUD_SQL_USERNAME }}|g" cloud/app.yaml
+          sed -i "s|<CLOUD_SQL_PASSWORD>|${{ secrets.CLOUD_SQL_PASSWORD }}|g" cloud/app.yaml
+          sed -i "s|<CLOUD_SQL_DATABASE_NAME>|${{ secrets.CLOUD_SQL_DATABASE_NAME }}|g" cloud/app.yaml
+          sed -i "s|<CLOUD_SQL_CONNECTION_NAME>|${{ secrets.CLOUD_SQL_CONNECTION_NAME }}|g" cloud/app.yaml
+          sed -i "s|<CLOUD_PRIVATE_IP>|${{ secrets.CLOUD_PRIVATE_IP }}|g" cloud/app.yaml
+          sed -i "s|<CLOUD_SQL_INSTANCES>|${{ secrets.CLOUD_SQL_INSTANCES }}|g" cloud/app.yaml
+          sed -i "s|<VPS_ACCESS_CONNECTOR_NAME>|${{ secrets.VPS_ACCESS_CONNECTOR_NAME }}|g" cloud/app.yaml
+
+      - name: Deploy to Google App Engine
+        run: gcloud app deploy cloud/app.yaml --quiet
+
+      - name: Notify Discord of deployment status
+        if: always()
+        env:
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+        run: |
+          STATUS=${{ job.status }}
+          if [ "$STATUS" = "success" ]; then
+            MESSAGE="Deployment to Google App Engine was successful!"
+          else
+            MESSAGE="Deployment to Google App Engine failed."
+          fi
+          curl -X POST -H "Content-Type: application/json" \
+            -d "{\"content\": \"$MESSAGE\"}" $DISCORD_WEBHOOK_URL

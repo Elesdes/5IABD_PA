@@ -23,84 +23,39 @@ Open pgAdmin4. Click on "Servers" in the left list. Write your password previous
 Right click Login/Group Roles -> Create -> Login/Group Roles. Create your user. Please be careful, you'll need to accept "Can login?" Privileges.
 Click on "Object" -> Create -> Database... Name your database and set your user as the owner.
 Click on your newly created database. On the top left of the app, click Query Tool.
-Copy and paste to query tool and execute the file : `cloud/sql/create_database_postgresql.sql`
+Copy and paste to query tool and execute the file : `scripts/create_database_postgresql.sql`
 
 ### Linux (Ubuntu)
 
-#### Setup & Run PostgreSQL
-
-First, run these commands :
+For a full install (installing PostgreSQL and setup the database):
 ```bash
-sudo apt-get update
-sudo apt install postgresql postgresql-contrib libgconf-2-4 libatk1.0-0 libatk-bridge2.0-0 libgdk-pixbuf2.0-0 libgtk-3-0 libgbm-dev libnss3-dev libxss-dev libasound2
+sudo apt install dos2unix
 ```
 
-Then, to start the PostgreSQL service, run these :
 ```bash
-sudo service postgresql start
-sudo -i -u postgres
+dos2unix scripts/setup_postgresql.sh
 ```
 
-Now, you can access the PostgreSQL CLI by running this command :
 ```bash
-psql
+bash scripts/setup_postgresql.sh full
 ```
 
-#### Create the database
-You can create the database by running this command :
-```sql
-CREATE DATABASE icarus_db;
+To install only PostgreSQL:
+
+```bash
+bash scripts/setup_postgresql.sh install
 ```
 
-Before the next step, we need to access the database. To do so, run this command :
-```sql
-\c icarus_db
+To only setup the database:
+
+```bash
+bash scripts/setup_postgresql.sh setup
 ```
-
-Here, we need to create a user and give him the right to access the database. To do so, run these commands :
-```sql
-CREATE USER icarus WITH PASSWORD 'icarus';
-GRANT ALL PRIVILEGES ON DATABASE icarus_db TO icarus;
-```
-
-You can then create the tables by running this query :
-```sql
-CREATE TABLE IF NOT EXISTS USERS
-(
-    IdUser SERIAL NOT NULL PRIMARY KEY,
-	Email VARCHAR(255) NOT NULL,
-	Name VARCHAR(255) NOT NULL,
-	Forename VARCHAR(255) NOT NULL,
-    Password CHAR(255) NOT NULL,
-    Cookie VARCHAR(255),
-	Role INT NOT NULL
-);
-
-CREATE TABLE IF NOT EXISTS MODELS
-(
-    IdModel SERIAL NOT NULL PRIMARY KEY,
-	Path VARCHAR(255) NOT NULL,
-	Date TIMESTAMP NOT NULL,
-	IdUser SERIAL REFERENCES USERS(IdUser)
-);
-```
-
-Finally, to grant the user all the rights necessary, run these commands :
-```sql
-GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO icarus;
-ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL PRIVILEGES ON TABLES TO icarus;
-GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA public TO icarus;
-ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL PRIVILEGES ON SEQUENCES TO icarus;
-```
-
-You can now exit the PostgreSQL CLI.
 
 ## Install Requirements
 
-Run the following command in the `cloud` directory to install the required packages:
-
 ```bash
-pip install -r requirements.txt
+pip install -r cloud/requirements.txt
 ```
 
 ## Launch the API

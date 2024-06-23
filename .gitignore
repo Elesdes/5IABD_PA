@@ -12,3 +12,6 @@ microcontroller/src/models
 # Configurations
 cloud/api/src/config/db_config.py
 microcontroller/src/id_device.cfg
+build
+install
+log
