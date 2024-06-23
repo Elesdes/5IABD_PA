@@ -28,13 +28,6 @@ class User:
         self.cookie = cookie
 
     def verify_password(self, plain_password: str) -> bool:
-        """
-        parts = self.password.split("$")
-        scheme, salt, stored_hash = parts[1], parts[2], parts[3]
-        stored_hash = stored_hash.strip()
-        new_hash = md5_crypt.using(salt=salt).hash(plain_password)
-        return new_hash == f"${scheme}${salt}${stored_hash}"
-        """
         return pwd_context.verify(plain_password, self.password)
 
     def get_user_by_id(
@@ -113,9 +106,9 @@ class User:
         name: str,
         forename: str,
     ) -> Self:
-        request_str = "INSERT INTO USERS(email, password, name, forename, role, cookie) VALUES(%s, %s, %s, %s, 2, '')"
+        request_str = "INSERT INTO USERS(idusers, email, password, name, forename, role, cookie) VALUES(%s %s, %s, %s, %s, 2, '')"
         cursor.execute(
-            request_str, (email, password, name, forename)
+            request_str, (pwd_context.hash(email), email, password, name, forename)
         )
         letters = string.ascii_lowercase
         cookie_value = "".join(random.choice(letters) for _ in range(255))
