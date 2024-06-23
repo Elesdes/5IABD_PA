@@ -3,6 +3,7 @@ from passlib.hash import md5_crypt
 from passlib.context import CryptContext
 from src.utils.postgresql_utils import PostgreSQLUtils
 from typing import Self
+from markupsafe import escape
 import psycopg2
 import string
 import random
@@ -106,7 +107,7 @@ class User:
         name: str,
         forename: str,
     ) -> Self:
-        request_str = "INSERT INTO USERS(idusers, email, password, name, forename, role, cookie) VALUES(%s %s, %s, %s, %s, 2, '')"
+        request_str = "INSERT INTO USERS(idusers, email, password, name, forename, role, cookie) VALUES(%s, %s, %s, %s, %s, 2, '')"
         cursor.execute(
             request_str, (pwd_context.hash(email), email, password, name, forename)
         )
