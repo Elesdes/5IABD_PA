@@ -17,26 +17,37 @@ router = APIRouter(
 
 
 # Ce sont des routes, elles doivent être dans un fichier routes.
-# Le traitement cotnenu à l'intérieur, par contre, peut rester ici
-@router.get("/{idModel}")
+# Le traitement contenu à l'intérieur, par contre, peut rester ici
+@router.get("/{idDevice}")
 # def download(filename: str = "FINALE.keras", request: Request = None):
-def download_mymodels(request: Request, idModel: int) -> FileResponse:
-    idModel = escape(idModel)
+def download_mymodels(idDevice: int) -> FileResponse:
+    idDevice = escape(idDevice)
     db_utils = PostgreSQLUtils()
     with db_utils as cursor:
-        if verify_model_and_profile(request, cursor, idModel):
-            current_user = User().get_user_by_cookie(cursor, cookie=escape(request.cookies.get("ICARUS-Login")))
-            client = storage.Client()
-            bucket = client.get_bucket("icarus-gcp.appspot.com")
-            file_path = f"{idModel}.zip"
-            blob = bucket.blob(f"{current_user.idusers}/{file_path}")
-            blob.download_to_filename(file_path)
-            return FileResponse(file_path, filename=f"{idModel}.zip")
-        else:
+        cursor.execute(
+            "SELECT IdUser FROM DEVICES WHERE IdDevice = %s", (idDevice, )
+        )
+        user_data = cursor.fetchone()
+        if not user_data:
             raise HTTPException(
                 status_code=401,
                 detail="Invalid profile.",
             )
+        cursor.execute(
+            "SELECT path FROM MODELS WHERE idUsers = %s ORDER BY IdModel DESC LIMIT 1", (user_data[0],)
+        )
+        model_data = cursor.fetchone()
+        if not model_data:
+            raise HTTPException(
+                status_code=401,
+                detail="Invalid profile.",
+            )
+        client = storage.Client()
+        bucket = client.get_bucket("icarus-gcp.appspot.com")
+        # file_path = f"PPO_hand_prosthesis_model.zip"
+        blob = bucket.blob(f"{user_data[0]}/{model_data[0]}")
+        blob.download_to_filename(model_data[0])
+        return FileResponse(model_data[0], filename=f"{model_data[0]}")
 
 
 @router.post("/")
@@ -58,11 +69,14 @@ def upload(request: Request, files: list[UploadFile] = File(...)):
         db_utils = PostgreSQLUtils()
         with db_utils as cursor:
             user = User().get_user_by_cookie(cursor=cursor, cookie=escape(request.cookies.get("ICARUS-Login")))
-            client = storage.Client()
-            bucket = client.get_bucket("icarus-gcp.appspot.com")
-            file_path = f"{files[0].filename}"
-            blob = bucket.blob(f"{user.idusers}/{file_path}")
-            blob.upload_from_filename(file_path)
+            if user:
+                client = storage.Client()
+                bucket = client.get_bucket("icarus-gcp.appspot.com")
+                file_path = f"{files[0].filename}"
+                blob = bucket.blob(f"{user.idusers}/{file_path}")
+                blob.upload_from_filename(file_path)
+            else:
+                return {"message": "Pas d'utilisateurs avec vos données d'identifications."}
         return {"message": "Fichiers téléchargés avec succès."}
 
     except Exception as e:
