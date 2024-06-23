@@ -1,21 +1,3 @@
-document.getElementById("acceptAddDevice").addEventListener("click", function() {
-    const inputValue = document.getElementById("newDeviceIdInput").value;
-    fetch('https://votre-serveur.com/api', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ input: inputValue }),
-    })
-    .then(response => response.json())
-    .then(data => {
-        console.log('Success:', data);
-    })
-    .catch((error) => {
-        console.error('Error:', error);
-    });
-});
-
 document.addEventListener("DOMContentLoaded", function() {
     fetch('/api/get_devices')
     .then(response => response.json())
@@ -68,3 +50,21 @@ function reconnectDevice(deviceId) {
       console.error("Error reconnecting device:", error);
     });
 }
+
+document.getElementById("acceptAddDevice").addEventListener("click", function() {
+    const inputValue = document.getElementById("newDeviceIdInput").value;
+    fetch('https://votre-serveur.com/api', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ input: inputValue }),
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log('Success:', data);
+    })
+    .catch((error) => {
+        console.error('Error:', error);
+    });
+});
