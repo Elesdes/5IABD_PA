@@ -1,15 +1,15 @@
-from fastapi import FastAPI, Request, HTTPException
-from fastapi.staticfiles import StaticFiles
+import uvicorn
+from fastapi import FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
+from fastapi.staticfiles import StaticFiles
+from google.cloud import storage
+from src.routes import dashboard, user
+from src.services import call_models, call_users, devices_services, download_upload
+from src.utils.postgresql_utils import PostgreSQLUtils
 from starlette.exceptions import HTTPException as StarletteHTTPException
 from starlette.responses import HTMLResponse
 from starlette.templating import Jinja2Templates
-from src.services import download_upload, call_users, call_models
-from src.routes import user, dashboard
-from src.utils.postgresql_utils import PostgreSQLUtils
-from google.cloud import storage
-import uvicorn
 
 """
 app = FastAPI(
@@ -25,6 +25,7 @@ app.include_router(user.router)
 app.include_router(dashboard.router)
 app.include_router(call_users.router)
 app.include_router(call_models.router)
+app.include_router(devices_services.router, prefix="/api", tags=["api"])
 
 app.add_middleware(
     CORSMiddleware,
