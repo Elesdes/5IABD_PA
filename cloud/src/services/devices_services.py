@@ -1,8 +1,9 @@
-from fastapi import Request, APIRouter
+from fastapi import Request, APIRouter, status, HTTPException
 from markupsafe import escape
 from src.models.device_model import DeviceModel
 from src.models.user_model import User
 from src.utils.postgresql_utils import PostgreSQLUtils
+from src.utils.files_utils import verify_role_and_profile
 
 
 router = APIRouter(
@@ -37,3 +38,28 @@ def link_device(request: Request, device: DeviceModel):
             )
 
     return {"message": "Prosthesis connected successfully"}
+
+@router.get("/get_devices")
+def get_devices(request: Request) -> list[dict[str, str]]:
+    db_utils = PostgreSQLUtils()
+    devices = []
+    # Set the mail to "" because the verify_role_and_profile will fail the second test. Therefore, only an admin car get all users.
+    email = ""
+    with db_utils as cursor:
+        if verify_role_and_profile(request, cursor, email=email):
+            SQL_query = "SELECT iddevice, iduser FROM DEVICES"
+            cursor.execute(SQL_query)
+            devices_data = cursor.fetchall()
+            for device in devices_data:
+                devices.append(
+                    {
+                        "iddevice": device[0],
+                        "iduser": device[1]
+                    }
+                )
+            return devices
+        else:
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Invalid profile.",
+            )
