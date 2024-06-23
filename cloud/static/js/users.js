@@ -52,14 +52,14 @@ function editUser(user) {
     user = decodeURIComponent(user)
     user = JSON.parse(user)
     let tabletrIdUsers = "#tabletr" + user.idUsers
+    console.log(user)
+    console.log(tabletrIdUsers)
     let inputValues = $(tabletrIdUsers).find("input").map(function() {
         return $(this).val();
     }).get();
     let selectValues = $(tabletrIdUsers).find("select").map(function() {
         return $(this).val();
     }).get();
-    console.log(user)
-    console.log(inputValues)
     fetch(`/api/update_users/?idUsers=${user.idUsers}&name=${inputValues[1]}&forename=${inputValues[0]}&email=${inputValues[2]}&role=${selectValues[0]}`, {
         method: 'POST'
     })
