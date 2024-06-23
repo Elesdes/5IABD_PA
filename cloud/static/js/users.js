@@ -51,7 +51,7 @@ document.addEventListener("DOMContentLoaded", function() {
 function editUser(user) {
     user = decodeURIComponent(user)
     user = JSON.parse(user)
-    let tabletrIdUsers = "#tabletr" + user.idUsers
+    let tabletrIdUsers = "tabletr" + user.idUsers
     console.log(user)
     console.log(tabletrIdUsers)
     let inputValues = $(document.getElementById(tabletrIdUsers)).find("input").map(function() {
