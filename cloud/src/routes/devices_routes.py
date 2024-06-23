@@ -11,4 +11,4 @@ router = APIRouter(
 
 @router.get("/link-device/")
 async def link_device(request: Request, device: DeviceModel) -> Any:
-    link_device(request, device)
+    return link_device(request, device)
