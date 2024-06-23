@@ -20,7 +20,7 @@ router = APIRouter(
 # Le traitement contenu à l'intérieur, par contre, peut rester ici
 @router.get("/{idDevice}")
 # def download(filename: str = "FINALE.keras", request: Request = None):
-def download_mymodels(idDevice: int) -> FileResponse:
+def download_mymodels(idDevice: str) -> FileResponse:
     idDevice = escape(idDevice)
     db_utils = PostgreSQLUtils()
     with db_utils as cursor:
