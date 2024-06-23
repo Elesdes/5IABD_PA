@@ -29,7 +29,7 @@ def download_mymodels(request: Request, idModel: int) -> FileResponse:
             client = storage.Client()
             bucket = client.get_bucket("icarus-gcp.appspot.com")
             file_path = f"{idModel}.zip"
-            blob = bucket.blob(f"{current_user.email}/{file_path}")
+            blob = bucket.blob(f"{current_user.idusers}/{file_path}")
             blob.download_to_filename(file_path)
             return FileResponse(file_path, filename=f"{idModel}.zip")
         else:
@@ -61,7 +61,7 @@ def upload(request: Request, files: list[UploadFile] = File(...)):
             client = storage.Client()
             bucket = client.get_bucket("icarus-gcp.appspot.com")
             file_path = f"{files[0].filename}"
-            blob = bucket.blob(f"{user.email}/{file_path}")
+            blob = bucket.blob(f"{user.idusers}/{file_path}")
             blob.upload_from_filename(file_path)
         return {"message": "Fichiers téléchargés avec succès."}
 

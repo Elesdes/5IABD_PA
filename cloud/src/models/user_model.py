@@ -14,6 +14,7 @@ pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 class User:
     def __init__(
         self,
+        idusers: str = None,
         email: str = None,
         password: str = None,
         name: str = None,
@@ -21,6 +22,7 @@ class User:
         role: int = None,
         cookie: int = None,
     ):
+        self.idusers = idusers
         self.email = email
         self.password = password
         self.name = name
@@ -38,16 +40,17 @@ class User:
     ) -> Self | None:
         if id_users is None:
             return None
-        SQL_query = f"SELECT email, password, name, forename, role, cookie FROM USERS WHERE idusers = %s"
+        SQL_query = f"SELECT idusers, email, password, name, forename, role, cookie FROM USERS WHERE idusers = %s"
         cursor.execute(SQL_query, (id_users, ))
         user_data = cursor.fetchone()
         if user_data:
-            self.email = user_data[0]
-            self.password = user_data[1]
-            self.name = user_data[2]
-            self.forename = user_data[3]
-            self.role = user_data[4]
-            self.cookie = user_data[5]
+            self.idusers = user_data[0]
+            self.email = user_data[1]
+            self.password = user_data[2]
+            self.name = user_data[3]
+            self.forename = user_data[4]
+            self.role = user_data[5]
+            self.cookie = user_data[6]
             return self
         return None
 
@@ -58,16 +61,17 @@ class User:
     ) -> Self | None:
         if email is None:
             return None
-        SQL_query = f"SELECT email, password, name, forename, role, cookie FROM USERS WHERE email = %s"
+        SQL_query = f"SELECT idusers, email, password, name, forename, role, cookie FROM USERS WHERE email = %s"
         cursor.execute(SQL_query, (email,))
         user_data = cursor.fetchone()
         if user_data:
-            self.email = user_data[0]
-            self.password = user_data[1]
-            self.name = user_data[2]
-            self.forename = user_data[3]
-            self.role = user_data[4]
-            self.cookie = user_data[5]
+            self.idusers = user_data[0]
+            self.email = user_data[1]
+            self.password = user_data[2]
+            self.name = user_data[3]
+            self.forename = user_data[4]
+            self.role = user_data[5]
+            self.cookie = user_data[6]
             return self
         return None
 
@@ -78,16 +82,17 @@ class User:
     ) -> Self | None:
         if cookie is None:
             return None
-        SQL_query = f"SELECT email, password, name, forename, role, cookie FROM USERS WHERE cookie = %s"
+        SQL_query = f"SELECT idusers, email, password, name, forename, role, cookie FROM USERS WHERE cookie = %s"
         cursor.execute(SQL_query, (cookie,))
         user_data = cursor.fetchone()
         if user_data:
-            self.email = user_data[0]
-            self.password = user_data[1]
-            self.name = user_data[2]
-            self.forename = user_data[3]
-            self.role = user_data[4]
-            self.cookie = user_data[5]
+            self.idusers = user_data[0]
+            self.email = user_data[1]
+            self.password = user_data[2]
+            self.name = user_data[3]
+            self.forename = user_data[4]
+            self.role = user_data[5]
+            self.cookie = user_data[6]
             return self
         return None
 
