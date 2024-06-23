@@ -38,6 +38,15 @@ async def mymodels(request: Request):
     return templates.TemplateResponse(name="index.html", context={"request": request})
 
 
+@router.get("/mydevices", response_class=HTMLResponse)
+async def mydevices(request: Request):
+    if request_dashboard(request):
+        return templates.TemplateResponse(
+            name="mydevices.html", context={"request": request}
+        )
+    return templates.TemplateResponse(name="index.html", context={"request": request})
+
+
 @router.get("/profile", response_class=HTMLResponse)
 async def profile(request: Request):
     if request_dashboard(request):
