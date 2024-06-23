@@ -2,7 +2,7 @@ from fastapi import Request
 from markupsafe import escape
 from src.models.device_model import DeviceModel
 from src.models.user_model import User
-from utils.postgresql_utils import PostgreSQLUtils
+from src.utils.postgresql_utils import PostgreSQLUtils
 
 
 def link_device(request: Request, device: DeviceModel):
