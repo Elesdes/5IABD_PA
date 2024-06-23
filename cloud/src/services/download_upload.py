@@ -19,7 +19,6 @@ router = APIRouter(
 # Ce sont des routes, elles doivent être dans un fichier routes.
 # Le traitement contenu à l'intérieur, par contre, peut rester ici
 @router.get("/{idDevice}")
-# def download(filename: str = "FINALE.keras", request: Request = None):
 def download_mymodels(idDevice: str) -> FileResponse:
     idDevice = escape(idDevice)
     db_utils = PostgreSQLUtils()
@@ -46,8 +45,8 @@ def download_mymodels(idDevice: str) -> FileResponse:
         bucket = client.get_bucket("icarus-gcp.appspot.com")
         # file_path = f"PPO_hand_prosthesis_model.zip"
         blob = bucket.blob(f"{user_data[0]}/{model_data[0]}")
-        blob.download_to_filename(f"tmp/{model_data[0]}")
-        return FileResponse(f"tmp/{model_data[0]}", filename=f"{model_data[0]}")
+        blob.download_to_filename(f"/tmp/{model_data[0]}")
+        return FileResponse(f"/tmp/{model_data[0]}", filename=f"{model_data[0]}")
 
 
 @router.post("/")
