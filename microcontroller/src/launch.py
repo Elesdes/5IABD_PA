@@ -40,9 +40,6 @@ model = pd.read_pickle(
 
 print("Model loaded")
 
-with open("/home/enzol/Documents/5IABD_PA/microcontroller/src/state.txt", "w") as f:
-    f.write("Model loaded")
-
 m = Myo(sys.argv[1] if len(sys.argv) >= 2 else None, mode=emg_mode.RAW)
 
 myo_data = []
