@@ -6,9 +6,9 @@ document.addEventListener("DOMContentLoaded", function () {
       data.forEach((device) => {
         let buttonHtml;
         if (device.IdUser) {
-          buttonHtml = `<button class="bg-green-500 text-white font-bold py-2 px-4 rounded" disabled>Active</button>`;
+          buttonHtml = `<button class="btn btn-success" disabled>Active</button>`;
         } else {
-          buttonHtml = `<button class="bg-red-500 text-white font-bold py-2 px-4 rounded" onclick="confirmReconnectDevice('${device.IdDevice}')">Reconnect</button>`;
+          buttonHtml = `<button class="btn btn-danger" onclick="confirmReconnectDevice('${device.IdDevice}')">Reconnect</button>`;
         }
 
         let row = `
@@ -105,6 +105,51 @@ document.addEventListener("DOMContentLoaded", function () {
   window.confirmReconnectDevice = function (deviceId) {
     showReconnectModal(deviceId);
   };
+
+  // Add New Device Modal Logic
+  const addNewDeviceButton = document.getElementById("addNewDeviceButton");
+  const addDeviceModalBackdrop = document.getElementById("addDeviceModalBackdrop");
+  const closeAddDeviceModal = document.getElementById("closeAddDeviceModal");
+  const cancelAddDevice = document.getElementById("cancelAddDevice");
+  const acceptAddDevice = document.getElementById("acceptAddDevice");
+  const newDeviceIdInput = document.getElementById("newDeviceIdInput");
+
+  function showAddDeviceModal() {
+    addDeviceModalBackdrop.classList.remove("hidden");
+  }
+
+  function hideAddDeviceModal() {
+    addDeviceModalBackdrop.classList.add("hidden");
+    newDeviceIdInput.value = "";
+  }
+
+  addNewDeviceButton.addEventListener("click", showAddDeviceModal);
+  closeAddDeviceModal.addEventListener("click", hideAddDeviceModal);
+  cancelAddDevice.addEventListener("click", hideAddDeviceModal);
+
+  acceptAddDevice.addEventListener("click", function () {
+    const deviceId = newDeviceIdInput.value.trim();
+    if (deviceId.length === 8) {
+      fetch(`/api/devices/link-device/`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ IdDevice: deviceId }),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          console.log(`Device ${deviceId} added:`, data);
+          hideAddDeviceModal();
+          window.location.reload();
+        })
+        .catch((error) => {
+          console.error("Error adding device:", error);
+        });
+    } else {
+      alert("Please enter a valid 8 digits Device ID.");
+    }
+  });
 });
 
 function reconnectDevice(deviceId) {
