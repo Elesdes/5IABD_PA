@@ -2,6 +2,7 @@ import datetime
 from fastapi import APIRouter, status, HTTPException, Request
 from src.utils.postgresql_utils import PostgreSQLUtils
 from src.utils.files_utils import verify_role_and_profile
+from src.services.update_storage import delete_model
 from markupsafe import escape
 
 router = APIRouter(
@@ -106,8 +107,12 @@ def del_models(request: Request, idUsers: str, idModel: int) -> None:
     db_utils = PostgreSQLUtils()
     with db_utils as cursor:
         if verify_role_and_profile(request, cursor, id_users=idUsers):
+            SQL_query = "SELECT path FROM MODELS WHERE idModel=%s"
+            cursor.execute(SQL_query, (idModel,))
+            result = cursor.fetchone()
             SQL_query = "DELETE FROM MODELS WHERE idModel=%s"
             cursor.execute(SQL_query, (idModel,))
+            delete_model(idUsers, result[0])
         else:
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
@@ -120,12 +125,14 @@ def del_mymodels(request: Request, idModel: int) -> None:
     idModel = escape(idModel)
     db_utils = PostgreSQLUtils()
     # cookie_value = request.cookies.get("ICARUS-Login")
-    SQL_query = "SELECT idusers FROM MODELS WHERE idmodel=%s"
+    SQL_query = "SELECT idusers, path FROM MODELS WHERE idmodel=%s"
     with db_utils as cursor:
         cursor.execute(SQL_query, (idModel,))
-        if verify_role_and_profile(request, cursor, id_users=cursor.fetchone()[0]):
+        result = cursor.fetchone()
+        if verify_role_and_profile(request, cursor, id_users=result[0]):
             SQL_query = "DELETE FROM MODELS WHERE idModel=%s"
             cursor.execute(SQL_query, (idModel,))
+            delete_model(result[0], result[1])
         else:
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
