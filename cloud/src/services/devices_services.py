@@ -1,10 +1,18 @@
-from fastapi import Request
+from fastapi import Request, APIRouter
 from markupsafe import escape
 from src.models.device_model import DeviceModel
 from src.models.user_model import User
 from src.utils.postgresql_utils import PostgreSQLUtils
 
 
+router = APIRouter(
+    prefix="/api",
+    tags=["api"],
+    responses={404: {"description": "Not found"}},
+)
+
+
+@router.get("/link-device")
 def link_device(request: Request, device: DeviceModel):
     db_session = PostgreSQLUtils()
     with db_session as cursor:

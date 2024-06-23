@@ -25,7 +25,7 @@ app.include_router(user.router)
 app.include_router(dashboard.router)
 app.include_router(call_users.router)
 app.include_router(call_models.router)
-app.include_router(devices_services.router, prefix="/api", tags=["api"])
+app.include_router(devices_services.router)
 
 app.add_middleware(
     CORSMiddleware,
