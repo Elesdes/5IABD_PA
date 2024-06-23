@@ -1,6 +1,6 @@
 from fastapi import Request
 from markupsafe import escape
-from models.device_model import DeviceModel
+from src.models.device_model import DeviceModel
 from src.models.user_model import User
 from utils.postgresql_utils import PostgreSQLUtils
 
