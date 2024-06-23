@@ -21,7 +21,10 @@ class PostgreSQLUtils:
         Commit the transaction, close the cursor and connection.
         This method is called upon exiting the context.
         """
-        self.conn.commit()
+        if exc_type is not None:
+            self.conn.rollback()
+        else:
+            self.conn.commit()
         self.cur.close()
         self.conn.close()
 
