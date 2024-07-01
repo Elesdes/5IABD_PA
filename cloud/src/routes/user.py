@@ -18,11 +18,6 @@ router = APIRouter(
 templates = Jinja2Templates(directory="./templates/")
 
 
-@router.get("/about", response_class=HTMLResponse)
-async def about(request: Request):
-    return templates.TemplateResponse(name="about.html", context={"request": request})
-
-
 @router.get("/dashboard", response_class=HTMLResponse)
 async def dashboard(request: Request):
     if request_dashboard(request):
