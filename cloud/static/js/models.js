@@ -20,13 +20,13 @@ document.addEventListener("DOMContentLoaded", function() {
                         ${model.date}
                     </td>
                     <td class="px-4 py-3 text-xs">
-                        <span class="px-2 py-1 font-semibold leading-tight rounded-full">
+                        <span class="px-2 py-1 leading-tight rounded-full">
                             ${model.idUsers}
                         </span>
                     </td>
                     <td class="px-4 py-3">
                         <div class="flex items-center space-x-4 text-sm">
-                            <button class="flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-purple-600 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray" aria-label="Edit" onclick="editModel('${encodeURIComponent(JSON.stringify(model))}')">
+                            <button class="flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-purple-600 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray" aria-label="Edit" onclick="setModel('${encodeURIComponent(JSON.stringify(model))}')">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"> 
                                     <circle cx="12" cy="12" r="10"/>
                                     <path d="M16 12l-4 4-4-4M12 8v7"/>
@@ -46,7 +46,7 @@ document.addEventListener("DOMContentLoaded", function() {
     });
 });
 
-function editModel(model) {
+function setModel(model) {
     model = decodeURIComponent(model)
     model = JSON.parse(model)
     let tabletrIdModel = "#tabletr" + model.idModel
@@ -56,12 +56,12 @@ function editModel(model) {
     let selectValues = $(tabletrIdModel).find("select").map(function() {
         return $(this).val();
     }).get();
-    fetch(`/api/update_model/?idModel=${model.idModel}&path=${inputValues[0]}&date=${inputValues[1]}&idUsers=${inputValues[2]}`, {
+    fetch(`/api/take_model/?idModel=${model.idModel}&idUsers=${model.idUsers}`, {
         method: 'POST'
     })
     .then(response => {
         if (!response.ok) {
-            throw new Error('Erreur lors de l\'édition du modèle');
+            throw new Error('Erreur lors de la mise à jour du modèle');
         }
         return response.json();
     })
@@ -69,7 +69,7 @@ function editModel(model) {
         console.log('Modèle édité avec succès:', data);
     })
     .catch(error => {
-        console.error('Une erreur s\'est produite lors de l\'édition du modèle:', error);
+        console.error('Une erreur s\'est produite lors de la mise à jour du modèle:', error);
     }).finally(() => {
         window.location.reload();
     });

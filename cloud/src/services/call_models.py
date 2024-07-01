@@ -4,6 +4,7 @@ from src.utils.postgresql_utils import PostgreSQLUtils
 from src.utils.files_utils import verify_role_and_profile
 from src.services.update_storage import delete_model
 from markupsafe import escape
+from datetime import datetime
 
 router = APIRouter(
     prefix="/api",
@@ -153,6 +154,24 @@ def update_model(
         if verify_role_and_profile(request, cursor, id_users=idUsers):
             SQL_query = "UPDATE MODELS SET path = %s, date = %s, idusers = %s WHERE idModel = %s"
             cursor.execute(SQL_query, (path, date, idUsers, idModel))
+        else:
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Invalid profile.",
+            )
+
+@router.post("/take_model/")
+def take_model(
+    request: Request, idModel: str, idUsers: str
+) -> None:
+    idModel = escape(idModel)
+    date = datetime.now()
+    idUsers = escape(idUsers)
+    db_utils = PostgreSQLUtils()
+    with db_utils as cursor:
+        if verify_role_and_profile(request, cursor, id_users=idUsers):
+            SQL_query = "UPDATE MODELS SET date = %s WHERE idModel = %s"
+            cursor.execute(SQL_query, (date, idModel))
         else:
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,

@@ -33,7 +33,7 @@ def download_mymodels(idDevice: str) -> FileResponse:
                 detail="Invalid profile.",
             )
         cursor.execute(
-            "SELECT path FROM MODELS WHERE idUsers = %s ORDER BY IdModel DESC LIMIT 1", (user_data[0],)
+            "SELECT path FROM MODELS WHERE idUsers = %s ORDER BY date DESC LIMIT 1", (user_data[0],)
         )
         model_data = cursor.fetchone()
         if not model_data:
