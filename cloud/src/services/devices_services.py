@@ -51,12 +51,22 @@ def get_devices(request: Request) -> list[dict[str, str]]:
             cursor.execute(SQL_query)
             devices_data = cursor.fetchall()
             for device in devices_data:
-                devices.append(
-                    {
-                        "iddevice": device[0],
-                        "iduser": device[1]
-                    }
-                )
+                if device[1]:
+                    devices.append(
+                        {
+                            "iddevice": device[0],
+                            "iduser": device[1],
+                            "statut": "Connecté"
+                        }
+                    )
+                else:
+                    devices.append(
+                        {
+                            "iddevice": device[0],
+                            "iduser": "Pas d'id",
+                            "statut": "Déconnecté"
+                        }
+                    )
             return devices
         else:
             raise HTTPException(
