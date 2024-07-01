@@ -1,12 +1,12 @@
 from fastapi import APIRouter, Request, UploadFile, File, HTTPException
 from fastapi.responses import FileResponse
-from src.config import app_config as config
 from src.utils.files_utils import is_valid_mime, verify_model_and_profile
 from src.utils.postgresql_utils import PostgreSQLUtils
 from src.models.user_model import User
 from google.cloud import storage
 from markupsafe import escape
 import zipfile
+import os
 
 
 router = APIRouter(
@@ -46,7 +46,14 @@ def download_mymodels(idDevice: str) -> FileResponse:
         # file_path = f"PPO_hand_prosthesis_model.zip"
         blob = bucket.blob(f"{user_data[0]}/{model_data[0]}")
         blob.download_to_filename(f"/tmp/{model_data[0]}")
-        return FileResponse(f"/tmp/{model_data[0]}", filename=f"{model_data[0]}")
+        # C'est ce que l'on appelle un context manager. Cela permet d'effectuer des instructions après l'envoi de la réponse.
+        try:
+            response = FileResponse(f"/tmp/{model_data[0]}", filename=f"{model_data[0]}")
+        finally:
+            os.remove(f"/tmp/{model_data[0]}")
+
+        return response
+        # return FileResponse(f"/tmp/{model_data[0]}", filename=f"{model_data[0]}")
 
 
 @router.post("/")

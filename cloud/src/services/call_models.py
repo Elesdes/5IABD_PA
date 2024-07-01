@@ -191,7 +191,6 @@ def take_mymodel(
     with db_utils as cursor:
         if verify_role_and_profile(request, cursor, cookie=cookie):
             SQL_query = "UPDATE MODELS SET date = %s WHERE idModel = %s"
-            print(SQL_query, (date, idModel))
             cursor.execute(SQL_query, (date, idModel))
         else:
             raise HTTPException(
