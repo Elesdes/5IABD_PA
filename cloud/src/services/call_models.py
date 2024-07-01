@@ -190,11 +190,10 @@ def take_mymodel(
     db_utils = PostgreSQLUtils()
     with db_utils as cursor:
         if verify_role_and_profile(request, cursor, cookie=cookie):
-            print("Devrait être update?")
             SQL_query = "UPDATE MODELS SET date = %s WHERE idModel = %s"
+            print(SQL_query, (date, idModel))
             cursor.execute(SQL_query, (date, idModel))
         else:
-            print("Devrait pas être update?")
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
                 detail="Invalid profile.",
