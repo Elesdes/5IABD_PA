@@ -160,6 +160,7 @@ def update_model(
                 detail="Invalid profile.",
             )
 
+
 @router.post("/take_model/")
 def take_model(
     request: Request, idModel: str, idUsers: str
@@ -170,6 +171,25 @@ def take_model(
     db_utils = PostgreSQLUtils()
     with db_utils as cursor:
         if verify_role_and_profile(request, cursor, id_users=idUsers):
+            SQL_query = "UPDATE MODELS SET date = %s WHERE idModel = %s"
+            cursor.execute(SQL_query, (date, idModel))
+        else:
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Invalid profile.",
+            )
+
+
+@router.post("/take_mymodel/")
+def take_mymodel(
+    request: Request, idModel: str
+) -> None:
+    idModel = escape(idModel)
+    date = datetime.now()
+    cookie = escape(request.cookies.get("ICARUS-Login"))
+    db_utils = PostgreSQLUtils()
+    with db_utils as cursor:
+        if verify_role_and_profile(request, cursor, cookie=cookie):
             SQL_query = "UPDATE MODELS SET date = %s WHERE idModel = %s"
             cursor.execute(SQL_query, (date, idModel))
         else:
