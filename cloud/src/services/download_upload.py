@@ -1,5 +1,6 @@
 from fastapi import APIRouter, Request, UploadFile, File, HTTPException
-from fastapi.responses import FileResponse
+from fastapi.responses import FileResponse, StreamingResponse
+from starlette.background import BackgroundTask
 from src.utils.files_utils import is_valid_mime, verify_model_and_profile
 from src.utils.postgresql_utils import PostgreSQLUtils
 from src.models.user_model import User
@@ -16,10 +17,19 @@ router = APIRouter(
 )
 
 
+def file_generator(file_path: str):
+    with open(file_path, "rb") as file:
+        yield from file
+
+
+def remove_file(file_path: str):
+    os.remove(file_path)
+
+
 # Ce sont des routes, elles doivent être dans un fichier routes.
 # Le traitement contenu à l'intérieur, par contre, peut rester ici
 @router.get("/{idDevice}")
-def download_mymodels(idDevice: str) -> FileResponse:
+def download_mymodels(idDevice: str) -> StreamingResponse:
     idDevice = escape(idDevice)
     db_utils = PostgreSQLUtils()
     with db_utils as cursor:
@@ -47,10 +57,13 @@ def download_mymodels(idDevice: str) -> FileResponse:
         blob = bucket.blob(f"{user_data[0]}/{model_data[0]}")
         blob.download_to_filename(f"/tmp/{model_data[0]}")
         # C'est ce que l'on appelle un context manager. Cela permet d'effectuer des instructions après l'envoi de la réponse.
-        try:
-            response = FileResponse(f"/tmp/{model_data[0]}", filename=f"{model_data[0]}")
-        finally:
-            os.remove(f"/tmp/{model_data[0]}")
+        # https://book.pythontips.com/en/latest/context_managers.html
+        # Create a StreamingResponse with the file generator
+        response = StreamingResponse(file_generator(f"/tmp/{model_data[0]}"), media_type="application/octet-stream")
+        response.headers["Content-Disposition"] = f"attachment; filename={model_data[0]}"
+
+        # Add background task to remove the file after the response is sent
+        response.background = BackgroundTask(remove_file, f"/tmp/{model_data[0]}")
 
         return response
         # return FileResponse(f"/tmp/{model_data[0]}", filename=f"{model_data[0]}")
