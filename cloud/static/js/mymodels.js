@@ -63,7 +63,7 @@ function deleteMyModel(idModel) {
 
 function setMyModel(idModel) {
     fetch(`/api/take_mymodel/?idModel=${idModel}`, {
-        method: 'GET'
+        method: 'POST'
     })
     .then(response => {
         if (!response.ok) {
