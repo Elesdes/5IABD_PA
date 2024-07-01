@@ -14,7 +14,7 @@ router = APIRouter(
 
 
 @router.get("/get_models")
-def get_models(request: Request) -> list[dict[str, str | datetime.datetime | int]]:
+def get_models(request: Request) -> list[dict[str, str | datetime | int]]:
     db_utils = PostgreSQLUtils()
     models = []
     # Set the mail to "" because the verify_role_and_profile will fail the second test. Therefore, only an admin car get all users.
@@ -73,7 +73,7 @@ def get_model(request: Request, idUsers: str) -> list[dict[str, str | list[str]]
 
 
 @router.get("/get_mymodel/")
-def get_mymodel(request: Request) -> list[dict[str, str | datetime.datetime | int]]:
+def get_mymodel(request: Request) -> list[dict[str, str | datetime | int]]:
     db_utils = PostgreSQLUtils()
     models = []
     cookie_value = escape(request.cookies.get("ICARUS-Login"))
@@ -143,7 +143,7 @@ def del_mymodels(request: Request, idModel: int) -> None:
 
 @router.post("/update_model/")
 def update_model(
-    request: Request, idModel: str, path: str, date: datetime.datetime, idUsers: str
+    request: Request, idModel: str, path: str, date: datetime, idUsers: str
 ) -> None:
     idModel = escape(idModel)
     path = escape(path)
