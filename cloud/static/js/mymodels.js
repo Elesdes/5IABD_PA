@@ -62,7 +62,7 @@ function deleteMyModel(idModel) {
 }
 
 function setMyModel(idModel) {
-    fetch(`/api/take_mymodels/?idModel=${idModel}`, {
+    fetch(`/api/take_mymodel/?idModel=${idModel}`, {
         method: 'GET'
     })
     .then(response => {
