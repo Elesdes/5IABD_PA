@@ -58,5 +58,27 @@ function data() {
       this.isModalOpen = false
       this.trapCleanup()
     },
+    // Reconnect Modal
+    isReconnectModalOpen: false,
+    reconnectTrapCleanup: null,
+    openReconnectModal() {
+      this.isReconnectModalOpen = true
+      this.reconnectTrapCleanup = focusTrap(document.querySelector('#reconnectModal'))
+    },
+    closeReconnectModal() {
+      this.isReconnectModalOpen = false
+      this.reconnectTrapCleanup()
+    },
+    // Delete Modal
+    isDeleteModalOpen: false,
+    deleteTrapCleanup: null,
+    openDeleteModal() {
+      this.isDeleteModalOpen = true
+      this.deleteTrapCleanup = focusTrap(document.querySelector('#deleteModal'))
+    },
+    closeDeleteModal() {
+      this.isDeleteModalOpen = false
+      this.deleteTrapCleanup()
+    },
   }
 }
