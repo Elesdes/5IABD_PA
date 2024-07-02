@@ -43,18 +43,3 @@ document.addEventListener("DOMContentLoaded", function() {
         });
     });
 });
-
-function submitData() {
-    let inputValue = document.getElementById('newDeviceIdInput').value;
-    inputValue = inputValue.replace(/`/g, '');
-    fetch(`/api/link-device/?device=${inputValue}`, {
-        method: 'POST'
-    })
-    .then(response => response.json())
-    .then(data => {
-        console.log('Success:', data);
-    })
-    .catch((error) => {
-        console.error('Error:', error);
-    });
-}
