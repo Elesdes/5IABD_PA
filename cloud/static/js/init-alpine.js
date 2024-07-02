@@ -121,7 +121,7 @@ function data() {
       .catch((error) => {
           console.error('Error:', error);
       });
-      this.closeReconnectModal();
+      this.closeDeleteModal();
     },
   }
 }
