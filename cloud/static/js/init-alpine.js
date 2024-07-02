@@ -61,13 +61,27 @@ function data() {
     // Reconnect Modal
     isReconnectModalOpen: false,
     reconnectTrapCleanup: null,
-    openReconnectModal() {
+    openReconnectModal(iddevice) {
+      this.reconnectDeviceId = iddevice;
       this.isReconnectModalOpen = true
       this.reconnectTrapCleanup = focusTrap(document.querySelector('#reconnectModal'))
     },
     closeReconnectModal() {
       this.isReconnectModalOpen = false
       this.reconnectTrapCleanup()
+    },
+    reconnectDevice() {
+      fetch(`/api/link-device/?device=${this.reconnectDeviceId}`, {
+          method: 'POST'
+      })
+      .then(response => response.json())
+      .then(data => {
+          console.log('Success:', data);
+      })
+      .catch((error) => {
+          console.error('Error:', error);
+      });
+      this.closeReconnectModal(); // Fermer la modal après l'action
     },
     // Delete Modal
     isDeleteModalOpen: false,

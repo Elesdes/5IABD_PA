@@ -284,11 +284,11 @@
           </div>
         </div>
         <footer class="flex flex-col items-center justify-end px-6 py-3 -mx-6 -mb-4 space-y-4 sm:space-y-0 sm:space-x-6 sm:flex-row bg-gray-50 dark:bg-gray-800">
-          <button id="reconnectYes" class="px-4 py-2 bg-red-500 text-black text-base font-medium rounded-md w-full shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
-            Yes
-          </button>
           <button @click="closeReconnectModal" id="reconnectNo" class="px-4 py-2 bg-gray-300 text-black text-base font-medium rounded-md w-full shadow-sm hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 mt-2">
             No
+          </button>
+          <button @click="reconnectDevice" id="reconnectYes" class="px-4 py-2 bg-red-500 text-black text-base font-medium rounded-md w-full shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
+            Yes
           </button>
         </footer>
       </div>
