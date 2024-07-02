@@ -15,7 +15,6 @@ router = APIRouter(
 
 @router.post("/link-device")
 def link_device(request: Request, device: str):
-    print(request, device)
     db_session = PostgreSQLUtils()
     with db_session as cursor:
         user = User().get_user_by_cookie(
@@ -23,19 +22,19 @@ def link_device(request: Request, device: str):
         )
 
         cursor.execute(
-            "SELECT IdUser FROM DEVICES WHERE IdDevice = %s", (device,)
+            "SELECT IdUser FROM DEVICES WHERE IdDevice = %s", (device,)  # device.device_id,
         )
         if device := cursor.fetchone():
             # Device exists, only update the user
             cursor.execute(
                 "UPDATE DEVICES SET IdUser = %s WHERE IdDevice = %s",
-                (user.get("id_user", "email"), device.device_id),
+                (user.get("id_user", "email"), device),  # device.device_id,
             )
         else:
             # Device doesn't exist, insert a new record
             cursor.execute(
                 "INSERT INTO DEVICES (IdDevice, IdUser) VALUES (%s, %s)",
-                (device.device_id, user.get("id_user", "email")),
+                (device, user.get("id_user", "email")),  # device.device_id,
             )
 
     return {"message": "Prosthesis connected successfully"}
