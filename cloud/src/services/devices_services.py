@@ -16,6 +16,7 @@ router = APIRouter(
 @router.post("/link-device")
 def link_device(request: Request, device: str):
     db_session = PostgreSQLUtils()
+    print(device)
     with db_session as cursor:
         user = User().get_user_by_cookie(
             cursor, cookie=escape(request.cookies.get("ICARUS-Login"))

@@ -45,7 +45,8 @@ document.addEventListener("DOMContentLoaded", function() {
 });
 
 function submitData() {
-    const inputValue = JSON.stringify(document.getElementById('newDeviceIdInput').value);
+    let inputValue = JSON.stringify(document.getElementById('newDeviceIdInput').value);
+    inputValue = inputValue.replace(/`/g, '');
     fetch(`/api/link-device/?device=${inputValue}`, {
         method: 'POST'
     })
