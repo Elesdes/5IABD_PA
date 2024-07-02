@@ -43,3 +43,22 @@ document.addEventListener("DOMContentLoaded", function() {
         });
     });
 });
+
+document.getElementById('acceptAddDevice').addEventListener('click', function() {
+    const inputValue = document.getElementById('newDeviceIdInput').value;
+
+    fetch('/api/link-device', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ input_value: inputValue }),
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log('Success:', data);
+    })
+    .catch((error) => {
+        console.error('Error:', error);
+    });
+});

@@ -56,17 +56,12 @@ def download_mymodels(idDevice: str) -> StreamingResponse:
         # file_path = f"PPO_hand_prosthesis_model.zip"
         blob = bucket.blob(f"{user_data[0]}/{model_data[0]}")
         blob.download_to_filename(f"/tmp/{model_data[0]}")
-        # C'est ce que l'on appelle un context manager. Cela permet d'effectuer des instructions après l'envoi de la réponse.
-        # https://book.pythontips.com/en/latest/context_managers.html
-        # Create a StreamingResponse with the file generator
+
         response = StreamingResponse(file_generator(f"/tmp/{model_data[0]}"), media_type="application/octet-stream")
         response.headers["Content-Disposition"] = f"attachment; filename={model_data[0]}"
-
         # Add background task to remove the file after the response is sent
         response.background = BackgroundTask(remove_file, f"/tmp/{model_data[0]}")
-
         return response
-        # return FileResponse(f"/tmp/{model_data[0]}", filename=f"{model_data[0]}")
 
 
 @router.post("/")
