@@ -52,7 +52,7 @@ function submitData() {
         headers: {
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ input_value: inputValue }),
+        body: JSON.stringify({ device: inputValue }),
     })
     .then(response => response.json())
     .then(data => {
