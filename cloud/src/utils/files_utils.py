@@ -14,7 +14,7 @@ def is_valid_mime(file_name: str) -> bool:
     :return:
     If its a PNG or JPG, then it's true. Else it's false.
     """
-    valid_extensions: list[str] = [".csv"]
+    valid_extensions: list[str] = [".pkl"]
     ext: str = os.path.splitext(file_name)[-1].lower()
     return ext in valid_extensions
 

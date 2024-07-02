@@ -123,5 +123,35 @@ function data() {
       });
       this.closeDeleteModal();
     },
+
+    // Add Model Modal
+    isModelModalOpen: false,
+    trapCleanupModel: null,
+    openModalNewModel() {
+      this.isModelModalOpen = true
+      this.trapCleanupModel = focusTrap(document.querySelector('#modalModel'))
+    },
+    closeModelModal() {
+      this.isModelModalOpen = false
+      this.trapCleanupModel()
+    },
+    submitModel() {
+      const form = document.getElementById('uploadForm');
+      const formData = new FormData(form);
+
+      fetch('/files/', {
+        method: 'POST',
+        body: formData
+      })
+      .then(response => response.json())
+      .then(data => {
+        console.log('Success:', data);
+      })
+      .catch(error => {
+        console.error('Error:', error);
+      });
+
+      this.closeModelModal();
+    },
   }
 }

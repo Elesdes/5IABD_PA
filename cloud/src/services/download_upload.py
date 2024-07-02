@@ -78,7 +78,7 @@ def upload(request: Request, files: list[UploadFile] = File(...)):
                 if not is_valid_mime(member.filename):
                     raise HTTPException(
                         status_code=401,
-                        detail="Les fichiers doivent être de type csv.",
+                        detail="Les fichiers doivent être de type pkl.",
                     )
         db_utils = PostgreSQLUtils()
         with db_utils as cursor:
@@ -91,7 +91,7 @@ def upload(request: Request, files: list[UploadFile] = File(...)):
                 blob.upload_from_filename(file_path)
             else:
                 return {"message": "Pas d'utilisateurs avec vos données d'identifications."}
-        return {"message": "Fichiers téléchargés avec succès."}
+        return {"message": "Fichiers uploadé avec succès."}
 
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
