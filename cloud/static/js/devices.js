@@ -45,14 +45,9 @@ document.addEventListener("DOMContentLoaded", function() {
 });
 
 function submitData() {
-    const inputValue = document.getElementById('newDeviceIdInput').value;
-
-    fetch('/api/link-device', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ device: inputValue }),
+    const inputValue = JSON.stringify(document.getElementById('newDeviceIdInput').value);
+    fetch(`/api/link-device/?device=${inputValue}`, {
+        method: 'POST'
     })
     .then(response => response.json())
     .then(data => {
