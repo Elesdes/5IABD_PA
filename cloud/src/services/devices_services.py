@@ -40,8 +40,8 @@ def link_device(request: Request, device: str):
     return {"message": "Prosthesis connected successfully"}
 
 
-@router.post("/unlink-device")
-def unlink_device(request: Request, device: str):
+@router.post("/delete-device")
+def delete_device(request: Request, device: str):
     db_session = PostgreSQLUtils()
     with db_session as cursor:
         user = User().get_user_by_cookie(
@@ -56,7 +56,7 @@ def unlink_device(request: Request, device: str):
             if verify_role_and_profile(request, cursor, id_users=result[0]):
                 # Device exists, only update the user
                 cursor.execute(
-                    "UPDATE DEVICES SET IdUser = NULL WHERE IdDevice = %s",
+                    "DELETE FROM DEVICES WHERE IdDevice = %s",
                     (device, )  # device.device_id,
                 )
             else:

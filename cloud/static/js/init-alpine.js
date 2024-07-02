@@ -111,7 +111,7 @@ function data() {
       this.deleteTrapCleanup()
     },
     deleteDevice() {
-      fetch(`/api/unlink-device/?device=${this.deleteDeviceId}`, {
+      fetch(`/api/delete-device/?device=${this.deleteDeviceId}`, {
           method: 'POST'
       })
       .then(response => response.json())
