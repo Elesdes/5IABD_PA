@@ -15,6 +15,7 @@ router = APIRouter(
 
 @router.post("/link-device")
 def link_device(request: Request, device: DeviceModel):
+    print("Link device")
     db_session = PostgreSQLUtils()
     with db_session as cursor:
         user = User().get_user_by_cookie(
