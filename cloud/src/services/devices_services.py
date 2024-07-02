@@ -14,8 +14,8 @@ router = APIRouter(
 
 
 @router.post("/link-device")
-def link_device(request: Request, device: DeviceModel):
-    print("Link device")
+def link_device(request: Request, device: str):
+    print(request, device)
     db_session = PostgreSQLUtils()
     with db_session as cursor:
         user = User().get_user_by_cookie(
@@ -23,7 +23,7 @@ def link_device(request: Request, device: DeviceModel):
         )
 
         cursor.execute(
-            "SELECT IdUser FROM DEVICES WHERE IdDevice = %s", (device.device_id,)
+            "SELECT IdUser FROM DEVICES WHERE IdDevice = %s", (device,)
         )
         if device := cursor.fetchone():
             # Device exists, only update the user
