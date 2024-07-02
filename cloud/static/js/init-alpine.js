@@ -72,7 +72,6 @@ function data() {
           console.error('Error:', error);
       });
       this.closeModal();
-      location.reload();
     },
     // Reconnect Modal
     isReconnectModalOpen: false,
@@ -97,18 +96,32 @@ function data() {
       .catch((error) => {
           console.error('Error:', error);
       });
-      this.closeReconnectModal(); // Fermer la modal après l'action
+      this.closeReconnectModal();
     },
     // Delete Modal
     isDeleteModalOpen: false,
     deleteTrapCleanup: null,
-    openDeleteModal() {
+    openDeleteModal(iddevice) {
+      this.deleteDeviceId = iddevice;
       this.isDeleteModalOpen = true
       this.deleteTrapCleanup = focusTrap(document.querySelector('#deleteModal'))
     },
     closeDeleteModal() {
       this.isDeleteModalOpen = false
       this.deleteTrapCleanup()
+    },
+    deleteDevice() {
+      fetch(`/api/unlink-device/?device=${this.deleteDeviceId}`, {
+          method: 'POST'
+      })
+      .then(response => response.json())
+      .then(data => {
+          console.log('Success:', data);
+      })
+      .catch((error) => {
+          console.error('Error:', error);
+      });
+      this.closeReconnectModal();
     },
   }
 }
