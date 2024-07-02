@@ -24,7 +24,7 @@ def link_device(request: Request, device: str):
         cursor.execute(
             "SELECT IdUser FROM DEVICES WHERE IdDevice = %s", (device,)  # device.device_id,
         )
-        if device := cursor.fetchone():
+        if cursor.fetchone():
             # Device exists, only update the user
             cursor.execute(
                 "UPDATE DEVICES SET IdUser = %s WHERE IdDevice = %s",
