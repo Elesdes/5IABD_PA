@@ -44,7 +44,7 @@ document.addEventListener("DOMContentLoaded", function() {
     });
 });
 
-document.getElementById('acceptAddDevice').addEventListener('click', function() {
+function submitData() {
     const inputValue = document.getElementById('newDeviceIdInput').value;
 
     fetch('/api/link-device', {
@@ -61,4 +61,4 @@ document.getElementById('acceptAddDevice').addEventListener('click', function() 
     .catch((error) => {
         console.error('Error:', error);
     });
-});
+}
