@@ -28,16 +28,17 @@ def link_device(request: Request, device: str):
             # Device exists, only update the user
             cursor.execute(
                 "UPDATE DEVICES SET IdUser = %s WHERE IdDevice = %s",
-                (user.get("id_user", "email"), device),  # device.device_id,
+                (user.idusers, device),  # device.device_id,
             )
         else:
             # Device doesn't exist, insert a new record
             cursor.execute(
                 "INSERT INTO DEVICES (IdDevice, IdUser) VALUES (%s, %s)",
-                (device, user.get("id_user", "email")),  # device.device_id,
+                (device, user.idusers),  # device.device_id,
             )
 
     return {"message": "Prosthesis connected successfully"}
+
 
 @router.get("/get_devices")
 def get_devices(request: Request) -> list[dict[str, str]]:
