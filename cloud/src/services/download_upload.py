@@ -4,6 +4,7 @@ from starlette.background import BackgroundTask
 from src.utils.files_utils import is_valid_mime, verify_model_and_profile
 from src.utils.postgresql_utils import PostgreSQLUtils
 from src.models.user_model import User
+from src.services.call_models import add_model
 from google.cloud import storage
 from markupsafe import escape
 from io import BytesIO
@@ -55,7 +56,7 @@ def download_mymodels(idDevice: str) -> StreamingResponse:
         client = storage.Client()
         bucket = client.get_bucket("icarus-gcp.appspot.com")
         # file_path = f"PPO_hand_prosthesis_model.zip"
-        blob = bucket.blob(f"{user_data[0]}/{model_data[0]}")
+        blob = bucket.blob(f"{user_data[0].replace('/', '//')}/{model_data[0]}")
         blob.download_to_filename(f"/tmp/{model_data[0]}")
 
         response = StreamingResponse(file_generator(f"/tmp/{model_data[0]}"), media_type="application/octet-stream")
@@ -78,20 +79,19 @@ def upload(request: Request, files: list[UploadFile] = File(...)):
         with db_utils as cursor:
             user = User().get_user_by_cookie(cursor=cursor, cookie=escape(request.cookies.get("ICARUS-Login")))
             for member in zip_ref.infolist():
-                print(member.filename)
                 if not is_valid_mime(member.filename):
                     raise HTTPException(
                         status_code=401,
                         detail="Les fichiers doivent être de type pkl.",
                     )
                 if user:
-                    print(member)
                     file_data = zip_ref.read(member)
                     client = storage.Client()
                     bucket = client.get_bucket("icarus-gcp.appspot.com")
                     file_path = f"{member.filename}"
-                    blob = bucket.blob(f"{user.idusers}/{file_path}")
+                    blob = bucket.blob(f"{user.idusers.replace('/', '//')}/{file_path}")
                     blob.upload_from_file(BytesIO(file_data), content_type='application/octet-stream')
+                    add_model(request, file_path, user.idusers)
                 else:
                     return {"message": "Pas d'utilisateurs avec vos données d'identifications."}
     return {"message": "Fichiers uploadé avec succès."}

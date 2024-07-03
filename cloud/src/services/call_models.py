@@ -197,3 +197,21 @@ def take_mymodel(
                 status_code=status.HTTP_401_UNAUTHORIZED,
                 detail="Invalid profile.",
             )
+
+
+def add_model(
+    request: Request, path: str, idUsers: str
+) -> None:
+    path = escape(path)
+    date = datetime.now()
+    idUsers = escape(idUsers)
+    db_utils = PostgreSQLUtils()
+    with db_utils as cursor:
+        if verify_role_and_profile(request, cursor, id_users=idUsers):
+            SQL_query = f"INSERT INTO MODELS(path, date, idusers) VALUES('%s', '%s', '%s')"
+            cursor.execute(SQL_query, (path, date, idUsers))
+        else:
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Invalid profile.",
+            )
