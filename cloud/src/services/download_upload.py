@@ -86,6 +86,14 @@ def upload(request: Request, files: list[UploadFile] = File(...)):
                         detail="Les fichiers doivent être de type pkl.",
                     )
                 if user:
+                    db_utils = PostgreSQLUtils()
+                    with db_utils as cursor:
+                        cursor.execute(
+                            "SELECT path FROM MODELS WHERE path = %s AND idusers = %s", (member.filename, user.idusers)
+                        )
+                        user_data = cursor.fetchone()
+                        if user_data:
+                            return {"message": "Modèle déjà existant."}
                     file_data = zip_ref.read(member)
                     client = storage.Client()
                     bucket = client.get_bucket("icarus-gcp.appspot.com")
