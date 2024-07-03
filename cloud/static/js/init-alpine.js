@@ -66,7 +66,7 @@ function data() {
           headers: {
               'Content-Type': 'application/json'
           },
-          body: JSON.stringify({ device_id: this.reconnectDeviceId })
+          body: JSON.stringify({ device_id: inputValue })
       })
       .then(response => response.json())
       .then(data => {

@@ -20,7 +20,6 @@ def link_device(request: Request, device_id: DeviceModel):
         user = User().get_user_by_cookie(
             cursor, cookie=escape(request.cookies.get("ICARUS-Login"))
         )
-
         cursor.execute(
             "SELECT IdUser FROM DEVICES WHERE IdDevice = %s", (device_id,)  # device.device_id,
         )
