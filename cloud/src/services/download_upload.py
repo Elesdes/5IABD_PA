@@ -56,7 +56,8 @@ def download_mymodels(idDevice: str) -> StreamingResponse:
         client = storage.Client()
         bucket = client.get_bucket("icarus-gcp.appspot.com")
         # file_path = f"PPO_hand_prosthesis_model.zip"
-        blob = bucket.blob(f"{user_data[0].replace('/', '//')}/{model_data[0]}")
+        user_id = user_data[0].replace('/', '\\')
+        blob = bucket.blob(f"{user_id}/{model_data[0]}")
         blob.download_to_filename(f"/tmp/{model_data[0]}")
 
         response = StreamingResponse(file_generator(f"/tmp/{model_data[0]}"), media_type="application/octet-stream")
@@ -89,7 +90,8 @@ def upload(request: Request, files: list[UploadFile] = File(...)):
                     client = storage.Client()
                     bucket = client.get_bucket("icarus-gcp.appspot.com")
                     file_path = f"{member.filename}"
-                    blob = bucket.blob(f"{user.idusers.replace('/', '//')}/{file_path}")
+                    user_id = user.idusers.replace('/', '\\')
+                    blob = bucket.blob(f"{user_id}/{file_path}")
                     blob.upload_from_file(BytesIO(file_data), content_type='application/octet-stream')
                     add_model(request, file_path, user.idusers)
                 else:

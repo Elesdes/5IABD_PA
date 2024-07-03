@@ -208,7 +208,7 @@ def add_model(
     db_utils = PostgreSQLUtils()
     with db_utils as cursor:
         if verify_role_and_profile(request, cursor, id_users=idUsers):
-            SQL_query = f"INSERT INTO MODELS(path, date, idusers) VALUES('%s', '%s', '%s')"
+            SQL_query = f"INSERT INTO MODELS(path, date, idusers) VALUES(%s, %s, %s)"
             cursor.execute(SQL_query, (path, date, idUsers))
         else:
             raise HTTPException(
