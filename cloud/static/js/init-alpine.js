@@ -91,8 +91,12 @@ function data() {
       this.reconnectTrapCleanup()
     },
     reconnectDevice() {
-      fetch(`/api/link-device/?device=${this.reconnectDeviceId}`, {
-          method: 'POST'
+      fetch(`/api/link-device`, {
+          method: 'POST',
+          headers: {
+              'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ device_id: this.reconnectDeviceId })
       })
       .then(response => response.json())
       .then(data => {
@@ -118,8 +122,12 @@ function data() {
       this.deleteTrapCleanup()
     },
     deleteDevice() {
-      fetch(`/api/delete-device/?device=${this.deleteDeviceId}`, {
-          method: 'POST'
+      fetch(`/api/delete-device`, {
+          method: 'POST',
+          headers: {
+              'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ device_id: this.deleteDeviceId })
       })
       .then(response => response.json())
       .then(data => {
