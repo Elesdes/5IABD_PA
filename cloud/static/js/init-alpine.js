@@ -72,6 +72,7 @@ function data() {
           console.error('Error:', error);
       });
       this.closeModal();
+      location.reload()
     },
     // Reconnect Modal
     isReconnectModalOpen: false,
