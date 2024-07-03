@@ -67,12 +67,12 @@ function data() {
       .then(response => response.json())
       .then(data => {
           console.log('Success:', data);
+          this.closeModal();
+          location.reload();
       })
       .catch((error) => {
           console.error('Error:', error);
       });
-      this.closeModal();
-      location.reload()
     },
     // Reconnect Modal
     isReconnectModalOpen: false,
