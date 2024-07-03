@@ -61,8 +61,12 @@ function data() {
     submitData() {
       let inputValue = document.getElementById('newDeviceIdInput').value;
       inputValue = inputValue.replace(/`/g, '');
-      fetch(`/api/link-device/?device=${inputValue}`, {
-          method: 'POST'
+      fetch(`/api/link-device`, {
+          method: 'POST',
+          headers: {
+              'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ device_id: this.reconnectDeviceId })
       })
       .then(response => response.json())
       .then(data => {
