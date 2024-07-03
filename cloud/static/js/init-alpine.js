@@ -72,7 +72,7 @@ function data() {
       .then(data => {
           console.log('Success:', data);
           this.closeModal();
-          // location.reload();
+          location.reload();
       })
       .catch((error) => {
           console.error('Error:', error);

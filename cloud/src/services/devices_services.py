@@ -40,15 +40,11 @@ def link_device(request: Request, device_id: DeviceModel):
 
 
 @router.post("/delete-device")
-def delete_device(request: Request, device: str):
+def delete_device(request: Request, device_id: DeviceModel):
     db_session = PostgreSQLUtils()
     with db_session as cursor:
-        user = User().get_user_by_cookie(
-            cursor, cookie=escape(request.cookies.get("ICARUS-Login"))
-        )
-
         cursor.execute(
-            "SELECT IdUser FROM DEVICES WHERE IdDevice = %s", (device,)  # device.device_id,
+            "SELECT IdUser FROM DEVICES WHERE IdDevice = %s", (device_id.device_id,)
         )
         result = cursor.fetchone()
         if result:
@@ -56,7 +52,7 @@ def delete_device(request: Request, device: str):
                 # Device exists, only update the user
                 cursor.execute(
                     "DELETE FROM DEVICES WHERE IdDevice = %s",
-                    (device, )  # device.device_id,
+                    (device_id.device_id, )
                 )
             else:
                 return {"message": "Forbidden request"}
