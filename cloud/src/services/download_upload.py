@@ -6,6 +6,7 @@ from src.utils.postgresql_utils import PostgreSQLUtils
 from src.models.user_model import User
 from google.cloud import storage
 from markupsafe import escape
+from io import BytesIO
 import zipfile
 import os
 
@@ -85,11 +86,12 @@ def upload(request: Request, files: list[UploadFile] = File(...)):
                     )
                 if user:
                     print(member)
+                    file_data = zip_ref.read(member)
                     client = storage.Client()
                     bucket = client.get_bucket("icarus-gcp.appspot.com")
                     file_path = f"{member.filename}"
                     blob = bucket.blob(f"{user.idusers}/{file_path}")
-                    blob.upload_from_filename(file_path)
+                    blob.upload_from_file(BytesIO(file_data), content_type='application/octet-stream')
                 else:
                     return {"message": "Pas d'utilisateurs avec vos données d'identifications."}
     return {"message": "Fichiers uploadé avec succès."}
