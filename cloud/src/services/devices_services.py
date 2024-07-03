@@ -21,19 +21,19 @@ def link_device(request: Request, device_id: DeviceModel):
             cursor, cookie=escape(request.cookies.get("ICARUS-Login"))
         )
         cursor.execute(
-            "SELECT IdUser FROM DEVICES WHERE IdDevice = %s", (device_id,)  # device.device_id,
+            "SELECT IdUser FROM DEVICES WHERE IdDevice = %s", (device_id.device_id,)
         )
         if cursor.fetchone():
             # Device exists, only update the user
             cursor.execute(
                 "UPDATE DEVICES SET IdUser = %s WHERE IdDevice = %s",
-                (user.idusers, device_id),  # device.device_id,
+                (user.idusers, device_id.device_id),
             )
         else:
             # Device doesn't exist, insert a new record
             cursor.execute(
                 "INSERT INTO DEVICES (IdDevice, IdUser) VALUES (%s, %s)",
-                (device_id, user.idusers),  # device.device_id,
+                (device_id.device_id, user.idusers),
             )
 
     return {"message": "Prosthesis connected successfully"}
