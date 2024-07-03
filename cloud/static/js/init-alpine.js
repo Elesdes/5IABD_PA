@@ -93,11 +93,13 @@ function data() {
       .then(response => response.json())
       .then(data => {
           console.log('Success:', data);
+          this.closeReconnectModal();
+          location.reload();
       })
       .catch((error) => {
           console.error('Error:', error);
       });
-      this.closeReconnectModal();
+
     },
     // Delete Modal
     isDeleteModalOpen: false,
@@ -118,11 +120,12 @@ function data() {
       .then(response => response.json())
       .then(data => {
           console.log('Success:', data);
+          this.closeDeleteModal();
+          location.reload();
       })
       .catch((error) => {
           console.error('Error:', error);
       });
-      this.closeDeleteModal();
     },
 
     // Add Model Modal
@@ -147,12 +150,12 @@ function data() {
       .then(response => response.json())
       .then(data => {
         console.log('Success:', data);
+        location.reload();
+        this.closeModelModal();
       })
       .catch(error => {
         console.error('Error:', error);
       });
-
-      this.closeModelModal();
     },
   }
 }
