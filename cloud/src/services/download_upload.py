@@ -73,22 +73,24 @@ def upload(request: Request, files: list[UploadFile] = File(...)):
         )
     # Eventuellement, ajouter la fonction de création de zip dans le fichier utils/files_utils.py
     with zipfile.ZipFile(files[0].file, "r") as zip_ref:
-        for member in zip_ref.infolist():
-            if not is_valid_mime(member.filename):
-                raise HTTPException(
-                    status_code=401,
-                    detail="Les fichiers doivent être de type pkl.",
-                )
-    db_utils = PostgreSQLUtils()
-    with db_utils as cursor:
-        user = User().get_user_by_cookie(cursor=cursor, cookie=escape(request.cookies.get("ICARUS-Login")))
-        if user:
-            client = storage.Client()
-            bucket = client.get_bucket("icarus-gcp.appspot.com")
-            file_path = f"{files[0].filename}"
-            blob = bucket.blob(f"{user.idusers}/{file_path}")
-            blob.upload_from_filename(file_path)
-        else:
-            return {"message": "Pas d'utilisateurs avec vos données d'identifications."}
+        db_utils = PostgreSQLUtils()
+        with db_utils as cursor:
+            user = User().get_user_by_cookie(cursor=cursor, cookie=escape(request.cookies.get("ICARUS-Login")))
+            for member in zip_ref.infolist():
+                print(member.filename)
+                if not is_valid_mime(member.filename):
+                    raise HTTPException(
+                        status_code=401,
+                        detail="Les fichiers doivent être de type pkl.",
+                    )
+                if user:
+                    print(member)
+                    client = storage.Client()
+                    bucket = client.get_bucket("icarus-gcp.appspot.com")
+                    file_path = f"{member.filename}"
+                    blob = bucket.blob(f"{user.idusers}/{file_path}")
+                    blob.upload_from_filename(file_path)
+                else:
+                    return {"message": "Pas d'utilisateurs avec vos données d'identifications."}
     return {"message": "Fichiers uploadé avec succès."}
 
