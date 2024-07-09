@@ -15,44 +15,22 @@ install_postgresql() {
 # Function to run PostgreSQL commands
 run_postgresql_commands() {
     sudo service postgresql start
-    sudo -i -u postgres psql << EOF
+    sudo -i -u postgres psql <<EOF
 CREATE DATABASE icarus_db;
 \c icarus_db
 CREATE USER icarus WITH PASSWORD 'icarus';
 GRANT ALL PRIVILEGES ON DATABASE icarus_db TO icarus;
+EOF
 
--- Create tables
-CREATE TABLE IF NOT EXISTS USERS
-(
-    IdUser VARCHAR(64) NOT NULL PRIMARY KEY,
-    Email VARCHAR(255) NOT NULL,
-    Name VARCHAR(255) NOT NULL,
-    Forename VARCHAR(255) NOT NULL,
-    Password CHAR(255) NOT NULL,
-    Cookie VARCHAR(255),
-    Role INT NOT NULL
-);
+    # Run the SQL script
+    sudo -u postgres psql -d icarus_db -f create_tables.sql
 
-CREATE TABLE IF NOT EXISTS MODELS
-(
-    IdModel SERIAL NOT NULL PRIMARY KEY,
-    Path VARCHAR(255) NOT NULL,
-    Date TIMESTAMP NOT NULL,
-    IdUser VARCHAR(64) REFERENCES USERS(IdUser)
-);
-
-CREATE TABLE IF NOT EXISTS DEVICES
-(
-    IdDevice VARCHAR(8) NOT NULL PRIMARY KEY,
-    IdUser VARCHAR(64) REFERENCES USERS(IdUser)
-);
-
--- Grant privileges
+    # Grant privileges
+    sudo -i -u postgres psql -d icarus_db <<EOF
 GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO icarus;
 ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL PRIVILEGES ON TABLES TO icarus;
 GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA public TO icarus;
 ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL PRIVILEGES ON SEQUENCES TO icarus;
-
 EOF
 
     echo "PostgreSQL setup complete."
