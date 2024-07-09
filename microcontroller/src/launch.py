@@ -6,10 +6,11 @@ from predict_model import predict
 from prosthesis_management.hand import Hand
 from emg_recorder import Myo, emg_mode
 from stable_baselines3 import PPO
+from device import get_device_id
 
+MICROCONTROLLER_PATH = "/home/enzol/Documents/5IABD_PA/microcontroller"
 
-with open("/home/enzol/Documents/5IABD_PA/microcontroller/src/id_device.cfg", "r") as f:
-    id_device = f.read()
+id_device = get_device_id()
 
 url = "https://icarus-gcp.oa.r.appspot.com/files/" + id_device
 result_request = requests.get(url)
@@ -23,7 +24,7 @@ print(result_request)
 
 # download the model in the result of the request
 timestamp = time.strftime("%Y%m%d_%H%M%S")
-with open(f"/home/enzol/Documents/5IABD_PA/microcontroller/src/models/xgb_{timestamp}.pkl", "wb") as f:
+with open(f"{MICROCONTROLLER_PATH}/src/models/xgb_{timestamp}.pkl", "wb") as f:
     f.write(result_request.content)
 
 hand = Hand()
@@ -35,7 +36,7 @@ print("Hand reset done")
 # ppo_model = PPO.load("/home/enzol/Documents/5IABD_PA/microcontroller/src/models/PPO_hand_prosthesis_model")
 
 model = pd.read_pickle(
-    f"/home/enzol/Documents/5IABD_PA/microcontroller/src/models/xgb_{timestamp}.pkl"
+    f"{MICROCONTROLLER_PATH}/src/models/xgb_{timestamp}.pkl"
 )
 
 print("Model loaded")
