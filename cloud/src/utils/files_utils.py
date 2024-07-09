@@ -19,6 +19,18 @@ def is_valid_mime(file_name: str) -> bool:
     return ext in valid_extensions
 
 
+def is_valid_data_mime(file_name: str) -> bool:
+    """
+    Low security check of file extension.
+    :param file_name: String of the file name.
+    :return:
+    If its a PNG or JPG, then it's true. Else it's false.
+    """
+    valid_extensions: list[str] = [".csv"]
+    ext: str = os.path.splitext(file_name)[-1].lower()
+    return ext in valid_extensions
+
+
 def get_extension(file_path: str) -> str:
     """
     Get the extension of the specified file.
