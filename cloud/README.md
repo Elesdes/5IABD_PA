@@ -28,6 +28,7 @@ Copy and paste to query tool and execute the file : `scripts/create_database_pos
 ### Linux (Ubuntu)
 
 For a full install (installing PostgreSQL and setup the database):
+
 ```bash
 sudo apt install dos2unix
 ```
