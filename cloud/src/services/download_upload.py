@@ -107,33 +107,40 @@ def upload(request: Request, files: list[UploadFile] = File(...)):
     return {"message": "Fichiers uploadé avec succès."}
 
 
-@router.post("/upload_data")
-def upload_data(request: Request, files: list[UploadFile] = File(...)):
+@router.post("/upload_data/{idDevice}")
+def upload_data(request: Request, files: list[UploadFile], idDevice: str):
     if len(files) > 2:
         raise HTTPException(
             status_code=401,
             detail="Un seul upload possible.",
         )
+    idDevice = escape(idDevice)
+    db_utils = PostgreSQLUtils()
+    with db_utils as cursor:
+        cursor.execute(
+            "SELECT IdUser FROM DEVICES WHERE IdDevice = %s", (idDevice,)
+        )
+        user_data = cursor.fetchone()
+        if not user_data:
+            raise HTTPException(
+                status_code=401,
+                detail="Invalid device.",
+            )
     # Eventuellement, ajouter la fonction de création de zip dans le fichier utils/files_utils.py
     with zipfile.ZipFile(files[0].file, "r") as zip_ref:
-        db_utils = PostgreSQLUtils()
-        with db_utils as cursor:
-            user = User().get_user_by_cookie(cursor=cursor, cookie=escape(request.cookies.get("ICARUS-Login")))
-            for member in zip_ref.infolist():
-                if not is_valid_data_mime(member.filename):
-                    raise HTTPException(
-                        status_code=401,
-                        detail="Les fichiers doivent être de type csv.",
-                    )
-                if user:
-                    file_data = zip_ref.read(member)
-                    client = storage.Client()
-                    bucket = client.get_bucket("icarus-gcp.appspot.com")
-                    file_path = f"{member.filename}"
-                    user_id = user.idusers.replace('/', '\\')
-                    blob = bucket.blob(f"{user_id}/data/{file_path}")
-                    blob.upload_from_file(BytesIO(file_data), content_type='application/octet-stream')
-                else:
-                    return {"message": "Pas d'utilisateurs avec vos données d'identifications."}
-    return {"message": "Fichiers uploadé avec succès."}
+        for member in zip_ref.infolist():
+            if not is_valid_data_mime(member.filename):
+                raise HTTPException(
+                    status_code=401,
+                    detail="Les fichiers doivent être de type csv.",
+                )
 
+            file_data = zip_ref.read(member)
+            client = storage.Client()
+            bucket = client.get_bucket("icarus-gcp.appspot.com")
+            file_path = f"{member.filename}"
+            user_id = user_data[0].replace('/', '\\')
+            blob = bucket.blob(f"{user_id}/data/{file_path}")
+            blob.upload_from_file(BytesIO(file_data), content_type='application/octet-stream')
+
+    return {"message": "Fichiers uploadé avec succès."}
