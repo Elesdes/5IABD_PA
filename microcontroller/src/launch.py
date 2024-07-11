@@ -1,7 +1,6 @@
 import pandas as pd
 import time
-import sys
-import requests
+import os
 from call_api import download_model, send_zip_data
 from predict_model import predict
 from prosthesis_management.hand import Hand
@@ -9,12 +8,11 @@ from emg_recorder import Myo, emg_mode
 from stable_baselines3 import PPO
 from device import get_device_id
 
-MICROCONTROLLER_PATH = "/home/enzol/Documents/5IABD_PA/microcontroller"
+MICROCONTROLLER_PATH = os.path.dirname(__file__)
 
 id_device = get_device_id()
 
-# model_name = download_model(id_device)
-model_name = f"{MICROCONTROLLER_PATH}/src/models/xgb_20240709_170032.pkl"
+model_name = download_model(id_device)
 
 # hand = Hand()
 
@@ -58,7 +56,7 @@ myo_cols = [
 ]
 chunk_size = 300
 
-data = pd.read_csv(f'{MICROCONTROLLER_PATH}/src/data/data.csv')
+data = pd.read_csv(f'{MICROCONTROLLER_PATH}/data/data.csv')
 
 data = data[myo_cols]
 

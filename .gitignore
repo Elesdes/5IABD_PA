@@ -9,6 +9,10 @@ data
 # Models
 microcontroller/src/models
 
+# Raspberry Pi Hardware Testing
+test.py
+test_button.py
+
 # Configurations
 cloud/api/src/config/db_config.py
 microcontroller/id_device.cfg

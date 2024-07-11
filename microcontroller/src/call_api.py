@@ -3,9 +3,10 @@ import time
 import os
 import zipfile
 import pandas as pd
+import os
 
 
-MICROCONTROLLER_PATH = "/home/enzol/Documents/5IABD_PA/microcontroller"
+MICROCONTROLLER_PATH = os.path.dirname(__file__)
 
 def download_model(id_device: str):
     url = "https://icarus-gcp.oa.r.appspot.com/files/" + id_device
@@ -28,7 +29,7 @@ def download_model(id_device: str):
     # download the model in the result of the request
     timestamp = time.strftime("%Y%m%d_%H%M%S")
 
-    model_name = f"{MICROCONTROLLER_PATH}/src/models/xgb_{timestamp}.pkl"
+    model_name = f"{MICROCONTROLLER_PATH}/models/xgb_{timestamp}.pkl"
 
     with open(model_name, "wb") as f:
         f.write(result_request.content)
@@ -43,9 +44,9 @@ def send_zip_data(emg: pd.DataFrame, prediction: pd.DataFrame, id_device: str):
     csv_emg = f"emg_{timestamp}.csv"
     csv_prediction = f"prediction_{timestamp}.csv"
 
-    zip_path = f'{MICROCONTROLLER_PATH}/src/tmp/{zip_filename}'
-    emg_path = f'{MICROCONTROLLER_PATH}/src/tmp/{csv_emg}'
-    prediction_path = f'{MICROCONTROLLER_PATH}/src/tmp/{csv_prediction}'
+    zip_path = f'{MICROCONTROLLER_PATH}/tmp/{zip_filename}'
+    emg_path = f'{MICROCONTROLLER_PATH}/tmp/{csv_emg}'
+    prediction_path = f'{MICROCONTROLLER_PATH}/tmp/{csv_prediction}'
 
     emg.to_csv(emg_path, index=False)
     prediction.to_csv(prediction_path, index=False)
