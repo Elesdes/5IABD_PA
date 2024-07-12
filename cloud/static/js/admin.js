@@ -3,7 +3,7 @@ document.addEventListener("DOMContentLoaded", function() {
     fetch("/api/get_role")
         .then(response => response.json())
         .then(data => {
-            if (data) {
+            if (data == true) {
                 document.querySelectorAll('.admin-only').forEach(element => {
                     element.style.visibility = 'visible';
                 });
