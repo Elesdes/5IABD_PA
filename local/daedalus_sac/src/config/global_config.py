@@ -1,6 +1,6 @@
 from dataclasses import fields, is_dataclass
 from pathlib import Path
-from typing import Any, Dict, Literal, Tuple, Type
+from typing import Any, Dict, List, Literal, Tuple, Type
 from schemas.paths_schema import PathsSchema
 from schemas.models_schema import AutoencoderSchema, RegressionModelSchema, SacSchema
 from schemas.preprocessing_schema import PreprocessingSchema
@@ -29,9 +29,10 @@ class Config(
         ae_encoding_dim: int = 16,
         ae_epochs: int = 100,
         ae_batch_size: int = 32,
-        ae_hidden_layers: Tuple[int, ...] = (128, 64, 32),
+        ae_hidden_layers: List[int] = [128, 64, 32],
         ae_activation: Literal["relu", "tanh", "sigmoid", "elu", "selu"] = "relu",
         ae_output_activation: Literal["sigmoid", "tanh", "linear"] = "sigmoid",
+        ae_learning_rate: float = 1e-3,
         regression_epochs: int = 100,
         regression_batch_size: int = 32,
         sac_policy: str = "MlpPolicy",
@@ -72,13 +73,14 @@ class Config(
         self.ae_encoding_dim: int = ae_encoding_dim
         self.ae_epochs: int = ae_epochs
         self.ae_batch_size: int = ae_batch_size
-        ae_hidden_layers: Tuple[int, ...] = (ae_hidden_layers,)
-        ae_activation: Literal["relu", "tanh", "sigmoid", "elu", "selu"] = (
-            ae_activation,
-        )
-        ae_output_activation: Literal["sigmoid", "tanh", "linear"] = (
-            ae_output_activation,
-        )
+        self.ae_hidden_layers: List[int] = [128, 64, 32]
+        self.ae_activation: Literal[
+            "relu", "tanh", "sigmoid", "elu", "selu"
+        ] = ae_activation
+        self.ae_output_activation: Literal[
+            "sigmoid", "tanh", "linear"
+        ] = ae_output_activation
+        self.ae_learning_rate: float = ae_learning_rate
 
         ## Regression
         self.regression_epochs: int = regression_epochs
