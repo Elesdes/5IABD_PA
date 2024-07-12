@@ -41,11 +41,6 @@ python local/daedalus_sac/src/train.py [OPTIONS]
 --train-regression&nbsp;&nbsp;&nbsp;&nbsp;Flag to train the regression model<br>
 --regression-pretrained TEXT&nbsp;&nbsp;&nbsp;&nbsp;Full path to the pre-trained regression model
 
-#### SAC Options
-
---train-sac&nbsp;&nbsp;&nbsp;&nbsp;Flag to train the SAC model<br>
---sac-pretrained TEXT&nbsp;&nbsp;&nbsp;&nbsp;Full path to the pre-trained SAC model
-
 ### Examples
 
 1. Run the training pipeline with default settings:
@@ -75,7 +70,7 @@ python local/daedalus_sac/src/train.py [OPTIONS]
 5. Train all models:
 
    ```bash
-   python local/daedalus_sac/src/train.py --train-autoencoder --train-regression --train-sac
+   python local/daedalus_sac/src/train.py --train-autoencoder --train-regression
    ```
 
 Note: The options for training and using pre-trained models are mutually exclusive for each model type. For example, you can't use both --train-autoencoder and --autoencoder-pretrained at the same time.
