@@ -96,3 +96,40 @@ def get_devices(request: Request) -> list[dict[str, str]]:
                 status_code=status.HTTP_401_UNAUTHORIZED,
                 detail="Invalid profile.",
             )
+
+
+@router.get("/get_mydevices")
+def get_mydevices(request: Request) -> list[dict[str, str]]:
+    db_utils = PostgreSQLUtils()
+    devices = []
+    cookie_value = escape(request.cookies.get("ICARUS-Login"))
+    with db_utils as cursor:
+        if verify_role_and_profile(request, cursor, cookie=cookie_value):
+            SQL_query = "SELECT idusers FROM USERS WHERE cookie=%s"
+            cursor.execute(SQL_query, (cookie_value,))
+            SQL_query = "SELECT iddevice, iduser FROM DEVICES WHERE idUsers=%s"
+            cursor.execute(SQL_query, (cursor.fetchone()[0],))
+            devices_data = cursor.fetchall()
+            for device in devices_data:
+                if device[1]:
+                    devices.append(
+                        {
+                            "iddevice": device[0],
+                            "iduser": device[1],
+                            "statut": "Connecté"
+                        }
+                    )
+                else:
+                    devices.append(
+                        {
+                            "iddevice": device[0],
+                            "iduser": "Pas d'id",
+                            "statut": "Déconnecté"
+                        }
+                    )
+            return devices
+        else:
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Invalid profile.",
+            )
