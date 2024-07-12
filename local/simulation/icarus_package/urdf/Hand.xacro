@@ -1,0 +1,434 @@
+<?xml version="1.0" ?>
+<robot name="Hand" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+<xacro:include filename="$(find icarus_package)/urdf/materials.xacro" />
+<xacro:include filename="$(find icarus_package)/urdf/Hand.trans" />
+<xacro:include filename="$(find icarus_package)/urdf/Hand.gazebo" />
+<link name="base_link">
+  <inertial>
+    <origin xyz="0.0 0.0 0.0" rpy="0 0 0"/>
+    <mass value="0.0"/>
+    <inertia ixx="0.0" iyy="0.0" izz="0.0" ixy="0.0" iyz="0.0" ixz="0.0"/>
+  </inertial>
+  <visual>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="file://$(find icarus_package)/meshes/base_link.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+    <material name="silver"/>
+  </visual>
+  <collision>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="file://$(find icarus_package)/meshes/base_link.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+  </collision>
+</link>
+
+<link name="finger_m1_link_1">
+  <inertial>
+    <origin xyz="0.016070016877492536 -0.006500509786654653 -0.009126118114694225" rpy="0 0 0"/>
+    <mass value="0.06162017006731255"/>
+    <inertia ixx="5e-06" iyy="8e-06" izz="9e-06" ixy="3e-06" iyz="-1e-06" ixz="2e-06"/>
+  </inertial>
+  <visual>
+    <origin xyz="-0.041278 -0.041922 -0.013378" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="file://$(find icarus_package)/meshes/finger_m1_link_1.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+    <material name="silver"/>
+  </visual>
+  <collision>
+    <origin xyz="-0.041278 -0.041922 -0.013378" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="file://$(find icarus_package)/meshes/finger_m1_link_1.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+  </collision>
+</link>
+
+<link name="finger_tip_m1_link_1">
+  <inertial>
+    <origin xyz="0.0184761664749917 -0.009507344064285661 -0.01020889034206194" rpy="0 0 0"/>
+    <mass value="0.08163358314047574"/>
+    <inertia ixx="7e-06" iyy="1.1e-05" izz="1.3e-05" ixy="4e-06" iyz="-1e-06" ixz="3e-06"/>
+  </inertial>
+  <visual>
+    <origin xyz="-0.069507 -0.025227 -0.001624" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="file://$(find icarus_package)/meshes/finger_tip_m1_link_1.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+    <material name="silver"/>
+  </visual>
+  <collision>
+    <origin xyz="-0.069507 -0.025227 -0.001624" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="file://$(find icarus_package)/meshes/finger_tip_m1_link_1.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+  </collision>
+</link>
+
+<link name="finger_bot_m2_link_1">
+  <inertial>
+    <origin xyz="0.0048001255345838136 -0.01844912473057455 8.130676054260953e-05" rpy="0 0 0"/>
+    <mass value="0.05749950589559982"/>
+    <inertia ixx="8e-06" iyy="3e-06" izz="8e-06" ixy="0.0" iyz="0.0" ixz="-0.0"/>
+  </inertial>
+  <visual>
+    <origin xyz="-0.021525 0.027684 -0.008937" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="file://$(find icarus_package)/meshes/finger_bot_m2_link_1.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+    <material name="silver"/>
+  </visual>
+  <collision>
+    <origin xyz="-0.021525 0.027684 -0.008937" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="file://$(find icarus_package)/meshes/finger_bot_m2_link_1.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+  </collision>
+</link>
+
+<link name="finger_top_m2_link_1">
+  <inertial>
+    <origin xyz="0.004188420745675405 -0.012981208122140611 -0.0008407101466927774" rpy="0 0 0"/>
+    <mass value="0.029364178100809595"/>
+    <inertia ixx="3e-06" iyy="1e-06" izz="3e-06" ixy="0.0" iyz="-0.0" ixz="0.0"/>
+  </inertial>
+  <visual>
+    <origin xyz="-0.024025 0.06288 -0.00819" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="file://$(find icarus_package)/meshes/finger_top_m2_link_1.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+    <material name="silver"/>
+  </visual>
+  <collision>
+    <origin xyz="-0.024025 0.06288 -0.00819" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="file://$(find icarus_package)/meshes/finger_top_m2_link_1.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+  </collision>
+</link>
+
+<link name="finger_tip_m2_link_1">
+  <inertial>
+    <origin xyz="0.004343368315175223 -0.017756989315971597 -0.0010444049066111434" rpy="0 0 0"/>
+    <mass value="0.03804848946601954"/>
+    <inertia ixx="4e-06" iyy="1e-06" izz="4e-06" ixy="0.0" iyz="-0.0" ixz="0.0"/>
+  </inertial>
+  <visual>
+    <origin xyz="-0.025852 0.087465 -0.007144" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="file://$(find icarus_package)/meshes/finger_tip_m2_link_1.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+    <material name="silver"/>
+  </visual>
+  <collision>
+    <origin xyz="-0.025852 0.087465 -0.007144" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="file://$(find icarus_package)/meshes/finger_tip_m2_link_1.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+  </collision>
+</link>
+
+<link name="finger_bot_m3_link_1">
+  <inertial>
+    <origin xyz="0.003414385343644129 -0.018776180579241006 -0.00018833042019554547" rpy="0 0 0"/>
+    <mass value="0.05749950589559969"/>
+    <inertia ixx="8e-06" iyy="3e-06" izz="8e-06" ixy="0.0" iyz="0.0" ixz="0.0"/>
+  </inertial>
+  <visual>
+    <origin xyz="0.003739 0.036867 -0.009009" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="file://$(find icarus_package)/meshes/finger_bot_m3_link_1.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+    <material name="silver"/>
+  </visual>
+  <collision>
+    <origin xyz="0.003739 0.036867 -0.009009" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="file://$(find icarus_package)/meshes/finger_bot_m3_link_1.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+  </collision>
+</link>
+
+<link name="finger_top_m3_link_1">
+  <inertial>
+    <origin xyz="0.003212625270625827 -0.013245387957479107 -0.0005961641669813712" rpy="0 0 0"/>
+    <mass value="0.02936417810080959"/>
+    <inertia ixx="3e-06" iyy="1e-06" izz="3e-06" ixy="0.0" iyz="0.0" ixz="0.0"/>
+  </inertial>
+  <visual>
+    <origin xyz="0.003863 0.072173 -0.008" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="file://$(find icarus_package)/meshes/finger_top_m3_link_1.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+    <material name="silver"/>
+  </visual>
+  <collision>
+    <origin xyz="0.003863 0.072173 -0.008" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="file://$(find icarus_package)/meshes/finger_top_m3_link_1.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+  </collision>
+</link>
+
+<link name="finger_tip_m3_link_1">
+  <inertial>
+    <origin xyz="0.0030115529573035166 -0.01802588282578428 -0.0008441355498918163" rpy="0 0 0"/>
+    <mass value="0.03804848946601953"/>
+    <inertia ixx="4e-06" iyy="1e-06" izz="4e-06" ixy="0.0" iyz="-0.0" ixz="-0.0"/>
+  </inertial>
+  <visual>
+    <origin xyz="0.003866 0.096816 -0.007399" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="file://$(find icarus_package)/meshes/finger_tip_m3_link_1.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+    <material name="silver"/>
+  </visual>
+  <collision>
+    <origin xyz="0.003866 0.096816 -0.007399" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="file://$(find icarus_package)/meshes/finger_tip_m3_link_1.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+  </collision>
+</link>
+
+<link name="finger_top_m4_link_1">
+  <inertial>
+    <origin xyz="0.0018558420016311847 -0.0184427906480917 0.00039393006464263393" rpy="0 0 0"/>
+    <mass value="0.05749950589559968"/>
+    <inertia ixx="8e-06" iyy="3e-06" izz="8e-06" ixy="-0.0" iyz="0.0" ixz="0.0"/>
+  </inertial>
+  <visual>
+    <origin xyz="0.029955 0.024972 -0.009397" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="file://$(find icarus_package)/meshes/finger_top_m4_link_1.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+    <material name="silver"/>
+  </visual>
+  <collision>
+    <origin xyz="0.029955 0.024972 -0.009397" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="file://$(find icarus_package)/meshes/finger_top_m4_link_1.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+  </collision>
+</link>
+
+<link name="finger_bot_m4_link_1">
+  <inertial>
+    <origin xyz="0.00207920001930555 -0.013456295803182021 -3.331291941451736e-05" rpy="0 0 0"/>
+    <mass value="0.029364178100809504"/>
+    <inertia ixx="3e-06" iyy="1e-06" izz="3e-06" ixy="-0.0" iyz="0.0" ixz="0.0"/>
+  </inertial>
+  <visual>
+    <origin xyz="0.033029 0.059604 -0.009627" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="file://$(find icarus_package)/meshes/finger_bot_m4_link_1.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+    <material name="silver"/>
+  </visual>
+  <collision>
+    <origin xyz="0.033029 0.059604 -0.009627" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="file://$(find icarus_package)/meshes/finger_bot_m4_link_1.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+  </collision>
+</link>
+
+<link name="finger_tip_m4_link_1">
+  <inertial>
+    <origin xyz="0.0014703657399842487 -0.018128864251384838 -0.0015991665084065416" rpy="0 0 0"/>
+    <mass value="0.03804848946601931"/>
+    <inertia ixx="4e-06" iyy="1e-06" izz="4e-06" ixy="-0.0" iyz="-0.0" ixz="-0.0"/>
+  </inertial>
+  <visual>
+    <origin xyz="0.03512 0.084135 -0.010061" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="file://$(find icarus_package)/meshes/finger_tip_m4_link_1.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+    <material name="silver"/>
+  </visual>
+  <collision>
+    <origin xyz="0.03512 0.084135 -0.010061" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="file://$(find icarus_package)/meshes/finger_tip_m4_link_1.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+  </collision>
+</link>
+
+<link name="finger_bot_m5_link_1">
+  <inertial>
+    <origin xyz="0.00034283625706488935 -0.018831482741888183 -0.0007311630387505583" rpy="0 0 0"/>
+    <mass value="0.05749950589559977"/>
+    <inertia ixx="8e-06" iyy="3e-06" izz="8e-06" ixy="-1e-06" iyz="-0.0" ixz="-0.0"/>
+  </inertial>
+  <visual>
+    <origin xyz="0.053965 0.007993 -0.009578" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="file://$(find icarus_package)/meshes/finger_bot_m5_link_1.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+    <material name="silver"/>
+  </visual>
+  <collision>
+    <origin xyz="0.053965 0.007993 -0.009578" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="file://$(find icarus_package)/meshes/finger_bot_m5_link_1.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+  </collision>
+</link>
+
+<link name="finger_top_m5_link_1">
+  <inertial>
+    <origin xyz="0.0010130258208710247 -0.013535071888448491 -0.0013741811947472213" rpy="0 0 0"/>
+    <mass value="0.02936417810080954"/>
+    <inertia ixx="3e-06" iyy="1e-06" izz="3e-06" ixy="-0.0" iyz="-0.0" ixz="-0.0"/>
+  </inertial>
+  <visual>
+    <origin xyz="0.059809 0.042533 -0.007667" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="file://$(find icarus_package)/meshes/finger_top_m5_link_1.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+    <material name="silver"/>
+  </visual>
+  <collision>
+    <origin xyz="0.059809 0.042533 -0.007667" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="file://$(find icarus_package)/meshes/finger_top_m5_link_1.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+  </collision>
+</link>
+
+<link name="finger_tip_m5_link_1">
+  <inertial>
+    <origin xyz="3.8575615310065814e-05 -0.018203884649828264 -0.0014154258471049432" rpy="0 0 0"/>
+    <mass value="0.03804848946601955"/>
+    <inertia ixx="4e-06" iyy="1e-06" izz="4e-06" ixy="-1e-06" iyz="-0.0" ixz="-0.0"/>
+  </inertial>
+  <visual>
+    <origin xyz="0.063829 0.066767 -0.005621" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="file://$(find icarus_package)/meshes/finger_tip_m5_link_1.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+    <material name="silver"/>
+  </visual>
+  <collision>
+    <origin xyz="0.063829 0.066767 -0.005621" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="file://$(find icarus_package)/meshes/finger_tip_m5_link_1.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+  </collision>
+</link>
+
+<joint name="base_m1_joint" type="revolute">
+  <origin xyz="0.041278 0.041922 0.013378" rpy="0 0 0"/>
+  <parent link="base_link"/>
+  <child link="finger_m1_link_1"/>
+  <axis xyz="0.133674 0.687641 -0.713639"/>
+  <limit upper="0.785398" lower="0.0" effort="100" velocity="100"/>
+</joint>
+
+<joint name="m1_tip_joint" type="revolute">
+  <origin xyz="0.028229 -0.016695 -0.011754" rpy="0 0 0"/>
+  <parent link="finger_m1_link_1"/>
+  <child link="finger_tip_m1_link_1"/>
+  <axis xyz="0.133677 0.687641 -0.713639"/>
+  <limit upper="1.396263" lower="0.0" effort="100" velocity="100"/>
+</joint>
+
+<joint name="base_m2_joint" type="revolute">
+  <origin xyz="0.021525 -0.027684 0.008937" rpy="0 0 0"/>
+  <parent link="base_link"/>
+  <child link="finger_bot_m2_link_1"/>
+  <axis xyz="0.997218 0.074343 -0.005494"/>
+  <limit upper="1.396263" lower="0.0" effort="100" velocity="100"/>
+</joint>
+
+<joint name="m2_bot_joint" type="revolute">
+  <origin xyz="0.0025 -0.035196 -0.000747" rpy="0 0 0"/>
+  <parent link="finger_bot_m2_link_1"/>
+  <child link="finger_top_m2_link_1"/>
+  <axis xyz="0.997218 0.07434 -0.005494"/>
+  <limit upper="1.48353" lower="0.0" effort="100" velocity="100"/>
+</joint>
+
+<joint name="m2_top_tip_joint" type="revolute">
+  <origin xyz="0.001827 -0.024585 -0.001046" rpy="0 0 0"/>
+  <parent link="finger_top_m2_link_1"/>
+  <child link="finger_tip_m2_link_1"/>
+  <axis xyz="0.997218 0.074339 -0.005497"/>
+  <limit upper="1.396263" lower="0.0" effort="100" velocity="100"/>
+</joint>
+
+<joint name="base_m3_joint" type="revolute">
+  <origin xyz="-0.003739 -0.036867 0.009009" rpy="0 0 0"/>
+  <parent link="base_link"/>
+  <child link="finger_bot_m3_link_1"/>
+  <axis xyz="0.999983 1.1e-05 -0.005803"/>
+  <limit upper="1.396263" lower="0.0" effort="100" velocity="100"/>
+</joint>
+
+<joint name="m3_bot_joint" type="revolute">
+  <origin xyz="-0.000124 -0.035306 -0.001009" rpy="0 0 0"/>
+  <parent link="finger_bot_m3_link_1"/>
+  <child link="finger_top_m3_link_1"/>
+  <axis xyz="0.999983 8e-06 -0.005803"/>
+  <limit upper="1.48353" lower="0.0" effort="100" velocity="100"/>
+</joint>
+
+<joint name="m3_top_tip_joint" type="revolute">
+  <origin xyz="-3e-06 -0.024643 -0.000601" rpy="0 0 0"/>
+  <parent link="finger_top_m3_link_1"/>
+  <child link="finger_tip_m3_link_1"/>
+  <axis xyz="0.999983 7e-06 -0.005806"/>
+  <limit upper="1.396263" lower="0.0" effort="100" velocity="100"/>
+</joint>
+
+<joint name="base_m4_joint" type="revolute">
+  <origin xyz="-0.029955 -0.024972 0.009397" rpy="0 0 0"/>
+  <parent link="base_link"/>
+  <child link="finger_top_m4_link_1"/>
+  <axis xyz="0.996358 -0.085045 -0.006116"/>
+  <limit upper="1.396263" lower="0.0" effort="100" velocity="100"/>
+</joint>
+
+<joint name="m4_bot_joint" type="revolute">
+  <origin xyz="-0.003074 -0.034632 0.00023" rpy="0 0 0"/>
+  <parent link="finger_top_m4_link_1"/>
+  <child link="finger_bot_m4_link_1"/>
+  <axis xyz="0.996358 -0.085047 -0.006116"/>
+  <limit upper="1.48353" lower="0.0" effort="100" velocity="100"/>
+</joint>
+
+<joint name="m4_top_tip_joint" type="revolute">
+  <origin xyz="-0.002091 -0.024531 0.000434" rpy="0 0 0"/>
+  <parent link="finger_bot_m4_link_1"/>
+  <child link="finger_tip_m4_link_1"/>
+  <axis xyz="0.996358 -0.085049 -0.006119"/>
+  <limit upper="1.396263" lower="0.0" effort="100" velocity="100"/>
+</joint>
+
+<joint name="base_m5_joint" type="revolute">
+  <origin xyz="-0.053965 -0.007993 0.009578" rpy="0 0 0"/>
+  <parent link="base_link"/>
+  <child link="finger_bot_m5_link_1"/>
+  <axis xyz="0.986585 -0.163123 -0.006364"/>
+  <limit upper="1.396263" lower="0.0" effort="100" velocity="100"/>
+</joint>
+
+<joint name="m5_bot_joint" type="revolute">
+  <origin xyz="-0.005844 -0.03454 -0.001911" rpy="0 0 0"/>
+  <parent link="finger_bot_m5_link_1"/>
+  <child link="finger_top_m5_link_1"/>
+  <axis xyz="0.986585 -0.163125 -0.006364"/>
+  <limit upper="1.48353" lower="0.0" effort="100" velocity="100"/>
+</joint>
+
+<joint name="m5_top_tip_joint" type="revolute">
+  <origin xyz="-0.00402 -0.024234 -0.002046" rpy="0 0 0"/>
+  <parent link="finger_top_m5_link_1"/>
+  <child link="finger_tip_m5_link_1"/>
+  <axis xyz="0.986585 -0.163126 -0.006366"/>
+  <limit upper="1.396263" lower="0.0" effort="100" velocity="100"/>
+</joint>
+
+</robot>
