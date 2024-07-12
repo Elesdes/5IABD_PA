@@ -1,8 +1,7 @@
-
-from gpiozero import Button
-import os
 import subprocess
 import time
+import os
+from gpiozero import Button
 
 GPIO_PIN = 17
 
@@ -10,11 +9,11 @@ button = Button(GPIO_PIN)
 
 process = None
 
-conda_activate_script = "/home/enzol/miniforge-pypy3/etc/profile.d/conda.sh"
+conda_activate_script = "/home/enzol/miniforge3/etc/profile.d/conda.sh"
 
 conda_env_name = "5IABD"
 
-script_name = "test.py"
+script_name = f"{os.path.dirname(__file__)}/launch.py"
 
 def start_script():
     global process

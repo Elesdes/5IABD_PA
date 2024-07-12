@@ -4,7 +4,7 @@
 CONDA_ENV_NAME="5IABD"
 
 # Path to the Python script
-PYTHON_SCRIPT_PATH="/home/enzol/Documents/5IABD_PA/microcontroller/src/launch.py"
+PYTHON_SCRIPT_PATH="/home/enzol/5IABD_PA/microcontroller/src/launch.py"
 
 # Activate the conda environment
 source "$(conda info --base)/etc/profile.d/conda.sh"

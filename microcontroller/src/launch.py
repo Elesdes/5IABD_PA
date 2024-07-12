@@ -1,12 +1,18 @@
 import pandas as pd
 import time
 import os
+import threading
 from call_api import download_model, send_zip_data
 from predict_model import predict
 from prosthesis_management.hand import Hand
 from emg_recorder import Myo, emg_mode
-from stable_baselines3 import PPO
 from device import get_device_id
+
+
+def send_data_thread(df_emg_total, df_predictions_total, id_device, file_index):
+    send_zip_data(df_emg_total, df_predictions_total, id_device)
+    print(f"Sent {file_index} files")
+
 
 MICROCONTROLLER_PATH = os.path.dirname(__file__)
 
@@ -14,13 +20,11 @@ id_device = get_device_id()
 
 model_name = download_model(id_device)
 
-# hand = Hand()
+hand = Hand()
 
-# hand.reset()
+hand.reset()
 
-# print("Hand reset done")
-
-# ppo_model = PPO.load("/home/enzol/Documents/5IABD_PA/microcontroller/src/models/PPO_hand_prosthesis_model")
+print("Hand reset done")
 
 model = pd.read_pickle(model_name)
 
@@ -68,6 +72,7 @@ api_chunk_size = 30000
 
 try:
     for index, row in data.iterrows():
+
         myo_data.append(row.tolist())
         total_emg_data.append(row.tolist())
 
@@ -78,18 +83,23 @@ try:
             print(prediction)
             myo_data = []
 
+            hand.moveFromCategoricalList(prediction)
+
+            time.sleep(1)
+
             total_predictions.append(str(prediction))
 
         if len(total_emg_data) >= api_chunk_size:
             df_emg_total = pd.DataFrame(total_emg_data, columns=myo_cols)
             df_predictions_total = pd.DataFrame(total_predictions, columns=['prediction'])
             file_index += 1
-            send_zip_data(df_emg_total, df_predictions_total, id_device)
+            threading.Thread(target=send_data_thread, args=(df_emg_total, df_predictions_total, id_device, file_index)).start()
             total_emg_data = []
             total_predictions = []
             print(f"Sent {file_index} files")
 
 except KeyboardInterrupt:
+    hand.reset()
     quit()
 
 
