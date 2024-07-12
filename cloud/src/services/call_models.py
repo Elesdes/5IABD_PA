@@ -130,6 +130,8 @@ def del_mymodels(request: Request, idModel: int) -> None:
     with db_utils as cursor:
         cursor.execute(SQL_query, (idModel,))
         result = cursor.fetchone()
+        print(result)
+        print(idModel)
         if verify_role_and_profile(request, cursor, id_users=result[0]):
             SQL_query = "DELETE FROM MODELS WHERE idModel=%s"
             cursor.execute(SQL_query, (idModel,))
