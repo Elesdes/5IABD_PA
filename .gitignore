@@ -1,6 +1,7 @@
 # File system
 __pycache__
 .idea
+.vscode
 
 # Project generated files
 logs
