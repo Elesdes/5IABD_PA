@@ -4,6 +4,7 @@ You must follow these documentations before proceeding:
 
 - [Connect Myo Armband](../docs/local/connect_myo_armband.md)
 - [Setup ROS](../docs/local/setup_ros.md)
+- [Setup Video Data Recorder](../docs/local/video_data_recorder.md)
 
 ## Install Requirements
 

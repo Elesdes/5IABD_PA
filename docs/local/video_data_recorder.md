@@ -13,7 +13,7 @@ Local file use a specific environment. All libraries are standard but myo-python
 pip install -r requirements.txt
 ```
 
-Once done, you can now launch video_data_recorder.md
+Once done, you can now launch `video_data_recorder.py`
 
 ### Interface
 
