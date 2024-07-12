@@ -107,7 +107,7 @@ def get_mydevices(request: Request) -> list[dict[str, str]]:
         if verify_role_and_profile(request, cursor, cookie=cookie_value):
             SQL_query = "SELECT idusers FROM USERS WHERE cookie=%s"
             cursor.execute(SQL_query, (cookie_value,))
-            SQL_query = "SELECT iddevice, iduser FROM DEVICES WHERE idUsers=%s"
+            SQL_query = "SELECT iddevice, iduser FROM DEVICES WHERE idUser=%s"
             cursor.execute(SQL_query, (cursor.fetchone()[0],))
             devices_data = cursor.fetchall()
             for device in devices_data:
