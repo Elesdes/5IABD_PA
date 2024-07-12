@@ -1,10 +1,14 @@
 # Run Simulation on Local
 
-You must follow these documentations before proceeding:
+Before proceeding, you must follow these documentations:
 
 - [Connect Myo Armband](../docs/local/connect_myo_armband.md)
 - [Setup ROS](../docs/local/setup_ros.md)
 - [Setup Video Data Recorder](../docs/local/video_data_recorder.md)
+
+## DAEDALUS-SAC Architecture
+
+![Model Architecture](../docs/DAEDALUS-SAC.jpg)
 
 ## Install Requirements
 
