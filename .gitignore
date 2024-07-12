@@ -5,6 +5,7 @@ __pycache__
 # Project generated files
 logs
 data
+tensorboard_logs
 
 # Models
 microcontroller/src/models
