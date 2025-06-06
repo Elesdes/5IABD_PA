@@ -60,6 +60,12 @@ This project has been influenced by the following works:
 
 We would like to express our gratitude to these authors for their groundbreaking work and contributions to the open-source community.
 
+## License
+
+This project is licensed under the Apache License (Version 2.0).
+
+See [LICENSE](LICENSE) for details.
+
 ## Authors
 
 - [Erwan DUPREY](https://github.com/ErwanDuprey)
